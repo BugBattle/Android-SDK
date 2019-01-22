@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">bugbattle</string>
+    <string name="image" />
+
+    <string name="title_activity_feedback">Feedback</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="loading">Sending bug report ..</string>
+    <string name="done">Bug report sent!</string>
+</resources>
