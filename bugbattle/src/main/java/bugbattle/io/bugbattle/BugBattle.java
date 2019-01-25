@@ -24,12 +24,10 @@ public class BugBattle {
         }
         FeedbackService service = FeedbackService.init();
         stepsToReproduce = StepsToReproduce.getInstance();
+        service.setMainActivity(mainActivity);
         service.setSdkKey(sdkKey);
         bugBattleActivationMethod = activationMethod;
         shakeGestureDetector = new ShakeGestureDetector(mainActivity);
-
-
-
     }
 
     public static void initialize(String sdkKey, BugBattleActivationMethod activationMethod, Activity mainActivity) {

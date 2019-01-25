@@ -8,7 +8,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
+
+import org.w3c.dom.Text;
 
 import bugbattle.io.bugbattle.helper.FeedbackService;
 import bugbattle.io.bugbattle.helper.HttpHelper;
@@ -18,20 +22,23 @@ import bugbattle.io.bugbattle.helper.HttpHelper;
  * status bar and navigation/system bar) with user interaction.
  */
 public class Feedback extends AppCompatActivity {
-    private ImageView imageView;
     private Button button;
+    private Button btnClose;
     private View loading;
     private View done;
+    private View feedback;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_feedback);
-        loading = (View) findViewById(R.id.loading);
+        loading = (View) findViewById(R.id.bb_loading);
         loading.setVisibility(View.INVISIBLE);
-        done = (View) findViewById(R.id.done);
+        done = (View) findViewById(R.id.bb_done_view);
         done.setVisibility(View.INVISIBLE);
-        button = (Button)findViewById(R.id.btn_send);
+        feedback = (View) findViewById(R.id.bb_feedback);
+        button = (Button)findViewById(R.id.bb_btnsend);
+        btnClose = (Button) findViewById(R.id.bb_btnclose);
         final FeedbackService service = FeedbackService.getInstance();
 
         EditText email = (EditText)findViewById(R.id.email);
@@ -41,11 +48,33 @@ public class Feedback extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                feedback.setVisibility(View.INVISIBLE);
                 loading.setVisibility(View.VISIBLE);
-                new HttpHelper().execute(service);
-                loading.setVisibility(View.INVISIBLE);
-                done.setVisibility(View.VISIBLE);
+                try{
+                    Integer httpResponse = new HttpHelper().execute(service).get();
+                    if(httpResponse == 200) {
+                        loading.setVisibility(View.INVISIBLE);
+                        done.setVisibility(View.VISIBLE);
+                    } else if(httpResponse == 400) {
+                        loading.setVisibility(View.INVISIBLE);
+                        TextView txt = (TextView)findViewById(R.id.bb_done);
+                        txt.setText("Ups, there is an Error.");
+                        done.setVisibility(View.VISIBLE);
+                    } else {
+
+                    }
+
+                }catch (Exception e) {
+                    System.out.println(e);
+                }
+            }
+        });
+        btnClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
             }
         });
     }
+
 }

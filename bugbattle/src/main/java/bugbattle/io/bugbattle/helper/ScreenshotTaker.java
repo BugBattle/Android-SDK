@@ -19,44 +19,29 @@ public class ScreenshotTaker {
     public ScreenshotTaker(Activity currActivity) {
         activity = currActivity;
         service = FeedbackService.getInstance();
+
     }
     private FeedbackService service;
 
-    public Bitmap takeScreenshot() {
+    public void takeScreenshot() throws Exception {
         Date now = new Date();
         android.text.format.DateFormat.format("yyyyMMddhhmmss", now);
+        // image naming and path  to include sd card  appending name you choose for file
+        String mPath = Environment.getExternalStorageDirectory().toString() + "/" + now + ".jpg";
 
-        try {
-            // image naming and path  to include sd card  appending name you choose for file
-            String mPath = Environment.getExternalStorageDirectory().toString() + "/" + now + ".jpg";
-
-            // create bitmap screen capture
-            View v1 = activity.getWindow().getDecorView().getRootView();
-            v1.setDrawingCacheEnabled(true);
-            Bitmap bitmap = Bitmap.createBitmap(v1.getDrawingCache());
-            v1.setDrawingCacheEnabled(false);
-            bitmap = getResizedBitmap(bitmap);
-          //  File imageFile = new File(mPath);
-
-            //FileOutputStream outputStream = new FileOutputStream(imageFile);
-         //   int quality = 100;
-    //            bitmap.compress(Bitmap.CompressFormat.JPEG, quality, outputStream);
-
-
-         //   outputStream.flush();
-          //  outputStream.close();
-
-            openScreenshot(bitmap);
-        } catch (Throwable e) {
-            // Several error may come out with file handling or DOM
-            e.printStackTrace();
-        }
-        return null;
+        // create bitmap screen capture
+        View v1 = activity.getWindow().getDecorView().getRootView();
+        v1.setDrawingCacheEnabled(true);
+        Bitmap bitmap = Bitmap.createBitmap(v1.getDrawingCache());
+        v1.setDrawingCacheEnabled(false);
+        bitmap = getResizedBitmap(bitmap);
+        openScreenshot(bitmap);
     }
     public void openScreenshot(Bitmap imageFile) {
         Intent intent = new Intent(activity, ImageEditor.class);
-      //  Uri uri = Uri.fromFile(imageFile);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         service.setImage(imageFile);
+        activity.finish();
         activity.startActivity(intent);
     }
 

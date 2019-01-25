@@ -1,5 +1,6 @@
 package bugbattle.io.bugbattle.helper;
 
+import android.app.Activity;
 import android.graphics.Bitmap;
 import android.net.Uri;
 
@@ -8,6 +9,7 @@ import org.json.JSONArray;
 import bugbattle.io.bugbattle.Entity.PhoneMeta;
 
 public class FeedbackService {
+    private Activity mainActivity;
     private String sdkKey;
     private Bitmap image;
     private String email;
@@ -74,5 +76,13 @@ public class FeedbackService {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Activity getMainActivity() {
+        return mainActivity;
+    }
+
+    public void setMainActivity(Activity mainActivity) {
+        this.mainActivity = mainActivity;
     }
 }
