@@ -1,4 +1,4 @@
-package bugbattle.io.bugbattle.helper;
+package bugbattle.io.bugbattle;
 
 
 import org.json.JSONArray;
@@ -16,7 +16,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
-public class LogReader {
+ class LogReader {
 
     private String formatDate(String time, String date) {
         String result = "";

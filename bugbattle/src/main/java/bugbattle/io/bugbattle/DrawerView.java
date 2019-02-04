@@ -1,4 +1,4 @@
-package bugbattle.io.bugbattle.Views;
+package bugbattle.io.bugbattle;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -14,7 +14,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
-public class DrawerView  extends View {
+ class DrawerView  extends View {
     // setup initial color
     private int paintColor = Color.RED;
     // defines paint and canvas

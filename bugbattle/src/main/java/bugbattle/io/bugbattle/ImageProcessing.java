@@ -1,9 +1,9 @@
-package bugbattle.io.bugbattle.helper;
+package bugbattle.io.bugbattle;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 
-public class ImageProcessing {
+ class ImageProcessing {
 
     public static Bitmap mergeImages(Bitmap background, Bitmap overlay) {
             try

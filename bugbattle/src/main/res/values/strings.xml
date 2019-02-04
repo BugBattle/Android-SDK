@@ -3,8 +3,6 @@
     <string name="image" />
 
     <string name="title_activity_feedback">Feedback</string>
-    <string name="dummy_button">Dummy Button</string>
-    <string name="dummy_content">DUMMY\nCONTENT</string>
-    <string name="loading">Sending bug report ..</string>
-    <string name="done">Bug report sent!</string>
+    <string name="loading">Sending your bug report ...</string>
+    <string name="done">Thank you for your bug report!</string>
 </resources>

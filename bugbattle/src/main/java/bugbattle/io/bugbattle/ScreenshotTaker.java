@@ -1,20 +1,15 @@
-package bugbattle.io.bugbattle.helper;
+package bugbattle.io.bugbattle;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
-import android.net.Uri;
 import android.os.Environment;
 import android.view.View;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.util.Date;
 
-import bugbattle.io.bugbattle.ImageEditor;
-
-public class ScreenshotTaker {
+ class ScreenshotTaker {
     private Activity activity;
     public ScreenshotTaker(Activity currActivity) {
         activity = currActivity;
@@ -38,11 +33,10 @@ public class ScreenshotTaker {
         openScreenshot(bitmap);
     }
     public void openScreenshot(Bitmap imageFile) {
-        Intent intent = new Intent(activity, ImageEditor.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        Intent intent = new Intent(service.getMainActivity(), ImageEditor.class);
+        //intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         service.setImage(imageFile);
-        activity.finish();
-        activity.startActivity(intent);
+        service.getMainActivity().startActivity(intent);
     }
 
     private Bitmap getResizedBitmap(Bitmap bm) {
@@ -51,7 +45,7 @@ public class ScreenshotTaker {
         // CREATE A MATRIX FOR THE MANIPULATION
         Matrix matrix = new Matrix();
         // RESIZE THE BIT MAP
-        matrix.postScale(0.7f, 0.7f);
+        matrix.postScale(0.8f, 0.8f);
 
         // "RECREATE" THE NEW BITMAP
         Bitmap resizedBitmap = Bitmap.createBitmap(

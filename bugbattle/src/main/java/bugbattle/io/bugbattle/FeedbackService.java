@@ -1,14 +1,11 @@
-package bugbattle.io.bugbattle.helper;
+package bugbattle.io.bugbattle;
 
 import android.app.Activity;
 import android.graphics.Bitmap;
-import android.net.Uri;
 
 import org.json.JSONArray;
 
-import bugbattle.io.bugbattle.Entity.PhoneMeta;
-
-public class FeedbackService {
+ class FeedbackService {
     private Activity mainActivity;
     private String sdkKey;
     private Bitmap image;

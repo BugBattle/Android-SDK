@@ -6,9 +6,6 @@ import org.json.JSONException;
 
 import java.io.IOException;
 
-import bugbattle.io.bugbattle.helper.FeedbackService;
-import bugbattle.io.bugbattle.helper.ShakeGestureDetector;
-import bugbattle.io.bugbattle.helper.StepsToReproduce;
 
 public class BugBattle {
     private static BugBattle instance;
@@ -30,7 +27,13 @@ public class BugBattle {
         shakeGestureDetector = new ShakeGestureDetector(mainActivity);
     }
 
-    public static void initialize(String sdkKey, BugBattleActivationMethod activationMethod, Activity mainActivity) {
+    /**
+     * Initialise the
+     * @param mainActivity
+     * @param sdkKey
+     * @param activationMethod
+     */
+    public static void initialise(Activity mainActivity, String sdkKey, BugBattleActivationMethod activationMethod) {
         if(instance == null){
             instance = new BugBattle(sdkKey, activationMethod, mainActivity);
         }
@@ -40,7 +43,13 @@ public class BugBattle {
 
     }
 
-    public static void addStep(String type, String description) throws JSONException {
+    /**
+     *
+     * @param type
+     * @param description
+     * @throws JSONException
+     */
+    public static void trackStep(String type, String description) throws JSONException {
         stepsToReproduce.setStep(type, description);
     }
 

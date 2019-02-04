@@ -1,34 +1,31 @@
-package bugbattle.io.bugbattle.helper;
+package bugbattle.io.bugbattle;
 
 import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.AsyncTask;
-import android.util.Base64;
 
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.nio.ByteBuffer;
 
 import javax.net.ssl.HttpsURLConnection;
 
-public class HttpHelper extends AsyncTask<FeedbackService, Void, Integer> {
+ class HttpHelper extends AsyncTask<FeedbackService, Void, Integer> {
     private static final String GET_SIGNED_URL = "https://ii5xbrdd27.execute-api.eu-central-1.amazonaws.com/default/getSignedBugBattleUploadUrl";
     private static final String MONGO_STICH = "https://webhooks.mongodb-stitch.com/api/client/v2.0/app/bugbattle-xfblb/service/reportBug/incoming_webhook/reportBugWebhook?token=";
 
     private String imageURL;
     private String s3URL;
+    private OnHttpResponseListener listener;
+    public HttpHelper(OnHttpResponseListener listener) {
+        this.listener = listener;
+    }
     @Override
     protected Integer doInBackground(FeedbackService... feedbackServices) {
         FeedbackService service = feedbackServices[0];
@@ -36,14 +33,22 @@ public class HttpHelper extends AsyncTask<FeedbackService, Void, Integer> {
         try {
            if((httpResult = postS3Bucket(service.getSdkKey())) == HttpURLConnection.HTTP_OK) {
                if((httpResult = putImage(service.getImage())) == HttpURLConnection.HTTP_OK) {
+
                    return postFeedback(service);
                }
             }
         } catch (Exception e) {
             System.out.println(e);
         }
+
         return httpResult;
     }
+
+    @Override
+     protected void onPostExecute(Integer result) {
+        listener.onTaskComplete(result);
+    }
+
 
     private Integer postFeedback(FeedbackService service) throws Exception {
         HttpsURLConnection conn = (HttpsURLConnection) new URL(MONGO_STICH+service.getSdkKey()).openConnection();
@@ -54,7 +59,7 @@ public class HttpHelper extends AsyncTask<FeedbackService, Void, Integer> {
         JSONObject result = new JSONObject();
         result.put("screenshot", imageURL);
         result.put("description", service.getDescription());
-        result.put("email", service.getEmail());
+        result.put("reportedBy", service.getEmail());
         result.put("meta", service.getPhoneMeta().getJSONObj());
         result.put("consoleLog", service.getLogs());
         result.put("actionLog", service.getStepsToReproduce());
@@ -65,7 +70,7 @@ public class HttpHelper extends AsyncTask<FeedbackService, Void, Integer> {
 
         int HttpResult = conn.getResponseCode();
 
-
+        listener.onTaskComplete(HttpResult);
         return HttpResult;
     }
 
@@ -126,6 +131,8 @@ public class HttpHelper extends AsyncTask<FeedbackService, Void, Integer> {
         byte[] b = baos.toByteArray();
         return b;
     }
+
+
 }
 
 

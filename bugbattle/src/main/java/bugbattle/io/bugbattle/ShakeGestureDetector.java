@@ -1,19 +1,14 @@
-package bugbattle.io.bugbattle.helper;
+package bugbattle.io.bugbattle;
 
 import android.app.Activity;
-import android.app.IntentService;
-import android.app.Service;
 import android.content.Context;
-import android.content.Intent;
-import android.graphics.Bitmap;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 
-import bugbattle.io.bugbattle.ImageEditor;
 
-public class ShakeGestureDetector implements SensorEventListener  {
+class ShakeGestureDetector implements SensorEventListener  {
     private static final float SHAKE_THRESHOLD_GRAVITY = 2.7F;
     private static final int SHAKE_SLOP_TIME_MS = 500;
     private static final int SHAKE_COUNT_RESET_TIME_MS = 3000;
@@ -32,6 +27,9 @@ public class ShakeGestureDetector implements SensorEventListener  {
         mSensorManager = (SensorManager) mainActivity.getSystemService(Context.SENSOR_SERVICE);
         mAccelerometer = mSensorManager
                 .getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+
+
+      //  mSensorManager.registerListener(this, mAccelerometer,	SensorManager.SENSOR_DELAY_UI);
 
         //init screenshot taker
         screenshotTaker = new ScreenshotTaker(mainActivity);
@@ -72,7 +70,6 @@ public class ShakeGestureDetector implements SensorEventListener  {
 
                 mShakeTimestamp = now;
                 mShakeCount++;
-                Intent intent = new Intent(this, ImageEditor.class);
                 try {
                     screenshotTaker.takeScreenshot();
                 } catch (Exception e) {

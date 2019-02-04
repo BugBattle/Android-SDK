@@ -1,4 +1,4 @@
-package bugbattle.io.bugbattle.helper;
+package bugbattle.io.bugbattle;
 
 import android.graphics.Bitmap;
 import android.os.Environment;
@@ -7,7 +7,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.util.Date;
 
-public class FileStorage {
+ class FileStorage {
     public static File saveBitmap(Bitmap bitmap) {
         Date now = new Date();
         android.text.format.DateFormat.format("yyyyMMddhhmmss", now);

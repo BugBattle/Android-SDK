@@ -1,4 +1,4 @@
-package bugbattle.io.bugbattle.Entity;
+package bugbattle.io.bugbattle;
 
 import android.os.Build;
 
@@ -7,9 +7,7 @@ import org.json.JSONObject;
 
 import java.util.Date;
 
-import bugbattle.io.bugbattle.BuildConfig;
-
-public class PhoneMeta {
+class PhoneMeta {
     private static double startTime;
     private static String deviceModel;
     private static String deviceName;

@@ -8,31 +8,19 @@ import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
-import android.media.Image;
-import android.net.Uri;
-import android.os.Environment;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.util.Date;
 import java.util.List;
 
-import bugbattle.io.bugbattle.Views.DrawerView;
-import bugbattle.io.bugbattle.helper.FeedbackService;
-import bugbattle.io.bugbattle.helper.FileStorage;
-import bugbattle.io.bugbattle.helper.ImageProcessing;
-import bugbattle.io.bugbattle.helper.ScreenshotTaker;
-
-public class ImageEditor extends AppCompatActivity {
+ public class ImageEditor extends AppCompatActivity {
     private ImageView imageView;
     private DrawerView drawerView;
     private Button red;
@@ -45,11 +33,11 @@ public class ImageEditor extends AppCompatActivity {
 
     private FeedbackService service;
     //Add Navigation
-    private ImageButton next;
+    private Button next;
     private Intent nextIntent;
-    private ImageButton back;
+    private Button back;
     private Intent backIntent;
-
+    private Boolean backClicked = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,40 +51,29 @@ public class ImageEditor extends AppCompatActivity {
         }
         setContentView(R.layout.activity_image_editor);
         service = FeedbackService.getInstance();
-        imageView = (ImageView) findViewById(R.id.image);
-        drawerView = (DrawerView) findViewById(R.id.drawerview);
+        imageView = (ImageView) findViewById(R.id.bb_image);
+        drawerView = (DrawerView) findViewById(R.id.bb_drawerview);
 
         //navigation
-        next = (ImageButton) findViewById(R.id.next);
+        next = (Button) findViewById(R.id.bb_next);
         nextIntent = new Intent(this, Feedback.class);
-        back = (ImageButton) findViewById(R.id.close);
+        back = (Button) findViewById(R.id.bb_close);
        // backIntent =
         if(imageView != null) {
             imageView.setImageBitmap(service.getImage());
         }
 
         initBtn();
-        System.out.println(getLauncherActivityName());
     }
-    private String getLauncherActivityName(){
-        String activityName = "";
-        final PackageManager pm = getPackageManager();
-        Intent intent = pm.getLaunchIntentForPackage(getPackageName());
-        List<ResolveInfo> activityList = pm.queryIntentActivities(intent,0);
 
-        if(activityList != null){
-            activityName = activityList.get(0).activityInfo.name;
-        }
-        return activityName;
-    }
     private void initBtn() {
-        red = (Button) findViewById(R.id.redbutton);
-        violette = (Button) findViewById(R.id.violettebutton);
-        blue = (Button) findViewById(R.id.bluebutton);
-        lightBlue = (Button) findViewById(R.id.lightbluebutton);
-        green = (Button) findViewById(R.id.greenbutton);
-        yellow = (Button) findViewById(R.id.yellowbutton);
-        gray = (Button) findViewById(R.id.graybutton);
+        red = (Button) findViewById(R.id.bb_redbutton);
+        violette = (Button) findViewById(R.id.bb_violettebutton);
+        blue = (Button) findViewById(R.id.bb_bluebutton);
+        lightBlue = (Button) findViewById(R.id.bb_lightbluebutton);
+        green = (Button) findViewById(R.id.bb_greenbutton);
+        yellow = (Button) findViewById(R.id.bb_yellowbutton);
+        gray = (Button) findViewById(R.id.bb_graybutton);
 
         red.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -104,6 +81,13 @@ public class ImageEditor extends AppCompatActivity {
                 if(drawerView != null) {
                     drawerView.setColor(Color.RED);
                 }
+                red.setBackgroundDrawable(getResources().getDrawable(R.drawable.roundbutton_red_selected));
+                violette.setBackgroundDrawable(getResources().getDrawable(R.drawable.roundbutton_violette));
+                blue.setBackgroundDrawable(getResources().getDrawable(R.drawable.roundbutton_blue));
+                lightBlue.setBackgroundDrawable(getResources().getDrawable(R.drawable.roundbutton_lightblue));
+                green.setBackgroundDrawable(getResources().getDrawable(R.drawable.roundbutton_green));
+                yellow.setBackgroundDrawable(getResources().getDrawable(R.drawable.roundbutton_yellow));
+                gray.setBackgroundDrawable(getResources().getDrawable(R.drawable.roundbutton_gray));
             }
         });
         violette.setOnClickListener(new View.OnClickListener() {
@@ -112,6 +96,13 @@ public class ImageEditor extends AppCompatActivity {
                 if(drawerView != null) {
                     drawerView.setColor(Color.rgb(152,34,167));
                 }
+                violette.setBackgroundDrawable(getResources().getDrawable(R.drawable.roundbutton_violette_selected));
+                red.setBackgroundDrawable(getResources().getDrawable(R.drawable.roundbutton_red));
+                blue.setBackgroundDrawable(getResources().getDrawable(R.drawable.roundbutton_blue));
+                lightBlue.setBackgroundDrawable(getResources().getDrawable(R.drawable.roundbutton_lightblue));
+                green.setBackgroundDrawable(getResources().getDrawable(R.drawable.roundbutton_green));
+                yellow.setBackgroundDrawable(getResources().getDrawable(R.drawable.roundbutton_yellow));
+                gray.setBackgroundDrawable(getResources().getDrawable(R.drawable.roundbutton_gray));
             }
         });
         blue.setOnClickListener(new View.OnClickListener() {
@@ -120,6 +111,14 @@ public class ImageEditor extends AppCompatActivity {
                 if(drawerView != null) {
                     drawerView.setColor(Color.BLUE);
                 }
+
+                red.setBackgroundDrawable(getResources().getDrawable(R.drawable.roundbutton_red));
+                violette.setBackgroundDrawable(getResources().getDrawable(R.drawable.roundbutton_violette));
+                blue.setBackgroundDrawable(getResources().getDrawable(R.drawable.roundbutton_blue_selected));
+                lightBlue.setBackgroundDrawable(getResources().getDrawable(R.drawable.roundbutton_lightblue));
+                green.setBackgroundDrawable(getResources().getDrawable(R.drawable.roundbutton_green));
+                yellow.setBackgroundDrawable(getResources().getDrawable(R.drawable.roundbutton_yellow));
+                gray.setBackgroundDrawable(getResources().getDrawable(R.drawable.roundbutton_gray));
             }
         });
         lightBlue.setOnClickListener(new View.OnClickListener() {
@@ -128,6 +127,13 @@ public class ImageEditor extends AppCompatActivity {
                 if(drawerView != null) {
                     drawerView.setColor(Color.rgb(0,189,208));
                 }
+                red.setBackgroundDrawable(getResources().getDrawable(R.drawable.roundbutton_red));
+                violette.setBackgroundDrawable(getResources().getDrawable(R.drawable.roundbutton_violette));
+                blue.setBackgroundDrawable(getResources().getDrawable(R.drawable.roundbutton_blue));
+                lightBlue.setBackgroundDrawable(getResources().getDrawable(R.drawable.roundbutton_lightblue_selected));
+                green.setBackgroundDrawable(getResources().getDrawable(R.drawable.roundbutton_green));
+                yellow.setBackgroundDrawable(getResources().getDrawable(R.drawable.roundbutton_yellow));
+                gray.setBackgroundDrawable(getResources().getDrawable(R.drawable.roundbutton_gray));
             }
         });
         green.setOnClickListener(new View.OnClickListener() {
@@ -136,6 +142,13 @@ public class ImageEditor extends AppCompatActivity {
                 if(drawerView != null) {
                     drawerView.setColor(Color.rgb(80,176,96));
                 }
+                red.setBackgroundDrawable(getResources().getDrawable(R.drawable.roundbutton_red));
+                violette.setBackgroundDrawable(getResources().getDrawable(R.drawable.roundbutton_violette));
+                blue.setBackgroundDrawable(getResources().getDrawable(R.drawable.roundbutton_blue));
+                lightBlue.setBackgroundDrawable(getResources().getDrawable(R.drawable.roundbutton_lightblue));
+                green.setBackgroundDrawable(getResources().getDrawable(R.drawable.roundbutton_green_selected));
+                yellow.setBackgroundDrawable(getResources().getDrawable(R.drawable.roundbutton_yellow));
+                gray.setBackgroundDrawable(getResources().getDrawable(R.drawable.roundbutton_gray));
             }
         });
         yellow.setOnClickListener(new View.OnClickListener() {
@@ -144,6 +157,13 @@ public class ImageEditor extends AppCompatActivity {
                 if(drawerView != null) {
                     drawerView.setColor(Color.rgb(255,198,79));
                 }
+                red.setBackgroundDrawable(getResources().getDrawable(R.drawable.roundbutton_red));
+                violette.setBackgroundDrawable(getResources().getDrawable(R.drawable.roundbutton_violette));
+                blue.setBackgroundDrawable(getResources().getDrawable(R.drawable.roundbutton_blue));
+                lightBlue.setBackgroundDrawable(getResources().getDrawable(R.drawable.roundbutton_lightblue));
+                green.setBackgroundDrawable(getResources().getDrawable(R.drawable.roundbutton_green));
+                yellow.setBackgroundDrawable(getResources().getDrawable(R.drawable.roundbutton_yellow_selected));
+                gray.setBackgroundDrawable(getResources().getDrawable(R.drawable.roundbutton_gray));
             }
         });
         gray.setOnClickListener(new View.OnClickListener() {
@@ -152,25 +172,35 @@ public class ImageEditor extends AppCompatActivity {
                 if(drawerView != null) {
                     drawerView.setColor(Color.rgb(51,51,51));
                 }
+                red.setBackgroundDrawable(getResources().getDrawable(R.drawable.roundbutton_red));
+                violette.setBackgroundDrawable(getResources().getDrawable(R.drawable.roundbutton_violette));
+                blue.setBackgroundDrawable(getResources().getDrawable(R.drawable.roundbutton_blue));
+                lightBlue.setBackgroundDrawable(getResources().getDrawable(R.drawable.roundbutton_lightblue));
+                green.setBackgroundDrawable(getResources().getDrawable(R.drawable.roundbutton_green));
+                yellow.setBackgroundDrawable(getResources().getDrawable(R.drawable.roundbutton_yellow));
+                gray.setBackgroundDrawable(getResources().getDrawable(R.drawable.roundbutton_gray_selected));
             }
         });
 
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                System.out.println(drawerView.getWidth());
-                System.out.println(drawerView.getHeight());
                // File result = saveBitmap());
                 Intent intent = new Intent(ImageEditor.this, Feedback.class);
                 Bitmap mergedImage = ImageProcessing.mergeImages(loadBitmapFromView(imageView), loadBitmapFromView(drawerView));
                 service.setImage(mergedImage);
                 ImageEditor.this.startActivity(intent);
+                finish();
             }
         });
         back.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
             @Override
             public void onClick(View view) {
-                finish();
+             if(!backClicked) {
+                 backClicked = true;
+                 finish();
+             }
             }
         });
 

@@ -1,14 +1,13 @@
-package bugbattle.io.bugbattle.helper;
+package bugbattle.io.bugbattle;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 
-public class StepsToReproduce {
+ class StepsToReproduce {
     private static StepsToReproduce instance;
     private JSONArray steps = new JSONArray();
     private StepsToReproduce() {
@@ -23,10 +22,10 @@ public class StepsToReproduce {
     }
 
 
-    public void setStep(String type, String description) throws JSONException{
+    public void setStep(String type, String data) throws JSONException{
         JSONObject step = new JSONObject();
         step.put("type",type);
-        step.put("description", description);
+        step.put("data", data);
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss:SSSS");
         step.put("date", format.format(new Date()));
         steps.put(step);

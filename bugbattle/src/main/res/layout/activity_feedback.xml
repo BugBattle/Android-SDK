@@ -16,93 +16,12 @@
 
 
     <android.support.constraint.ConstraintLayout
-        android:id="@+id/bb_feedback"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <EditText
-            android:id="@+id/email"
-            android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:ems="10"
-            android:hint="Enter your Email"
-            android:inputType="textEmailAddress"
-            android:textColor="#000000"
-            android:textColorHighlight="@android:color/black"
-            android:textColorHint="#dddddd"
-            android:visibility="visible"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/bb_btnsend" />
-
-        <EditText
-            android:id="@+id/description"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:ems="10"
-            android:hint="Describe your problem"
-            android:inputType="textMultiLine"
-            android:singleLine="false"
-            android:textColor="#000000"
-            android:textColorHighlight="@android:color/black"
-            android:textColorHint="#dddddd"
-            android:visibility="visible"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/email" />
-
-        <Button
-            android:id="@+id/bb_btnsend"
-            android:layout_width="89dp"
-            android:layout_height="wrap_content"
-            android:background="@android:color/transparent"
-            android:text="Send"
-            android:textColor="@android:color/black"
-            android:visibility="visible"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <EditText
-            android:id="@+id/editText"
-            android:layout_width="wrap_content"
-            android:layout_height="46dp"
-            android:layout_marginBottom="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:ems="10"
-            android:inputType="textPersonName"
-            android:text="Report your Bug"
-            android:textColor="#000000"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@+id/email"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-    </android.support.constraint.ConstraintLayout>
-
-    <android.support.constraint.ConstraintLayout
         android:id="@+id/bb_done_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="invisible">
+        android:layout_height="match_parent">
 
         <View
-            android:id="@+id/view"
+            android:id="@+id/bb_view"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:background="@android:color/background_light"
@@ -127,26 +46,10 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <Button
-            android:id="@+id/bb_btnclose"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:text="Close"
-            app:layout_constraintBottom_toBottomOf="@+id/view"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/bb_done" />
-
         <ImageView
-            android:id="@+id/imageView2"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:id="@+id/bb_success"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
             android:layout_marginBottom="8dp"
             app:layout_constraintBottom_toTopOf="@+id/bb_done"
             app:layout_constraintEnd_toEndOf="parent"
@@ -161,12 +64,17 @@
         android:id="@+id/bb_loading_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="invisible">
+        android:background="#ffffff"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <View
             android:id="@+id/bb_loading_background"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:alpha="1"
             android:background="@android:color/background_light"
             android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -178,16 +86,21 @@
             android:id="@+id/bb_loading"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
+            android:layout_marginEnd="34dp"
+            android:layout_marginLeft="34dp"
+            android:layout_marginRight="34dp"
+            android:layout_marginStart="34dp"
             android:text="@string/loading"
             android:textAppearance="@style/TextAppearance.AppCompat"
             android:textColor="@android:color/black"
+            android:textSize="24sp"
             android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.557"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.499" />
 
         <ProgressBar
             android:id="@+id/bb_progressBar"
@@ -203,6 +116,148 @@
             app:layout_constraintBottom_toTopOf="@+id/bb_loading"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
+
+    </android.support.constraint.ConstraintLayout>
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/bb_feedback"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="visible"
+        android:isScrollContainer="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0">
+
+        <View
+            android:id="@+id/bb_view5"
+            android:layout_width="wrap_content"
+            android:layout_height="60dp"
+            android:alpha="1"
+            android:background="#515151"
+            app:layout_constraintBottom_toTopOf="@+id/bb_email"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <EditText
+            android:id="@+id/bb_header"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#00000000"
+            android:ems="10"
+            android:enabled="false"
+            android:gravity="center"
+            android:inputType="none"
+            android:text="Report a bug"
+            android:textColor="#ffffff"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/bb_view5"
+            app:layout_constraintEnd_toStartOf="@+id/bb_btnsend"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <EditText
+            android:id="@+id/bb_email"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="16dp"
+            android:background="@null"
+            android:ems="10"
+            android:hint="Enter your Email"
+            android:inputType="textEmailAddress"
+            android:textColor="#000000"
+            android:textColorHighlight="@android:color/black"
+            android:textColorHint="#dddddd"
+            android:visibility="visible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/bb_view5" />
+
+        <View
+            android:id="@+id/bb_view3"
+            android:layout_width="wrap_content"
+            android:layout_height="1dp"
+            android:layout_marginTop="15dp"
+            android:background="#E9E9E9"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/bb_email" />
+
+        <EditText
+            android:id="@+id/description"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="15dp"
+            android:background="@null"
+            android:ems="10"
+            android:hint="Describe your problem"
+            android:minHeight="50dp"
+            android:inputType="textMultiLine"
+            android:singleLine="false"
+            android:textColor="#000000"
+            android:textColorHighlight="@android:color/black"
+            android:textColorHint="#dddddd"
+            android:visibility="visible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/bb_view3" />
+
+        <View
+            android:id="@+id/bb_view2"
+            android:layout_width="wrap_content"
+            android:layout_height="1dp"
+            android:layout_marginTop="15dp"
+            android:background="#E9E9E9"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/description" />
+
+        <ImageView
+            android:id="@+id/bb_thumbnail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="30dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/bb_view2" />
+
+        <ImageButton
+            android:id="@+id/bb_edit_btn"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/bb_image_btn"
+            android:scaleType="fitCenter"
+            app:layout_constraintBottom_toBottomOf="@+id/bb_thumbnail"
+            app:layout_constraintEnd_toEndOf="@+id/bb_thumbnail"
+            app:layout_constraintHorizontal_bias="0.405"
+            app:layout_constraintStart_toStartOf="@+id/bb_thumbnail"
+            app:layout_constraintTop_toTopOf="@+id/bb_thumbnail"
+            app:layout_constraintVertical_bias="0.506"
+            app:srcCompat="@drawable/edit" />
+
+        <Button
+            android:id="@+id/bb_btnsend"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:background="#00000000"
+            android:text="Send"
+            app:layout_constraintBottom_toBottomOf="@+id/bb_view5"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </android.support.constraint.ConstraintLayout>
 
