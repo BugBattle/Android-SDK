@@ -29,7 +29,7 @@ class ShakeGestureDetector implements SensorEventListener  {
                 .getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
 
 
-      //  mSensorManager.registerListener(this, mAccelerometer,	SensorManager.SENSOR_DELAY_UI);
+        mSensorManager.registerListener(this, mAccelerometer,	SensorManager.SENSOR_DELAY_UI);
 
         //init screenshot taker
         screenshotTaker = new ScreenshotTaker(mainActivity);

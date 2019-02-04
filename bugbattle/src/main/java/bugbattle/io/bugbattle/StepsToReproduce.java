@@ -22,13 +22,17 @@ import java.util.Date;
     }
 
 
-    public void setStep(String type, String data) throws JSONException{
-        JSONObject step = new JSONObject();
-        step.put("type",type);
-        step.put("data", data);
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss:SSSS");
-        step.put("date", format.format(new Date()));
-        steps.put(step);
+    public void setStep(String type, String data) {
+        try {
+            JSONObject step = new JSONObject();
+            step.put("type", type);
+            step.put("data", data);
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss:SSSS");
+            step.put("date", format.format(new Date()));
+            steps.put(step);
+        }catch (Exception e) {
+            System.out.println(e);
+        }
     }
 
 

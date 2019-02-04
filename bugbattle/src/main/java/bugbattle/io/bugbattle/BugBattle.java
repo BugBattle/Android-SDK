@@ -12,14 +12,14 @@ public class BugBattle {
     private BugBattleActivationMethod bugBattleActivationMethod;
     private static ShakeGestureDetector shakeGestureDetector;
     private static StepsToReproduce stepsToReproduce;
-
+    private static FeedbackService service;
     private BugBattle(String sdkKey, BugBattleActivationMethod activationMethod, Activity mainActivity) {
         try {
             Runtime.getRuntime().exec("logcat -c");
         } catch (IOException e) {
             System.out.println(e);
         }
-        FeedbackService service = FeedbackService.init();
+        service = FeedbackService.init();
         stepsToReproduce = StepsToReproduce.getInstance();
         service.setMainActivity(mainActivity);
         service.setSdkKey(sdkKey);
@@ -28,10 +28,10 @@ public class BugBattle {
     }
 
     /**
-     * Initialise the
-     * @param mainActivity
-     * @param sdkKey
-     * @param activationMethod
+     * Initialises the Bugbattle SDK.
+     * @param mainActivity The main activity of your application
+     * @param sdkKey The SDK key, which can be found on dashboard.bugbattle.io
+     * @param activationMethod Activation method, which triggers a new bug report.
      */
     public static void initialise(Activity mainActivity, String sdkKey, BugBattleActivationMethod activationMethod) {
         if(instance == null){
@@ -39,17 +39,25 @@ public class BugBattle {
         }
     }
 
+    /**
+     * Trigger the report flow manually
+     */
     public static void trigger() {
-
+        ScreenshotTaker sc = new ScreenshotTaker(service.getMainActivity());
+        try {
+            sc.takeScreenshot();
+        }catch (Exception e) {
+            System.out.println(e);
+        }
     }
 
     /**
-     *
+     * Track a step to add more information to the bug report
      * @param type
      * @param description
      * @throws JSONException
      */
-    public static void trackStep(String type, String description) throws JSONException {
+    public static void trackStep(String type, String description) {
         stepsToReproduce.setStep(type, description);
     }
 
