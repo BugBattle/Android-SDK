@@ -38,7 +38,8 @@ import javax.net.ssl.HttpsURLConnection;
                }
             }
         } catch (Exception e) {
-            System.out.println(e);
+           // System.out.println(e);
+            httpResult = 400;
         }
 
         return httpResult;
@@ -63,6 +64,7 @@ import javax.net.ssl.HttpsURLConnection;
         result.put("meta", service.getPhoneMeta().getJSONObj());
         result.put("consoleLog", service.getLogs());
         result.put("actionLog", service.getStepsToReproduce());
+        result.put("customData", service.getCustomData());
         OutputStreamWriter wr= new OutputStreamWriter(conn.getOutputStream());
         System.out.println(result.toString());
         wr.write(result.toString());

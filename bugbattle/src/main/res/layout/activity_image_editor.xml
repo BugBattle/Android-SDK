@@ -8,11 +8,10 @@
     tools:context=".ImageEditor">
 
     <View
-        android:id="@+id/view4"
+        android:id="@+id/bb_header_view"
         android:layout_width="wrap_content"
         android:layout_height="60dp"
         android:alpha="1"
-        android:background="#515151"
         android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -195,7 +194,7 @@
         android:layout_height="wrap_content"
         android:background="#00000000"
         android:text="Cancle"
-        app:layout_constraintBottom_toBottomOf="@+id/view4"
+        app:layout_constraintBottom_toBottomOf="@+id/bb_header_view"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -205,8 +204,8 @@
         android:layout_height="wrap_content"
         android:background="#00000000"
         android:text="Next"
-        app:layout_constraintBottom_toBottomOf="@+id/view4"
-        app:layout_constraintEnd_toEndOf="@+id/view4"
+        app:layout_constraintBottom_toBottomOf="@+id/bb_header_view"
+        app:layout_constraintEnd_toEndOf="@+id/bb_header_view"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
@@ -221,9 +220,9 @@
         android:textColor="#ffffff"
         android:textSize="16dp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/view4"
+        app:layout_constraintBottom_toBottomOf="@+id/bb_header_view"
         app:layout_constraintEnd_toStartOf="@+id/bb_next"
         app:layout_constraintStart_toEndOf="@+id/bb_close"
-        app:layout_constraintTop_toTopOf="@+id/view4" />
+        app:layout_constraintTop_toTopOf="@+id/bb_header_view" />
 
 </android.support.constraint.ConstraintLayout>

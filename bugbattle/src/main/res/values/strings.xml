@@ -5,4 +5,5 @@
     <string name="title_activity_feedback">Feedback</string>
     <string name="loading">Sending your bug report ...</string>
     <string name="done">Thank you for your bug report!</string>
+    <string name="error">Ups, something went wrong.</string>
 </resources>

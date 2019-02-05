@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.Matrix;
 import android.os.Build;
 import android.os.Handler;
@@ -29,8 +30,10 @@ import android.widget.TextView;
  */
 public class Feedback extends AppCompatActivity implements OnHttpResponseListener {
     private Button button;
+    private Button cancle;
     private View loading;
     private View done;
+    private View error;
     private View feedback;
     private SharedPreferences pref;
     private ImageView thumbnail;
@@ -46,11 +49,16 @@ public class Feedback extends AppCompatActivity implements OnHttpResponseListene
 
         loading = (View) findViewById(R.id.bb_loading_view);
         loading.setVisibility(View.INVISIBLE);
+        error = (View) findViewById(R.id.bb_done_error);
+        error.setVisibility(View.INVISIBLE);
         done = (View) findViewById(R.id.bb_done_view);
         done.setVisibility(View.INVISIBLE);
         feedback = (View) findViewById(R.id.bb_feedback);
         button = (Button) findViewById(R.id.bb_btnsend);
+        cancle = (Button) findViewById(R.id.bb_btncancle);
         final FeedbackService service = FeedbackService.getInstance();
+        View headerView = findViewById(R.id.bb_header_view);
+        headerView.setBackgroundColor(Color.parseColor(service.getAppBarColor()));
         description = (EditText) findViewById(R.id.description);
         email = (EditText) findViewById(R.id.bb_email);
         //service.setEmail(email.getText().toString());
@@ -125,6 +133,13 @@ public class Feedback extends AppCompatActivity implements OnHttpResponseListene
                 finish();
             }
         });
+
+        cancle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
     }
 
 
@@ -165,7 +180,16 @@ public class Feedback extends AppCompatActivity implements OnHttpResponseListene
                         }
                     }, 1500);
         }else {
-
+            loading.setVisibility(View.INVISIBLE);
+            done.setVisibility(View.INVISIBLE);
+            error.setVisibility(View.VISIBLE);
+            new android.os.Handler().postDelayed(
+                    new Runnable() {
+                        public void run() {
+                           error.setVisibility(View.INVISIBLE);
+                           feedback.setVisibility(View.VISIBLE);
+                        }
+                    }, 1500);
         }
     }
 }

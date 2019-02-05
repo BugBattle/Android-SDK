@@ -3,8 +3,10 @@ package bugbattle.io.bugbattle;
 import android.app.Activity;
 
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.HashMap;
 
 
 public class BugBattle {
@@ -40,9 +42,9 @@ public class BugBattle {
     }
 
     /**
-     * Trigger the report flow manually
+     * Manually start the bug reporting workflow. This is used, when you use the activation method "NONE".
      */
-    public static void trigger() {
+    public static void startBugReporting() {
         ScreenshotTaker sc = new ScreenshotTaker(service.getMainActivity());
         try {
             sc.takeScreenshot();
@@ -53,23 +55,27 @@ public class BugBattle {
 
     /**
      * Track a step to add more information to the bug report
-     * @param type
-     * @param description
+     * @param type Type of the step. (Use any custom string or one of the predefined constants {@link STEPTYPE})
+     * @param data Custom data associated with the step.
      * @throws JSONException
      */
-    public static void trackStep(String type, String description) {
-        stepsToReproduce.setStep(type, description);
+    public static void trackStep(String type, String data) {
+        stepsToReproduce.setStep(type, data);
     }
 
-    public static void resume() {
-        if(instance != null){
-            shakeGestureDetector.resume();
-        }
+    /**
+     * Set a custom app bar color to fit the bug report more your app style.
+     * @param color the background color of the app bar.
+     */
+    public static void setAppBarColor(String color) {
+        service.setAppBarColor(color);
     }
 
-    public static void pause() {
-        if(instance != null) {
-            shakeGestureDetector.pause();
-        }
+    /**
+     * Attach cusom data, which can be view in the BugBattle dashboard.
+     * @param customData The data to attach to a bug report
+     */
+    public static void attachCustomData(JSONObject customData) {
+        service.setCustomData(customData);
     }
 }

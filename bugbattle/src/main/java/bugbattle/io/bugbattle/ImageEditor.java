@@ -36,7 +36,6 @@ import java.util.List;
     private Button next;
     private Intent nextIntent;
     private Button back;
-    private Intent backIntent;
     private Boolean backClicked = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +49,9 @@ import java.util.List;
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT);
         }
         setContentView(R.layout.activity_image_editor);
+        View headerView = (View)findViewById(R.id.bb_header_view);
         service = FeedbackService.getInstance();
+        headerView.setBackgroundColor(Color.parseColor(service.getAppBarColor()));
         imageView = (ImageView) findViewById(R.id.bb_image);
         drawerView = (DrawerView) findViewById(R.id.bb_drawerview);
 

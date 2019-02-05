@@ -16,6 +16,44 @@
 
 
     <android.support.constraint.ConstraintLayout
+        android:id="@+id/bb_done_error"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="invisible">
+
+        <View
+            android:id="@+id/view"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/bb_error_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/error"
+            android:textColor="@android:color/black"
+            android:textSize="24sp"
+            app:layout_constraintBottom_toBottomOf="@+id/view"
+            app:layout_constraintEnd_toEndOf="@+id/view"
+            app:layout_constraintStart_toStartOf="@+id/view"
+            app:layout_constraintTop_toTopOf="@+id/view" />
+
+        <ImageView
+            android:id="@+id/bb_image_error"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toTopOf="@+id/bb_error_text"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:srcCompat="@drawable/error" />
+    </android.support.constraint.ConstraintLayout>
+
+    <android.support.constraint.ConstraintLayout
         android:id="@+id/bb_done_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -163,7 +201,7 @@
             app:srcCompat="@drawable/edit" />
 
         <View
-            android:id="@+id/bb_view5"
+            android:id="@+id/bb_header_view"
             android:layout_width="wrap_content"
             android:layout_height="60dp"
             android:alpha="1"
@@ -190,7 +228,7 @@
             android:textColor="#ffffff"
             android:textSize="18sp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@+id/bb_view5"
+            app:layout_constraintBottom_toBottomOf="@+id/bb_header_view"
             app:layout_constraintEnd_toEndOf="@+id/bb_btnsend"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -214,7 +252,7 @@
             android:visibility="visible"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/bb_view5" />
+            app:layout_constraintTop_toBottomOf="@+id/bb_header_view" />
 
         <View
             android:id="@+id/bb_view3"
@@ -266,8 +304,20 @@
             android:layout_height="wrap_content"
             android:background="#00000000"
             android:text="Send"
-            app:layout_constraintBottom_toBottomOf="@+id/bb_view5"
+            app:layout_constraintBottom_toBottomOf="@+id/bb_header_view"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/bb_btncancle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:background="#00000000"
+            android:text="CANCLE"
+            app:layout_constraintBottom_toBottomOf="@+id/bb_header_view"
+            app:layout_constraintStart_toStartOf="@+id/bb_header_view"
             app:layout_constraintTop_toTopOf="parent" />
 
     </android.support.constraint.ConstraintLayout>

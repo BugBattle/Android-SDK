@@ -4,8 +4,9 @@ import android.app.Activity;
 import android.graphics.Bitmap;
 
 import org.json.JSONArray;
+import org.json.JSONObject;
 
- class FeedbackService {
+class FeedbackService {
     private Activity mainActivity;
     private String sdkKey;
     private Bitmap image;
@@ -14,6 +15,8 @@ import org.json.JSONArray;
     private static FeedbackService instance;
     private PhoneMeta phoneMeta;
     private LogReader logReader;
+    private String appBarColor = "#515151";
+    private JSONObject customData;
 
     private StepsToReproduce stepsToReproduce;
 
@@ -21,6 +24,7 @@ import org.json.JSONArray;
         phoneMeta = PhoneMeta.init();
         logReader = new LogReader();
         stepsToReproduce = StepsToReproduce.getInstance();
+        customData = new JSONObject();
     }
 
     public static FeedbackService init() {
@@ -82,5 +86,21 @@ import org.json.JSONArray;
 
     public void setMainActivity(Activity mainActivity) {
         this.mainActivity = mainActivity;
+    }
+
+     public String getAppBarColor() {
+         return appBarColor;
+     }
+
+     public void setAppBarColor(String appBarColor) {
+         this.appBarColor = appBarColor;
+     }
+
+    public JSONObject getCustomData() {
+        return customData;
+    }
+
+    public void setCustomData(JSONObject customData) {
+        this.customData = customData;
     }
 }
