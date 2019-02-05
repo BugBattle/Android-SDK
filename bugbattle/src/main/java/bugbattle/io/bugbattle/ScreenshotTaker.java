@@ -1,10 +1,14 @@
 package bugbattle.io.bugbattle;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.os.Environment;
+import android.util.DisplayMetrics;
 import android.view.View;
 
 import java.util.Date;
@@ -45,7 +49,13 @@ import java.util.Date;
         // CREATE A MATRIX FOR THE MANIPULATION
         Matrix matrix = new Matrix();
         // RESIZE THE BIT MAP
-        matrix.postScale(0.8f, 0.8f);
+        int orientation = service.getMainActivity().getResources().getConfiguration().orientation;
+        if (orientation == Configuration.ORIENTATION_PORTRAIT) {
+            matrix.postScale(0.7f, 0.7f);
+        } else {
+            matrix.postScale(0.5f, 0.5f);
+        }
+
 
         // "RECREATE" THE NEW BITMAP
         Bitmap resizedBitmap = Bitmap.createBitmap(

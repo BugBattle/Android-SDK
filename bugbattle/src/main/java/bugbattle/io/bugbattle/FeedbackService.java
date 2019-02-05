@@ -14,6 +14,7 @@ import org.json.JSONArray;
     private static FeedbackService instance;
     private PhoneMeta phoneMeta;
     private LogReader logReader;
+
     private StepsToReproduce stepsToReproduce;
 
     private FeedbackService()  {
