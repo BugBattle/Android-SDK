@@ -26,7 +26,9 @@ public class BugBattle {
         service.setMainActivity(mainActivity);
         service.setSdkKey(sdkKey);
         bugBattleActivationMethod = activationMethod;
-        shakeGestureDetector = new ShakeGestureDetector(mainActivity);
+        if(activationMethod == BugBattleActivationMethod.SHAKE) {
+            shakeGestureDetector = new ShakeGestureDetector(mainActivity);
+        }
     }
 
     /**

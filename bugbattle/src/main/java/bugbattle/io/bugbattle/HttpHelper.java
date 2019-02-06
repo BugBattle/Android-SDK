@@ -3,6 +3,7 @@ package bugbattle.io.bugbattle;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -12,6 +13,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -26,21 +28,25 @@ import javax.net.ssl.HttpsURLConnection;
     public HttpHelper(OnHttpResponseListener listener) {
         this.listener = listener;
     }
+
     @Override
     protected Integer doInBackground(FeedbackService... feedbackServices) {
         FeedbackService service = feedbackServices[0];
         Integer httpResult = 0;
-        try {
-           if((httpResult = postS3Bucket(service.getSdkKey())) == HttpURLConnection.HTTP_OK) {
-               if((httpResult = putImage(service.getImage())) == HttpURLConnection.HTTP_OK) {
+            try {
+                if ((httpResult = postS3Bucket(service.getSdkKey())) == HttpURLConnection.HTTP_OK) {
+                    if ((httpResult = putImage(service.getImage())) == HttpURLConnection.HTTP_OK) {
 
-                   return postFeedback(service);
-               }
+                        return postFeedback(service);
+                    }
+                }
+            }catch (JSONException e) {
+
+            } catch (MalformedURLException e) {
+
+            } catch (IOException e) {
+
             }
-        } catch (Exception e) {
-           // System.out.println(e);
-            httpResult = 400;
-        }
 
         return httpResult;
     }
@@ -51,7 +57,7 @@ import javax.net.ssl.HttpsURLConnection;
     }
 
 
-    private Integer postFeedback(FeedbackService service) throws Exception {
+    private Integer postFeedback(FeedbackService service) throws JSONException, MalformedURLException, IOException {
         HttpsURLConnection conn = (HttpsURLConnection) new URL(MONGO_STICH+service.getSdkKey()).openConnection();
         conn.setDoOutput(true);
 
@@ -72,11 +78,11 @@ import javax.net.ssl.HttpsURLConnection;
 
         int HttpResult = conn.getResponseCode();
 
-        listener.onTaskComplete(HttpResult);
+
         return HttpResult;
     }
 
-    private int putImage(Bitmap imagePath) throws Exception {
+    private int putImage(Bitmap imagePath) throws MalformedURLException, IOException {
         HttpsURLConnection conn = (HttpsURLConnection) new URL(s3URL).openConnection();
         conn.setDoOutput(true);
 
@@ -93,7 +99,7 @@ import javax.net.ssl.HttpsURLConnection;
         return HttpResult;
     }
 
-    private int postS3Bucket(String sdkKey) throws Exception {
+    private int postS3Bucket(String sdkKey) throws MalformedURLException, IOException, JSONException {
         HttpsURLConnection conn = (HttpsURLConnection) new URL(GET_SIGNED_URL).openConnection();
         conn.setDoOutput(true);
         conn.setDoInput(true);

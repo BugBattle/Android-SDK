@@ -170,6 +170,7 @@ public class Feedback extends AppCompatActivity implements OnHttpResponseListene
 
     @Override
     public void onTaskComplete(int httpResponse) {
+        if(httpResponse == 200) {
             done.setVisibility(View.VISIBLE);
             loading.setVisibility(View.INVISIBLE);
             new android.os.Handler().postDelayed(
@@ -178,5 +179,17 @@ public class Feedback extends AppCompatActivity implements OnHttpResponseListene
                             finish();
                         }
                     }, 1500);
+        }else {
+            loading.setVisibility(View.INVISIBLE);
+            done.setVisibility(View.INVISIBLE);
+            error.setVisibility(View.VISIBLE);
+            new android.os.Handler().postDelayed(
+                    new Runnable() {
+                        public void run() {
+                           error.setVisibility(View.INVISIBLE);
+                           feedback.setVisibility(View.VISIBLE);
+                        }
+                    }, 1500);
+        }
     }
 }
