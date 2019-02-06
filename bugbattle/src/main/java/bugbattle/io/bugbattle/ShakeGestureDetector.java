@@ -72,6 +72,7 @@ class ShakeGestureDetector implements SensorEventListener  {
                 mShakeCount++;
                 try {
                     screenshotTaker.takeScreenshot();
+                    pause();
                 } catch (Exception e) {
                     System.out.println(e);
                 }

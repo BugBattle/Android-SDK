@@ -45,15 +45,23 @@ public class BugBattle {
 
     /**
      * Manually start the bug reporting workflow. This is used, when you use the activation method "NONE".
+     * @throws BugBattleNotInitialisedException thrown when BugBattle is not initialised
      */
-    public static void startBugReporting() {
-        ScreenshotTaker sc = new ScreenshotTaker(service.getMainActivity());
-        try {
-            sc.takeScreenshot();
-        }catch (Exception e) {
-            System.out.println(e);
+    public static void startBugReporting() throws BugBattleNotInitialisedException{
+        if(instance != null) {
+            ScreenshotTaker sc = new ScreenshotTaker(service.getMainActivity());
+            try {
+                sc.takeScreenshot();
+            }catch (Exception e) {
+                System.out.println(e);
+            }
+        } else {
+            throw new BugBattleNotInitialisedException("BugBattle is not initialised");
         }
+
     }
+
+
 
     /**
      * Track a step to add more information to the bug report
