@@ -1,6 +1,7 @@
 package bugbattle.io.bugbattle;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
@@ -45,15 +46,7 @@ import java.util.List;
         setContentView(R.layout.activity_image_editor);
         View headerView = (View)findViewById(R.id.bb_header_view);
         service = FeedbackService.getInstance();
-        /**
-         *     int currentOrientation = getResources().getConfiguration().orientation;
-         *         if (currentOrientation == Configuration.ORIENTATION_LANDSCAPE) {
-         *             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
-         *         }
-         *         else {
-         *             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT);
-         *         }
-         */
+
         if(service.getImage().getWidth() > service.getImage().getHeight()) {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
         } else {
@@ -208,6 +201,11 @@ import java.util.List;
             public void onClick(View view) {
              if(!backClicked) {
                  backClicked = true;
+                 SharedPreferences pref = getApplicationContext().getSharedPreferences("prefs", 0);
+                 SharedPreferences.Editor editor = pref.edit();
+                 editor.putString("description", ""); // Storing string
+                 editor.commit();
+                 service.getShakeGestureDetector().resume();
                  finish();
              }
             }

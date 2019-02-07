@@ -28,6 +28,7 @@ public class BugBattle {
         bugBattleActivationMethod = activationMethod;
         if(activationMethod == BugBattleActivationMethod.SHAKE) {
             shakeGestureDetector = new ShakeGestureDetector(mainActivity);
+            service.setShakeGestureDetector(shakeGestureDetector);
         }
     }
 
@@ -50,6 +51,7 @@ public class BugBattle {
     public static void startBugReporting() throws BugBattleNotInitialisedException{
         if(instance != null) {
             ScreenshotTaker sc = new ScreenshotTaker(service.getMainActivity());
+
             try {
                 sc.takeScreenshot();
             }catch (Exception e) {

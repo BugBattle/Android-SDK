@@ -17,6 +17,7 @@ class FeedbackService {
     private LogReader logReader;
     private String appBarColor = "#515151";
     private JSONObject customData;
+    private ShakeGestureDetector shakeGestureDetector;
 
     private StepsToReproduce stepsToReproduce;
 
@@ -102,5 +103,13 @@ class FeedbackService {
 
     public void setCustomData(JSONObject customData) {
         this.customData = customData;
+    }
+
+    public ShakeGestureDetector getShakeGestureDetector() {
+        return shakeGestureDetector;
+    }
+
+    public void setShakeGestureDetector(ShakeGestureDetector shakeGestureDetector) {
+        this.shakeGestureDetector = shakeGestureDetector;
     }
 }

@@ -40,11 +40,13 @@ public class Feedback extends AppCompatActivity implements OnHttpResponseListene
     private ImageButton backToEdit;
     private EditText email;
     private EditText description;
+    private FeedbackService service;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_feedback);
+        service = FeedbackService.getInstance();
         pref = getApplicationContext().getSharedPreferences("prefs", 0);
 
         loading = (View) findViewById(R.id.bb_loading_view);
@@ -137,6 +139,8 @@ public class Feedback extends AppCompatActivity implements OnHttpResponseListene
         cancle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                resetDescription();
+                service.getShakeGestureDetector().resume();
                 finish();
             }
         });
@@ -176,7 +180,10 @@ public class Feedback extends AppCompatActivity implements OnHttpResponseListene
             new android.os.Handler().postDelayed(
                     new Runnable() {
                         public void run() {
+                            resetDescription();
+                            service.getShakeGestureDetector().resume();
                             finish();
+
                         }
                     }, 1500);
         }else {
