@@ -13,6 +13,7 @@ import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -67,6 +68,21 @@ import java.util.List;
 
         initBtn();
     }
+     @Override
+     public boolean onKeyDown(int keyCode, KeyEvent event)  {
+         if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
+             // do something on back.
+             service.getShakeGestureDetector().resume();
+             SharedPreferences pref = getApplicationContext().getSharedPreferences("prefs", 0);
+             SharedPreferences.Editor editor = pref.edit();
+             editor.putString("description", ""); // Storing string
+             editor.commit();
+             finish();
+             return true;
+         }
+
+         return super.onKeyDown(keyCode, event);
+     }
 
     private void initBtn() {
         red = (Button) findViewById(R.id.bb_redbutton);
