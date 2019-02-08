@@ -1,5 +1,7 @@
 package bugbattle.io.bugbattle;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
@@ -61,7 +63,6 @@ import java.util.List;
         next = (Button) findViewById(R.id.bb_next);
         nextIntent = new Intent(this, Feedback.class);
         back = (Button) findViewById(R.id.bb_close);
-       // backIntent =
         if(imageView != null) {
             imageView.setImageBitmap(service.getImage());
         }
@@ -72,12 +73,28 @@ import java.util.List;
      public boolean onKeyDown(int keyCode, KeyEvent event)  {
          if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
              // do something on back.
-             service.getShakeGestureDetector().resume();
-             SharedPreferences pref = getApplicationContext().getSharedPreferences("prefs", 0);
-             SharedPreferences.Editor editor = pref.edit();
-             editor.putString("description", ""); // Storing string
-             editor.commit();
-             finish();
+             AlertDialog alertDialog = new AlertDialog.Builder(ImageEditor.this).create();
+             alertDialog.setTitle("Back to the app");
+             alertDialog.setMessage("Do you want to go back to the app?");
+             alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "No",
+                     new DialogInterface.OnClickListener() {
+                         public void onClick(DialogInterface dialog, int which) {
+                             dialog.dismiss();
+                         }
+                     });
+             alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Yes",
+                     new DialogInterface.OnClickListener() {
+                         public void onClick(DialogInterface dialog, int which) {
+                             service.getShakeGestureDetector().resume();
+                             SharedPreferences pref = getApplicationContext().getSharedPreferences("prefs", 0);
+                             SharedPreferences.Editor editor = pref.edit();
+                             editor.putString("description", ""); // Storing string
+                             editor.commit();
+                             finish();
+                             dialog.dismiss();
+                         }
+                     });
+             alertDialog.show();
              return true;
          }
 
