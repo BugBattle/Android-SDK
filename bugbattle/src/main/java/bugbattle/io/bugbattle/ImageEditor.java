@@ -86,6 +86,7 @@ import java.util.List;
                      new DialogInterface.OnClickListener() {
                          public void onClick(DialogInterface dialog, int which) {
                              service.getShakeGestureDetector().resume();
+                             service.setImage(null);
                              SharedPreferences pref = getApplicationContext().getSharedPreferences("prefs", 0);
                              SharedPreferences.Editor editor = pref.edit();
                              editor.putString("description", ""); // Storing string
@@ -234,6 +235,7 @@ import java.util.List;
             public void onClick(View view) {
              if(!backClicked) {
                  backClicked = true;
+                 service.setImage(null);
                  SharedPreferences pref = getApplicationContext().getSharedPreferences("prefs", 0);
                  SharedPreferences.Editor editor = pref.edit();
                  editor.putString("description", ""); // Storing string

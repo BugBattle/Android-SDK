@@ -1,6 +1,12 @@
 package bugbattle.io.bugbattle;
 
+import android.Manifest;
+import android.content.Context;
+import android.content.pm.PackageManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Build;
+import android.support.v4.content.ContextCompat;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -18,15 +24,16 @@ class PhoneMeta {
     private static String buildVersionNumber;
     private static String releaseVersionNumber;
     private static PhoneMeta phoneMeta;
+    private static FeedbackService service;
 
-    private PhoneMeta(){
+    private PhoneMeta() {
         startTime = new Date().getTime();
         getPhoneMeta();
 
     }
 
     public static PhoneMeta init() {
-        if(phoneMeta == null) {
+        if (phoneMeta == null) {
             phoneMeta = new PhoneMeta();
         }
         return phoneMeta;
@@ -43,13 +50,14 @@ class PhoneMeta {
         obj.put("buildVersionNumber", buildVersionNumber);
         obj.put("releaseVersionNumber", releaseVersionNumber);
         obj.put("sessionDuration", calculateDuration());
+        obj.put("networkStatus", getNetworkStatus());
         return obj;
     }
 
     private void getPhoneMeta() {
         deviceModel = Build.MODEL;
         deviceName = Build.MODEL;
-        deviceIdentifier= "";
+        deviceIdentifier = "";
         bundleID = BuildConfig.APPLICATION_ID;
         systemName = "Android";
         systemVersion = Build.VERSION.RELEASE;
@@ -58,7 +66,34 @@ class PhoneMeta {
     }
 
     private static String calculateDuration() {
-        double timeDif = (new Date().getTime()-startTime )/1000;
+        double timeDif = (new Date().getTime() - startTime) / 1000;
         return Double.toString(timeDif);
+    }
+
+    private static JSONObject getNetworkStatus() {
+        service = FeedbackService.getInstance();
+        JSONObject result = new JSONObject();
+        if (ContextCompat.checkSelfPermission(service.getMainActivity(), Manifest.permission.ACCESS_NETWORK_STATE)
+                == PackageManager.PERMISSION_GRANTED) {
+
+            try {
+                ConnectivityManager cm =
+                        (ConnectivityManager) service.getMainActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+
+                NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+                boolean isConnected = activeNetwork != null &&
+                        activeNetwork.isConnectedOrConnecting();
+
+                result.put("isConnected", isConnected);
+                result.put("type", activeNetwork.getTypeName());
+                result.put("subType", activeNetwork.getSubtypeName());
+                return result;
+            } catch (JSONException ex) {
+                return result;
+            }
+        } else {
+            return result;
+        }
+
     }
 }

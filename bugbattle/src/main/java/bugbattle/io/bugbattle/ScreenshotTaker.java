@@ -22,19 +22,29 @@ import java.util.Date;
     }
     private FeedbackService service;
 
-    public void takeScreenshot() throws Exception {
-        Date now = new Date();
-        android.text.format.DateFormat.format("yyyyMMddhhmmss", now);
-        // image naming and path  to include sd card  appending name you choose for file
-        String mPath = Environment.getExternalStorageDirectory().toString() + "/" + now + ".jpg";
+     public static Bitmap loadBitmapFromView(Context context, View v) {
+         DisplayMetrics dm = context.getResources().getDisplayMetrics();
+         v.measure(View.MeasureSpec.makeMeasureSpec(dm.widthPixels, View.MeasureSpec.EXACTLY),
+                 View.MeasureSpec.makeMeasureSpec(dm.heightPixels, View.MeasureSpec.EXACTLY));
+         v.layout(0, 0, v.getMeasuredWidth(), v.getMeasuredHeight());
+         Bitmap returnedBitmap = Bitmap.createBitmap(v.getMeasuredWidth(),
+                 v.getMeasuredHeight(), Bitmap.Config.ARGB_8888);
+         Canvas c = new Canvas(returnedBitmap);
+         v.draw(c);
 
+         return returnedBitmap;
+     }
+
+    public void takeScreenshot() throws Exception {
         // create bitmap screen capture
         View v1 = activity.getWindow().getDecorView().getRootView();
         v1.setDrawingCacheEnabled(true);
-        Bitmap bitmap = Bitmap.createBitmap(v1.getDrawingCache());
-        v1.setDrawingCacheEnabled(false);
+        Bitmap bitmap = loadBitmapFromView(activity, v1);
+
         bitmap = getResizedBitmap(bitmap);
         openScreenshot(bitmap);
+        bitmap = null;
+        v1.setDrawingCacheEnabled(false);
     }
     public void openScreenshot(Bitmap imageFile) {
         Intent intent = new Intent(service.getMainActivity(), ImageEditor.class);

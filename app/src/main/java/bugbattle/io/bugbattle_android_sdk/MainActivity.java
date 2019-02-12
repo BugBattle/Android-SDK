@@ -11,6 +11,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        BugBattle.initialise(this,"random", BugBattleActivationMethod.SHAKE);
+        BugBattle.initialise(this,"5c41fcd794aaf5331dd4d513", BugBattleActivationMethod.SHAKE);
     }
 }
