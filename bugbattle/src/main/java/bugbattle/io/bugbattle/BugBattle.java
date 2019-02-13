@@ -1,6 +1,8 @@
 package bugbattle.io.bugbattle;
 
 import android.app.Activity;
+import android.app.Application;
+import android.content.Context;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -15,7 +17,7 @@ public class BugBattle {
     private static ShakeGestureDetector shakeGestureDetector;
     private static StepsToReproduce stepsToReproduce;
     private static FeedbackService service;
-    private BugBattle(String sdkKey, BugBattleActivationMethod activationMethod, Activity mainActivity) {
+    private BugBattle(String sdkKey, BugBattleActivationMethod activationMethod, Context mainActivity) {
         try {
             Runtime.getRuntime().exec("logcat -c");
         } catch (IOException e) {
@@ -38,9 +40,9 @@ public class BugBattle {
      * @param sdkKey The SDK key, which can be found on dashboard.bugbattle.io
      * @param activationMethod Activation method, which triggers a new bug report.
      */
-    public static void initialise(Activity mainActivity, String sdkKey, BugBattleActivationMethod activationMethod) {
+    public static void initialise(Application mainActivity, String sdkKey, BugBattleActivationMethod activationMethod) {
         if(instance == null){
-            instance = new BugBattle(sdkKey, activationMethod, mainActivity);
+            instance = new BugBattle(sdkKey, activationMethod, mainActivity.getApplicationContext());
         }
     }
 
@@ -50,7 +52,7 @@ public class BugBattle {
      */
     public static void startBugReporting() throws BugBattleNotInitialisedException{
         if(instance != null) {
-            ScreenshotTaker sc = new ScreenshotTaker(service.getMainActivity());
+            ScreenshotTaker sc = new ScreenshotTaker();
 
             try {
                 sc.takeScreenshot();

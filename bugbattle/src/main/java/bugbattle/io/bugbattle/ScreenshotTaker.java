@@ -20,9 +20,8 @@ import java.util.Date;
 import java.util.Map;
 
 class ScreenshotTaker {
-   // private Activity activity;
-    public ScreenshotTaker(Activity currActivity) {
-  //      activity = currActivity;
+
+    public ScreenshotTaker() {
         service = FeedbackService.getInstance();
 
     }

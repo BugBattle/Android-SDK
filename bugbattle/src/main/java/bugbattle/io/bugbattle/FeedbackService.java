@@ -1,13 +1,14 @@
 package bugbattle.io.bugbattle;
 
 import android.app.Activity;
+import android.content.Context;
 import android.graphics.Bitmap;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 class FeedbackService {
-    private Activity mainActivity;
+    private Context mainActivity;
     private String sdkKey;
     private Bitmap image;
     private String email;
@@ -81,11 +82,11 @@ class FeedbackService {
         this.description = description;
     }
 
-    public Activity getMainActivity() {
+    public Context getMainActivity() {
         return mainActivity;
     }
 
-    public void setMainActivity(Activity mainActivity) {
+    public void setMainActivity(Context mainActivity) {
         this.mainActivity = mainActivity;
     }
 

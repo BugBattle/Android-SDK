@@ -20,8 +20,8 @@ class ShakeGestureDetector implements SensorEventListener  {
     // The following are used for the shake detection
     private SensorManager mSensorManager;
     private Sensor mAccelerometer;
-    public Activity activity;
-    public ShakeGestureDetector(Activity mainActivity) {
+    public Context activity;
+    public ShakeGestureDetector(Context mainActivity) {
         activity = mainActivity;
         //Init Sensors
         mSensorManager = (SensorManager) mainActivity.getSystemService(Context.SENSOR_SERVICE);
@@ -32,7 +32,7 @@ class ShakeGestureDetector implements SensorEventListener  {
         mSensorManager.registerListener(this, mAccelerometer,	SensorManager.SENSOR_DELAY_UI);
 
         //init screenshot taker
-        screenshotTaker = new ScreenshotTaker(mainActivity);
+        screenshotTaker = new ScreenshotTaker();
     }
 
     public void resume() {
