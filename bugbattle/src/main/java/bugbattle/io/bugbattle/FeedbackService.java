@@ -8,7 +8,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 class FeedbackService {
-    private Context mainActivity;
+    private Context context;
     private String sdkKey;
     private Bitmap image;
     private String email;
@@ -82,12 +82,12 @@ class FeedbackService {
         this.description = description;
     }
 
-    public Context getMainActivity() {
-        return mainActivity;
+    public Context getContext() {
+        return context;
     }
 
-    public void setMainActivity(Context mainActivity) {
-        this.mainActivity = mainActivity;
+    public void setContext(Context context) {
+        this.context = context;
     }
 
      public String getAppBarColor() {

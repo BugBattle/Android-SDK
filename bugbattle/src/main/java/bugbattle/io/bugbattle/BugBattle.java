@@ -17,32 +17,34 @@ public class BugBattle {
     private static ShakeGestureDetector shakeGestureDetector;
     private static StepsToReproduce stepsToReproduce;
     private static FeedbackService service;
-    private BugBattle(String sdkKey, BugBattleActivationMethod activationMethod, Context mainActivity) {
+
+    private BugBattle(String sdkKey, BugBattleActivationMethod activationMethod, Application application) {
         try {
             Runtime.getRuntime().exec("logcat -c");
         } catch (IOException e) {
             System.out.println(e);
         }
+
         service = FeedbackService.init();
         stepsToReproduce = StepsToReproduce.getInstance();
-        service.setMainActivity(mainActivity);
+        service.setContext(application.getApplicationContext());
         service.setSdkKey(sdkKey);
         bugBattleActivationMethod = activationMethod;
         if(activationMethod == BugBattleActivationMethod.SHAKE) {
-            shakeGestureDetector = new ShakeGestureDetector(mainActivity);
+            shakeGestureDetector = new ShakeGestureDetector(application.getApplicationContext());
             service.setShakeGestureDetector(shakeGestureDetector);
         }
     }
 
     /**
      * Initialises the Bugbattle SDK.
-     * @param mainActivity The main activity of your application
+     * @param application The application (this)
      * @param sdkKey The SDK key, which can be found on dashboard.bugbattle.io
      * @param activationMethod Activation method, which triggers a new bug report.
      */
-    public static void initialise(Application mainActivity, String sdkKey, BugBattleActivationMethod activationMethod) {
+    public static void initialise(Application application, String sdkKey, BugBattleActivationMethod activationMethod) {
         if(instance == null){
-            instance = new BugBattle(sdkKey, activationMethod, mainActivity.getApplicationContext());
+            instance = new BugBattle(sdkKey, activationMethod, application);
         }
     }
 
