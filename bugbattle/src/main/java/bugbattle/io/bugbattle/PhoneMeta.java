@@ -1,6 +1,7 @@
 package bugbattle.io.bugbattle;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
@@ -11,7 +12,9 @@ import android.support.v4.content.ContextCompat;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Field;
 import java.util.Date;
+import java.util.Map;
 
 class PhoneMeta {
     private static double startTime;
@@ -73,12 +76,12 @@ class PhoneMeta {
     private static JSONObject getNetworkStatus() {
         service = FeedbackService.getInstance();
         JSONObject result = new JSONObject();
-        if (ContextCompat.checkSelfPermission(service.getMainActivity(), Manifest.permission.ACCESS_NETWORK_STATE)
+        if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_NETWORK_STATE)
                 == PackageManager.PERMISSION_GRANTED) {
 
             try {
                 ConnectivityManager cm =
-                        (ConnectivityManager) service.getMainActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+                        (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
 
                 NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
                 boolean isConnected = activeNetwork != null &&
@@ -95,5 +98,36 @@ class PhoneMeta {
             return result;
         }
 
+    }
+
+    private static Activity getActivity() {
+        try {
+            Class activityThreadClass = Class.forName("android.app.ActivityThread");
+            Object activityThread = activityThreadClass.getMethod("currentActivityThread").invoke(null);
+            Field activitiesField = activityThreadClass.getDeclaredField("mActivities");
+            activitiesField.setAccessible(true);
+
+            Map<Object, Object> activities = (Map<Object, Object>) activitiesField.get(activityThread);
+            if (activities == null)
+                return null;
+
+            for (Object activityRecord : activities.values()) {
+                Class activityRecordClass = activityRecord.getClass();
+                Field pausedField = activityRecordClass.getDeclaredField("paused");
+                pausedField.setAccessible(true);
+                if (!pausedField.getBoolean(activityRecord)) {
+                    Field activityField = activityRecordClass.getDeclaredField("activity");
+                    activityField.setAccessible(true);
+                    Activity activity = (Activity) activityField.get(activityRecord);
+                    return activity;
+                }
+            }
+
+            return null;
+        }catch (Exception e) {
+
+
+        }
+        return null;
     }
 }

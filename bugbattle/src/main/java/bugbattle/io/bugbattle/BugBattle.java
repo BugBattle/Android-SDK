@@ -1,19 +1,15 @@
 package bugbattle.io.bugbattle;
 
-import android.app.Activity;
 import android.app.Application;
-import android.content.Context;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.HashMap;
 
 
 public class BugBattle {
     private static BugBattle instance;
-    private BugBattleActivationMethod bugBattleActivationMethod;
     private static ShakeGestureDetector shakeGestureDetector;
     private static StepsToReproduce stepsToReproduce;
     private static FeedbackService service;
@@ -29,7 +25,6 @@ public class BugBattle {
         stepsToReproduce = StepsToReproduce.getInstance();
         service.setContext(application.getApplicationContext());
         service.setSdkKey(sdkKey);
-        bugBattleActivationMethod = activationMethod;
         if(activationMethod == BugBattleActivationMethod.SHAKE) {
             shakeGestureDetector = new ShakeGestureDetector(application.getApplicationContext());
             service.setShakeGestureDetector(shakeGestureDetector);

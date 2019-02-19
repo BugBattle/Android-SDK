@@ -108,10 +108,10 @@ class ScreenshotTaker {
         v1.setDrawingCacheEnabled(false);
     }
     public void openScreenshot(Bitmap imageFile) {
-        Intent intent = new Intent(service.getMainActivity(), ImageEditor.class);
+        Intent intent = new Intent(getActivity(), ImageEditor.class);
         //intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         service.setImage(imageFile);
-        service.getMainActivity().startActivity(intent);
+        getActivity().startActivity(intent);
     }
 
     private Bitmap getResizedBitmap(Bitmap bm) {
@@ -120,7 +120,7 @@ class ScreenshotTaker {
         // CREATE A MATRIX FOR THE MANIPULATION
         Matrix matrix = new Matrix();
         // RESIZE THE BIT MAP
-        int orientation = service.getMainActivity().getResources().getConfiguration().orientation;
+        int orientation = getActivity().getResources().getConfiguration().orientation;
         if (orientation == Configuration.ORIENTATION_PORTRAIT) {
             matrix.postScale(0.7f, 0.7f);
         } else {
