@@ -16,9 +16,10 @@ class FeedbackService {
     private static FeedbackService instance;
     private PhoneMeta phoneMeta;
     private LogReader logReader;
-    private String appBarColor = "#515151";
+    private String appBarColor = "#0169ff";
     private JSONObject customData;
     private ShakeGestureDetector shakeGestureDetector;
+    private String severity;
 
     private StepsToReproduce stepsToReproduce;
 
@@ -112,5 +113,14 @@ class FeedbackService {
 
     public void setShakeGestureDetector(ShakeGestureDetector shakeGestureDetector) {
         this.shakeGestureDetector = shakeGestureDetector;
+    }
+
+
+    public String getSeverity() {
+        return severity;
+    }
+
+    public void setSeverity(String severity) {
+        this.severity = severity;
     }
 }
