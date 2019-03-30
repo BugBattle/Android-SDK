@@ -99,9 +99,9 @@ public class Feedback extends AppCompatActivity implements OnHttpResponseListene
 
             public void onTextChanged(CharSequence s, int start,
                                       int before, int count) {
-                System.out.println(start);
                 if( count > 0 || start > 0) {
                     button.setEnabled(true);
+                    storeEmail();
                 }
             }
         });
