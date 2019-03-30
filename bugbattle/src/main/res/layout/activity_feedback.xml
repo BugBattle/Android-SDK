@@ -179,14 +179,14 @@
             android:id="@+id/bb_thumbnail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:minHeight="160dp"
-            android:minWidth="90dp"
             android:layout_marginLeft="20dp"
             android:layout_marginStart="20dp"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="24dp"
+            android:minHeight="160dp"
+            android:minWidth="90dp"
             android:scaleType="fitXY"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/bb_view2" />
+            app:layout_constraintTop_toBottomOf="@+id/radioGroup" />
 
         <ImageButton
             android:id="@+id/bb_edit_btn"
@@ -319,6 +319,57 @@
             app:layout_constraintBottom_toBottomOf="@+id/bb_header_view"
             app:layout_constraintStart_toStartOf="@+id/bb_header_view"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <RadioGroup
+            android:id="@+id/radioGroup"
+            android:layout_width="0dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:checkedButton="@+id/radioButton2"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/bb_view2">
+
+            <RadioButton
+                android:id="@+id/radioButton"
+                android:layout_width="123dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0"
+                android:background="@drawable/radio_btn_left"
+                android:button="@android:color/transparent"
+                android:checked="false"
+                android:gravity="center"
+                android:text="Low"
+                android:textColor="@drawable/text_inactive" />
+
+            <RadioButton
+                android:id="@+id/radioButton2"
+                android:layout_width="123dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0"
+                android:background="@drawable/radio_btn_center"
+                android:button="@android:color/transparent"
+                android:checked="true"
+                android:gravity="center"
+                android:text="Medium"
+                android:textColor="@drawable/text_inactive" />
+
+            <RadioButton
+                android:id="@+id/radioButton3"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="0"
+                android:background="@drawable/radio_btn_right"
+                android:button="@android:color/transparent"
+                android:gravity="center"
+                android:text="High"
+                android:textColor="@drawable/text_inactive" />
+        </RadioGroup>
 
     </android.support.constraint.ConstraintLayout>
 

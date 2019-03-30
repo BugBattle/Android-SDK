@@ -6,9 +6,13 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Matrix;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
 import android.os.Handler;
 import android.support.annotation.RequiresApi;
@@ -22,9 +26,11 @@ import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RadioButton;
 import android.widget.TextView;
 
 /**
@@ -44,7 +50,12 @@ public class Feedback extends AppCompatActivity implements OnHttpResponseListene
     private EditText email;
     private EditText description;
     private FeedbackService service;
+    private RadioButton radioButton1;
+    private RadioButton radioButton2;
+    private RadioButton radioButton3;
 
+
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -117,6 +128,7 @@ public class Feedback extends AppCompatActivity implements OnHttpResponseListene
                     hideKeyboard(Feedback.this);
                     service.setEmail(email.getText().toString());
                     service.setDescription(description.getText().toString());
+
                     storeEmail();
                     resetDescription();
                     try {
@@ -146,7 +158,102 @@ public class Feedback extends AppCompatActivity implements OnHttpResponseListene
                 finish();
             }
         });
+
+        radioButton1 = findViewById(R.id.radioButton);
+        radioButton2 = findViewById(R.id.radioButton2);
+        radioButton3 = findViewById(R.id.radioButton3);
+        if(radioButton1.isChecked()) {
+            Drawable background = service.getContext().getResources().getDrawable(R.drawable.left_active);
+            background.setColorFilter(Color.parseColor(service.getAppBarColor()), PorterDuff.Mode.SRC_IN);
+            radioButton1.setTextColor(Color.WHITE);
+            radioButton1.setBackground(background);
+        } else {
+            GradientDrawable drawable2 = (GradientDrawable)service.getContext().getResources().getDrawable(R.drawable.left_active);
+            drawable2.setStroke(((int)(2*Resources.getSystem().getDisplayMetrics().density)), Color.parseColor(service.getAppBarColor()));
+            radioButton1.setBackground(drawable2);
+            radioButton1.setTextColor(Color.parseColor(service.getAppBarColor()));
+        }
+        if(radioButton2.isChecked()) {
+            Drawable background = service.getContext().getResources().getDrawable(R.drawable.center_active);
+            background.setColorFilter(Color.parseColor(service.getAppBarColor()), PorterDuff.Mode.SRC_IN);
+            radioButton2.setBackground(background);
+            radioButton2.setTextColor(Color.WHITE);
+        } else {
+            GradientDrawable drawable2 = (GradientDrawable)service.getContext().getResources().getDrawable(R.drawable.center_active);
+            drawable2.setStroke(((int)(2*Resources.getSystem().getDisplayMetrics().density)), Color.parseColor(service.getAppBarColor()));
+
+            radioButton2.setBackground(drawable2);
+            radioButton2.setTextColor(Color.parseColor(service.getAppBarColor()));
+        }
+
+        if(radioButton3.isChecked()) {
+            Drawable background = service.getContext().getResources().getDrawable(R.drawable.right_active);
+            background.setColorFilter(Color.parseColor(service.getAppBarColor()), PorterDuff.Mode.SRC_IN);
+            radioButton3.setBackground(background);
+            radioButton3.setTextColor(Color.WHITE);
+        }else {
+            GradientDrawable drawable2 = (GradientDrawable)service.getContext().getResources().getDrawable(R.drawable.right_active);
+            drawable2.setStroke(((int)(2*Resources.getSystem().getDisplayMetrics().density)), Color.parseColor(service.getAppBarColor()));
+            radioButton3.setBackground(drawable2);
+            radioButton3.setTextColor(Color.parseColor(service.getAppBarColor()));
+        }
+
+        radioButton1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if(radioButton1.isChecked()) {
+                    service.setSeverity("low");
+                    Drawable background = service.getContext().getResources().getDrawable(R.drawable.left_active);
+                    background.setColorFilter(Color.parseColor(service.getAppBarColor()), PorterDuff.Mode.SRC_IN);
+                    radioButton1.setTextColor(Color.WHITE);
+                    radioButton1.setBackground(background);
+                } else {
+                   GradientDrawable drawable2 = (GradientDrawable)service.getContext().getResources().getDrawable(R.drawable.left_active);
+                    drawable2.setStroke(((int)(2*Resources.getSystem().getDisplayMetrics().density)), Color.parseColor(service.getAppBarColor()));
+                    radioButton1.setTextColor(Color.parseColor(service.getAppBarColor()));
+                    radioButton1.setBackground(drawable2);
+                }
+            }
+        });
+
+        radioButton2.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if(radioButton2.isChecked()) {
+                    service.setSeverity("medium");
+                    Drawable background = service.getContext().getResources().getDrawable(R.drawable.center_active);
+                    background.setColorFilter(Color.parseColor(service.getAppBarColor()), PorterDuff.Mode.SRC_IN);
+                    radioButton2.setTextColor(Color.WHITE);
+                    radioButton2.setBackground(background);
+                } else {
+                    GradientDrawable drawable2 = (GradientDrawable)service.getContext().getResources().getDrawable(R.drawable.center_active);
+                    drawable2.setStroke(((int)(2*Resources.getSystem().getDisplayMetrics().density)), Color.parseColor(service.getAppBarColor()));
+                    radioButton2.setTextColor(Color.parseColor(service.getAppBarColor()));
+                    radioButton2.setBackground(drawable2);
+                }
+            }
+        });
+        radioButton3.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if(radioButton3.isChecked()) {
+                    service.setSeverity("high");
+                    Drawable background = service.getContext().getResources().getDrawable(R.drawable.right_active);
+                    background.setColorFilter(Color.parseColor(service.getAppBarColor()), PorterDuff.Mode.SRC_IN);
+                    radioButton3.setTextColor(Color.WHITE);
+                    radioButton3.setBackground(background);
+                } else {
+                    GradientDrawable drawable2 = (GradientDrawable)service.getContext().getResources().getDrawable(R.drawable.right_active);
+                    drawable2.setStroke(((int)(2*Resources.getSystem().getDisplayMetrics().density)), Color.parseColor(service.getAppBarColor()));
+                    radioButton3.setTextColor(Color.parseColor(service.getAppBarColor()));
+                    radioButton3.setBackground(drawable2);
+                }
+            }
+        });
+
     }
+
+
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event)  {

@@ -13,16 +13,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        BugBattle.initialise(getApplication(), "", BugBattleActivationMethod.SHAKE);
-        ((Button)findViewById(R.id.button)).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                try {
-                    BugBattle.startBugReporting();
-                }catch (Exception e) {
-                    System.out.println(e);
-                }
-            }
-        });
+        BugBattle.initialise(getApplication(), "5c41fcd794aaf5331dd4d513",BugBattleActivationMethod.SHAKE);
+        BugBattle.setAppBarColor("#ff0000");
     }
 }

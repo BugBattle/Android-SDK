@@ -71,6 +71,7 @@ import javax.net.ssl.HttpsURLConnection;
         result.put("consoleLog", service.getLogs());
         result.put("actionLog", service.getStepsToReproduce());
         result.put("customData", service.getCustomData());
+        result.put("severity", service.getSeverity());
         OutputStreamWriter wr= new OutputStreamWriter(conn.getOutputStream());
         System.out.println(result.toString());
         wr.write(result.toString());
