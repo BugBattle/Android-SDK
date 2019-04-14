@@ -37,10 +37,11 @@ public class BugBattle {
      * @param sdkKey The SDK key, which can be found on dashboard.bugbattle.io
      * @param activationMethod Activation method, which triggers a new bug report.
      */
-    public static void initialise(Application application, String sdkKey, BugBattleActivationMethod activationMethod) {
+    public static BugBattle initialise(Application application, String sdkKey, BugBattleActivationMethod activationMethod) {
         if(instance == null){
             instance = new BugBattle(sdkKey, activationMethod, application);
         }
+        return instance;
     }
 
     /**
