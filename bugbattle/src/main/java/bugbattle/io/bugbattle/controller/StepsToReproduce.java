@@ -30,7 +30,6 @@ public class StepsToReproduce {
      * @param type {@link STEPTYPE} or any custom tag
      * @param data additonal information
      */
-
     public void setStep(String type, String data) {
         try {
             JSONObject step = new JSONObject();
@@ -43,7 +42,6 @@ public class StepsToReproduce {
             System.out.println(e);
         }
     }
-
 
     public JSONArray getSteps() {
         return steps;

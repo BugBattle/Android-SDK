@@ -56,7 +56,6 @@ public class Feedback {
     public  void setSdkKey(String key) {
         sdkKey = key;
     }
-
     public void setImage(Bitmap img) {
         image = img;
     }
@@ -64,11 +63,9 @@ public class Feedback {
     public Bitmap getImage() {
         return image;
     }
-
     public JSONArray getLogs() {
         return logReader.readLog();
     }
-
     public JSONArray getStepsToReproduce() {
         return stepsToReproduce.getSteps();
     }
@@ -76,7 +73,6 @@ public class Feedback {
     public String getEmail() {
         return email;
     }
-
     public String getDescription() {
         return description;
     }
@@ -84,7 +80,6 @@ public class Feedback {
     public void setEmail(String email) {
         this.email = email;
     }
-
     public void setDescription(String description) {
         this.description = description;
     }
@@ -92,23 +87,20 @@ public class Feedback {
     public Context getContext() {
         return context;
     }
-
     public void setContext(Context context) {
         this.context = context;
     }
 
-     public String getAppBarColor() {
+    public String getAppBarColor() {
          return appBarColor;
      }
-
      public void setAppBarColor(String appBarColor) {
          this.appBarColor = appBarColor;
      }
 
-    public JSONObject getCustomData() {
+     public JSONObject getCustomData() {
         return customData;
     }
-
     public void setCustomData(JSONObject customData) {
         this.customData = customData;
     }
@@ -116,16 +108,13 @@ public class Feedback {
     public ShakeGestureDetector getShakeGestureDetector() {
         return shakeGestureDetector;
     }
-
     public void setShakeGestureDetector(ShakeGestureDetector shakeGestureDetector) {
         this.shakeGestureDetector = shakeGestureDetector;
     }
 
-
     public String getSeverity() {
         return severity;
     }
-
     public void setSeverity(String severity) {
         this.severity = severity;
     }
