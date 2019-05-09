@@ -1,9 +1,18 @@
 <resources>
     <string name="app_name">bugbattle</string>
     <string name="image" />
-
-    <string name="title_activity_feedback">Feedback</string>
-    <string name="loading">Sending your bug report ...</string>
-    <string name="done">Thank you for your bug report!</string>
-    <string name="error">Ups, something went wrong.</string>
+    <string name="imageview_cancel">Cancle</string>
+    <string name="imageview_next">Next</string>
+    <string name="imageview_title">Report a bug</string>
+    <string name="report_cancel">Cancle</string>
+    <string name="report_next">Send</string>
+    <string name="report_title">Report a bug</string>
+    <string name="report_email_placeholder">Enter your Email</string>
+    <string name="report_description_placeholder">Describe your problem</string>
+    <string name="report_priority_low">low</string>
+    <string name="report_priority_medium">medium</string>
+    <string name="report_priority_high">high</string>
+    <string name="report_loading">Sending your bug report ...</string>
+    <string name="report_done">Thank you for your bug report!</string>
+    <string name="report_error">Ups, something went wrong.</string>
 </resources>

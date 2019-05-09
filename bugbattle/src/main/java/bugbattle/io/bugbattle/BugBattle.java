@@ -5,23 +5,23 @@ import android.app.Application;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
+import bugbattle.io.bugbattle.controller.BugBattleActivationMethod;
+import bugbattle.io.bugbattle.controller.BugBattleNotInitialisedException;
+import bugbattle.io.bugbattle.model.Feedback;
+import bugbattle.io.bugbattle.model.STEPTYPE;
+import bugbattle.io.bugbattle.controller.StepsToReproduce;
+import bugbattle.io.bugbattle.service.ScreenshotTaker;
+import bugbattle.io.bugbattle.service.ShakeGestureDetector;
 
 
 public class BugBattle {
     private static BugBattle instance;
     private static ShakeGestureDetector shakeGestureDetector;
     private static StepsToReproduce stepsToReproduce;
-    private static FeedbackService service;
+    private static Feedback service;
 
     private BugBattle(String sdkKey, BugBattleActivationMethod activationMethod, Application application) {
-        try {
-            Runtime.getRuntime().exec("logcat -c");
-        } catch (IOException e) {
-            System.out.println(e);
-        }
-
-        service = FeedbackService.init();
+        service = Feedback.init();
         stepsToReproduce = StepsToReproduce.getInstance();
         service.setContext(application.getApplicationContext());
         service.setSdkKey(sdkKey);
@@ -37,7 +37,7 @@ public class BugBattle {
      * @param sdkKey The SDK key, which can be found on dashboard.bugbattle.io
      * @param activationMethod Activation method, which triggers a new bug report.
      */
-    public static BugBattle initialise(Application application, String sdkKey, BugBattleActivationMethod activationMethod) {
+    public static BugBattle initialise(String sdkKey, BugBattleActivationMethod activationMethod,Application application) {
         if(instance == null){
             instance = new BugBattle(sdkKey, activationMethod, application);
         }

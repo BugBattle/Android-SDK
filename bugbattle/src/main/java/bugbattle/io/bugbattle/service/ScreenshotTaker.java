@@ -1,62 +1,29 @@
-package bugbattle.io.bugbattle;
+package bugbattle.io.bugbattle.service;
 
 import android.app.Activity;
-import android.app.ActivityManager;
-import android.content.ComponentName;
-import android.content.Context;
-import android.content.ContextWrapper;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
-import android.graphics.Canvas;
 import android.graphics.Matrix;
-import android.graphics.Rect;
-import android.os.Environment;
-import android.util.DisplayMetrics;
 import android.view.View;
 
 import java.lang.reflect.Field;
-import java.util.Date;
 import java.util.Map;
 
-class ScreenshotTaker {
+import bugbattle.io.bugbattle.view.ImageEditor;
+import bugbattle.io.bugbattle.model.Feedback;
+
+
+/**
+ * Takes a screenshot of the current view
+ */
+public class ScreenshotTaker {
 
     public ScreenshotTaker() {
-        service = FeedbackService.getInstance();
+        service = Feedback.getInstance();
 
     }
-    private FeedbackService service;
-
-     public static Bitmap loadBitmapFromView(Context context, View v) {
-         DisplayMetrics dm = context.getResources().getDisplayMetrics();
-         v.measure(View.MeasureSpec.makeMeasureSpec(dm.widthPixels, View.MeasureSpec.EXACTLY),
-                 View.MeasureSpec.makeMeasureSpec(dm.heightPixels, View.MeasureSpec.EXACTLY));
-         v.layout(0, 0, v.getMeasuredWidth(), v.getMeasuredHeight());
-         Bitmap returnedBitmap = Bitmap.createBitmap(v.getMeasuredWidth(),
-                 v.getMeasuredHeight(), Bitmap.Config.ARGB_8888);
-         Canvas c = new Canvas(returnedBitmap);
-         v.draw(c);
-
-         return returnedBitmap;
-     }
-
-     public static Bitmap takeScreenShot(Activity activity) {
-         View view = activity.getWindow().getDecorView();
-         view.setDrawingCacheEnabled(true);
-         view.buildDrawingCache();
-         Bitmap b1 = view.getDrawingCache();
-         Rect frame = new Rect();
-         activity.getWindow().getDecorView().getWindowVisibleDisplayFrame(frame);
-         int statusBarHeight = frame.top;
-
-         //Find the screen dimensions to create bitmap in the same size.
-         int width = activity.getWindowManager().getDefaultDisplay().getWidth();
-         int height = activity.getWindowManager().getDefaultDisplay().getHeight();
-
-         Bitmap b = Bitmap.createBitmap(b1, 0, statusBarHeight, width, height - statusBarHeight);
-         view.destroyDrawingCache();
-         return b;
-     }
+    private Feedback service;
 
 
      public static Activity getActivity() {
@@ -90,26 +57,19 @@ class ScreenshotTaker {
          return null;
      }
 
-     public void takeScreenshot() throws Exception {
-     /*    ActivityManager am = (ActivityManager)activity.getSystemService(Context.ACTIVITY_SERVICE);
-         ActivityManager.RunningTaskInfo cn = am.getRunningTasks(1).get(0);
-         */
-
-
-        // create bitmap screen capture
+    /**
+     * Take a screenshot of the current view and opens it in the editor
+     */
+    public void takeScreenshot() {
         View v1 = getActivity().getWindow().getDecorView().getRootView() ;
         v1.setDrawingCacheEnabled(true);
         Bitmap bitmap = v1.getDrawingCache();
-
-
         bitmap = getResizedBitmap(bitmap);
         openScreenshot(bitmap);
-        bitmap = null;
         v1.setDrawingCacheEnabled(false);
     }
-    public void openScreenshot(Bitmap imageFile) {
+    private void openScreenshot(Bitmap imageFile) {
         Intent intent = new Intent(getActivity(), ImageEditor.class);
-        //intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         service.setImage(imageFile);
         getActivity().startActivity(intent);
     }
@@ -126,7 +86,6 @@ class ScreenshotTaker {
         } else {
             matrix.postScale(0.5f, 0.5f);
         }
-
 
         // "RECREATE" THE NEW BITMAP
         Bitmap resizedBitmap = Bitmap.createBitmap(

@@ -1,13 +1,10 @@
-package bugbattle.io.bugbattle;
+package bugbattle.io.bugbattle.view;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
-import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
-import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -19,12 +16,13 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 
-import java.util.List;
+import bugbattle.io.bugbattle.R;
+import bugbattle.io.bugbattle.model.Feedback;
+import bugbattle.io.bugbattle.service.ImageMerger;
 
- public class ImageEditor extends AppCompatActivity {
+public class ImageEditor extends AppCompatActivity {
     private ImageView imageView;
     private DrawerView drawerView;
     private Button red;
@@ -35,7 +33,7 @@ import java.util.List;
     private Button yellow;
     private Button gray;
 
-    private FeedbackService service;
+    private Feedback service;
     //Add Navigation
     private Button next;
     private Intent nextIntent;
@@ -48,7 +46,7 @@ import java.util.List;
 
         setContentView(R.layout.activity_image_editor);
         View headerView = (View)findViewById(R.id.bb_header_view);
-        service = FeedbackService.getInstance();
+        service = Feedback.getInstance();
 
         if(service.getImage().getWidth() > service.getImage().getHeight()) {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
@@ -61,7 +59,7 @@ import java.util.List;
 
         //navigation
         next = (Button) findViewById(R.id.bb_next);
-        nextIntent = new Intent(this, Feedback.class);
+        nextIntent = new Intent(this, bugbattle.io.bugbattle.view.Feedback.class);
         back = (Button) findViewById(R.id.bb_close);
         if(imageView != null) {
             imageView.setImageBitmap(service.getImage());
@@ -222,8 +220,8 @@ import java.util.List;
             @Override
             public void onClick(View view) {
                // File result = saveBitmap());
-                Intent intent = new Intent(ImageEditor.this, Feedback.class);
-                Bitmap mergedImage = ImageProcessing.mergeImages(loadBitmapFromView(imageView), loadBitmapFromView(drawerView));
+                Intent intent = new Intent(ImageEditor.this, bugbattle.io.bugbattle.view.Feedback.class);
+                Bitmap mergedImage = ImageMerger.mergeImages(loadBitmapFromView(imageView), loadBitmapFromView(drawerView));
                 service.setImage(mergedImage);
                 ImageEditor.this.startActivity(intent);
                 finish();

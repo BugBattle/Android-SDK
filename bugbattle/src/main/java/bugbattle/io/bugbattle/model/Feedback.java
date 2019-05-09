@@ -1,19 +1,25 @@
-package bugbattle.io.bugbattle;
+package bugbattle.io.bugbattle.model;
 
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-class FeedbackService {
+import bugbattle.io.bugbattle.controller.StepsToReproduce;
+import bugbattle.io.bugbattle.service.LogReader;
+import bugbattle.io.bugbattle.service.ShakeGestureDetector;
+
+/**
+ * Contains all relevant information gathered in the background.
+ */
+public class Feedback {
     private Context context;
     private String sdkKey;
     private Bitmap image;
     private String email;
     private String description;
-    private static FeedbackService instance;
+    private static Feedback instance;
     private PhoneMeta phoneMeta;
     private LogReader logReader;
     private String appBarColor = "#0169ff";
@@ -23,21 +29,21 @@ class FeedbackService {
 
     private StepsToReproduce stepsToReproduce;
 
-    private FeedbackService()  {
+    private Feedback()  {
         phoneMeta = PhoneMeta.init();
         logReader = new LogReader();
         stepsToReproduce = StepsToReproduce.getInstance();
         customData = new JSONObject();
     }
 
-    public static FeedbackService init() {
+    public static Feedback init() {
         if(instance == null) {
-            instance = new FeedbackService();
+            instance = new Feedback();
         }
         return instance;
     }
 
-    public static FeedbackService getInstance() {
+    public static Feedback getInstance() {
         return instance;
     }
     public PhoneMeta getPhoneMeta() {

@@ -1,9 +1,7 @@
-package bugbattle.io.bugbattle;
+package bugbattle.io.bugbattle.view;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
@@ -14,16 +12,13 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
-import android.os.Handler;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CompoundButton;
@@ -31,12 +26,12 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RadioButton;
-import android.widget.TextView;
 
-/**
- * An example full-screen activity that shows and hides the system UI (i.e.
- * status bar and navigation/system bar) with user interaction.
- */
+import bugbattle.io.bugbattle.R;
+import bugbattle.io.bugbattle.controller.OnHttpResponseListener;
+import bugbattle.io.bugbattle.service.HttpHelper;
+
+
 public class Feedback extends AppCompatActivity implements OnHttpResponseListener {
     private Button button;
     private Button cancle;
@@ -49,7 +44,7 @@ public class Feedback extends AppCompatActivity implements OnHttpResponseListene
     private ImageButton backToEdit;
     private EditText email;
     private EditText description;
-    private FeedbackService service;
+    private bugbattle.io.bugbattle.model.Feedback service;
     private RadioButton radioButton1;
     private RadioButton radioButton2;
     private RadioButton radioButton3;
@@ -60,7 +55,7 @@ public class Feedback extends AppCompatActivity implements OnHttpResponseListene
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_feedback);
-        service = FeedbackService.getInstance();
+        service = bugbattle.io.bugbattle.model.Feedback.getInstance();
         pref = getApplicationContext().getSharedPreferences("prefs", 0);
 
         loading = (View) findViewById(R.id.bb_loading_view);
@@ -72,7 +67,7 @@ public class Feedback extends AppCompatActivity implements OnHttpResponseListene
         feedback = (View) findViewById(R.id.bb_feedback);
         button = (Button) findViewById(R.id.bb_btnsend);
         cancle = (Button) findViewById(R.id.bb_btncancle);
-        final FeedbackService service = FeedbackService.getInstance();
+        final bugbattle.io.bugbattle.model.Feedback service = bugbattle.io.bugbattle.model.Feedback.getInstance();
         View headerView = findViewById(R.id.bb_header_view);
         headerView.setBackgroundColor(Color.parseColor(service.getAppBarColor()));
         description = (EditText) findViewById(R.id.description);

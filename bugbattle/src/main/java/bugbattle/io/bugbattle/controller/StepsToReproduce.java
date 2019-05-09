@@ -1,13 +1,17 @@
-package bugbattle.io.bugbattle;
+package bugbattle.io.bugbattle.controller;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
- class StepsToReproduce {
+import bugbattle.io.bugbattle.model.STEPTYPE;
+
+/**
+ * Add steps to add more detailed steps, beside the already collected data.
+ */
+public class StepsToReproduce {
     private static StepsToReproduce instance;
     private JSONArray steps = new JSONArray();
     private StepsToReproduce() {
@@ -21,6 +25,11 @@ import java.util.Date;
         return instance;
     }
 
+    /**
+     * Add a custom step.
+     * @param type {@link STEPTYPE} or any custom tag
+     * @param data additonal information
+     */
 
     public void setStep(String type, String data) {
         try {

@@ -1,4 +1,4 @@
-package bugbattle.io.bugbattle;
+package bugbattle.io.bugbattle.model;
 
 import android.Manifest;
 import android.app.Activity;
@@ -16,7 +16,12 @@ import java.lang.reflect.Field;
 import java.util.Date;
 import java.util.Map;
 
-class PhoneMeta {
+import bugbattle.io.bugbattle.BuildConfig;
+
+/**
+ * Collected information, gathered from the phone
+ */
+public class PhoneMeta {
     private static double startTime;
     private static String deviceModel;
     private static String deviceName;
@@ -27,7 +32,7 @@ class PhoneMeta {
     private static String buildVersionNumber;
     private static String releaseVersionNumber;
     private static PhoneMeta phoneMeta;
-    private static FeedbackService service;
+    private static Feedback service;
 
     private PhoneMeta() {
         startTime = new Date().getTime();
@@ -41,6 +46,7 @@ class PhoneMeta {
         }
         return phoneMeta;
     }
+
 
     public JSONObject getJSONObj() throws JSONException {
         JSONObject obj = new JSONObject();
@@ -74,7 +80,7 @@ class PhoneMeta {
     }
 
     private static JSONObject getNetworkStatus() {
-        service = FeedbackService.getInstance();
+        service = Feedback.getInstance();
         JSONObject result = new JSONObject();
         if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_NETWORK_STATE)
                 == PackageManager.PERMISSION_GRANTED) {

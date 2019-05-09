@@ -1,10 +1,19 @@
-package bugbattle.io.bugbattle;
+package bugbattle.io.bugbattle.service;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 
- class ImageProcessing {
 
+/**
+ * Merges the image and the drawn layer to one bitmap
+ */
+public class ImageMerger {
+    /**
+     * Merges two layers
+     * @param background layer in the back of the merged image
+     * @param overlay layer in the front of the merged image
+     * @return merged bitmap
+     */
     public static Bitmap mergeImages(Bitmap background, Bitmap overlay) {
             try
             {
@@ -18,7 +27,6 @@ import android.graphics.Canvas;
 
             } catch (Exception e)
             {
-                // TODO: handle exception
                 e.printStackTrace();
                 return null;
             }

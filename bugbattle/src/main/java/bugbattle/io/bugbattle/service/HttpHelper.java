@@ -1,4 +1,4 @@
-package bugbattle.io.bugbattle;
+package bugbattle.io.bugbattle.service;
 
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
@@ -18,7 +18,13 @@ import java.net.URL;
 
 import javax.net.ssl.HttpsURLConnection;
 
- class HttpHelper extends AsyncTask<FeedbackService, Void, Integer> {
+import bugbattle.io.bugbattle.controller.OnHttpResponseListener;
+import bugbattle.io.bugbattle.model.Feedback;
+
+/**
+ * Sends the report to the bugbattle dashboard.
+ */
+public class HttpHelper extends AsyncTask<Feedback, Void, Integer> {
     private static final String GET_SIGNED_URL = "https://ii5xbrdd27.execute-api.eu-central-1.amazonaws.com/default/getSignedBugBattleUploadUrl";
     private static final String MONGO_STICH = "https://webhooks.mongodb-stitch.com/api/client/v2.0/app/bugbattle-xfblb/service/reportBug/incoming_webhook/reportBugWebhook?token=";
 
@@ -30,8 +36,8 @@ import javax.net.ssl.HttpsURLConnection;
     }
 
     @Override
-    protected Integer doInBackground(FeedbackService... feedbackServices) {
-        FeedbackService service = feedbackServices[0];
+    protected Integer doInBackground(Feedback... feedbacks) {
+        Feedback service = feedbacks[0];
         Integer httpResult = 0;
             try {
                 if ((httpResult = postS3Bucket(service.getSdkKey())) == HttpURLConnection.HTTP_OK) {
@@ -57,7 +63,7 @@ import javax.net.ssl.HttpsURLConnection;
     }
 
 
-    private Integer postFeedback(FeedbackService service) throws JSONException, MalformedURLException, IOException {
+    private Integer postFeedback(Feedback service) throws JSONException, MalformedURLException, IOException {
         HttpsURLConnection conn = (HttpsURLConnection) new URL(MONGO_STICH+service.getSdkKey()).openConnection();
         conn.setDoOutput(true);
 

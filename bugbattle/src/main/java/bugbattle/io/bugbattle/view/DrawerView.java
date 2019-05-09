@@ -1,4 +1,4 @@
-package bugbattle.io.bugbattle;
+package bugbattle.io.bugbattle.view;
 
 import android.content.Context;
 import android.graphics.Canvas;

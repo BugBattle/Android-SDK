@@ -5,12 +5,12 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <application>
         <activity
-            android:name=".ImageEditor"
+            android:name=".view.ImageEditor"
             android:theme="@style/Theme.AppCompat.NoActionBar" />
         <activity
-            android:name=".Feedback"
+            android:name=".view.Feedback"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:label="@string/title_activity_feedback"
+            android:label="@string/imageview_title"
             android:theme="@style/Theme.AppCompat.NoActionBar"></activity>
     </application>
 

@@ -1,4 +1,4 @@
-package bugbattle.io.bugbattle;
+package bugbattle.io.bugbattle.service;
 
 
 import org.json.JSONArray;
@@ -16,7 +16,10 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
- class LogReader {
+/**
+ * Read the log of the application.
+ */
+public class LogReader {
 
     private String formatDate(String time, String date) {
         String result = "";
@@ -25,6 +28,12 @@ import java.util.regex.Pattern;
         result += Calendar.getInstance().get(Calendar.YEAR)+ "-"+ splittedDate[1] + "-" + splittedDate[0] + " " + time;
         return result;
     }
+
+     /**
+      * Reads the stacktrace, formats the string
+      * @return {@link JSONArray} formatted log
+      */
+
     public JSONArray readLog(){
         try {
             Process process = Runtime.getRuntime().exec("logcat -d");

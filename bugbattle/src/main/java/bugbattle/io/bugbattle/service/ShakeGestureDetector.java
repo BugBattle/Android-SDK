@@ -1,4 +1,4 @@
-package bugbattle.io.bugbattle;
+package bugbattle.io.bugbattle.service;
 
 import android.app.Activity;
 import android.content.Context;
@@ -7,8 +7,10 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 
-
-class ShakeGestureDetector implements SensorEventListener  {
+/**
+ * Detects the shake gesture of the phone
+ */
+public class ShakeGestureDetector implements SensorEventListener  {
     private static final float SHAKE_THRESHOLD_GRAVITY = 2.7F;
     private static final int SHAKE_SLOP_TIME_MS = 500;
     private static final int SHAKE_COUNT_RESET_TIME_MS = 3000;
@@ -21,6 +23,11 @@ class ShakeGestureDetector implements SensorEventListener  {
     private SensorManager mSensorManager;
     private Sensor mAccelerometer;
     public Context activity;
+
+    /**
+     * called when a shake gesture is detected
+     * @param mainActivity context is needed to access the sensor
+     */
     public ShakeGestureDetector(Context mainActivity) {
         activity = mainActivity;
         //Init Sensors
