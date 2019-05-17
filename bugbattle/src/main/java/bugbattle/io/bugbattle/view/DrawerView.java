@@ -9,12 +9,10 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
- class DrawerView  extends View {
+class DrawerView extends View {
     // setup initial color
     private int paintColor = Color.RED;
     // defines paint and canvas
@@ -47,16 +45,17 @@ import java.util.List;
         paint.setStyle(Paint.Style.STROKE); // change to fill
         return paint;
     }
+
     // Setup paint with color and stroke styles
     private void setupPaint() {
-       // drawPaint.add(generatePaint(paintColor));
+        // drawPaint.add(generatePaint(paintColor));
         tmpPaint = generatePaint(paintColor);
     }
 
     // Draw each circle onto the view
     @Override
     protected void onDraw(Canvas canvas) {
-        for(int i = 0; i < paths.size(); i++) {
+        for (int i = 0; i < paths.size(); i++) {
             canvas.drawPath(paths.get(i), drawPaint.get(i));
         }
     }
@@ -87,7 +86,6 @@ import java.util.List;
         postInvalidate(); // Indicate view should be redrawn
         return true; // Indicate we've consumed the touch
     }
-
 
 
 }

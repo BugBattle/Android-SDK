@@ -6,20 +6,19 @@ import org.json.JSONObject;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import bugbattle.io.bugbattle.model.STEPTYPE;
-
 /**
  * Add steps to add more detailed steps, beside the already collected data.
  */
 public class StepsToReproduce {
     private static StepsToReproduce instance;
     private JSONArray steps = new JSONArray();
+
     private StepsToReproduce() {
 
     }
 
     public static StepsToReproduce getInstance() {
-        if(instance == null) {
+        if (instance == null) {
             instance = new StepsToReproduce();
         }
         return instance;
@@ -27,7 +26,8 @@ public class StepsToReproduce {
 
     /**
      * Add a custom step.
-     * @param type {@link STEPTYPE} or any custom tag
+     *
+     * @param type any custom tag
      * @param data additonal information
      */
     public void setStep(String type, String data) {
@@ -35,10 +35,10 @@ public class StepsToReproduce {
             JSONObject step = new JSONObject();
             step.put("type", type);
             step.put("data", data);
-            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss:SSSS");
-            step.put("date", format.format(new Date()));
+
+            step.put("date", new Date().toString());
             steps.put(step);
-        }catch (Exception e) {
+        } catch (Exception e) {
             System.out.println(e);
         }
     }

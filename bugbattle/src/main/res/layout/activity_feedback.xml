@@ -332,14 +332,14 @@
             android:layout_marginTop="24dp"
             android:layout_marginEnd="16dp"
             android:layout_marginRight="16dp"
-            android:checkedButton="@+id/radioButton2"
+            android:checkedButton="@+id/priorityMedium"
             android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/bb_view2">
 
             <RadioButton
-                android:id="@+id/radioButton"
+                android:id="@+id/priorityLow"
                 android:layout_width="123dp"
                 android:layout_height="match_parent"
                 android:layout_weight="0"
@@ -351,7 +351,7 @@
                 android:textColor="@drawable/text_inactive" />
 
             <RadioButton
-                android:id="@+id/radioButton2"
+                android:id="@+id/priorityMedium"
                 android:layout_width="123dp"
                 android:layout_height="match_parent"
                 android:layout_weight="0"
@@ -363,7 +363,7 @@
                 android:textColor="@drawable/text_inactive" />
 
             <RadioButton
-                android:id="@+id/radioButton3"
+                android:id="@+id/priorityHigh"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="0"

@@ -11,7 +11,7 @@
             android:name=".view.Feedback"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/imageview_title"
-            android:theme="@style/Theme.AppCompat.NoActionBar"></activity>
+            android:theme="@style/Theme.AppCompat.NoActionBar" />
     </application>
 
 </manifest>

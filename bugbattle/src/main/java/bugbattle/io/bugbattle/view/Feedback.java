@@ -11,8 +11,6 @@ import android.graphics.Matrix;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
-import android.os.Build;
-import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
@@ -29,60 +27,134 @@ import android.widget.RadioButton;
 
 import bugbattle.io.bugbattle.R;
 import bugbattle.io.bugbattle.controller.OnHttpResponseListener;
+import bugbattle.io.bugbattle.model.FeedbackModel;
 import bugbattle.io.bugbattle.service.HttpHelper;
 
 
 public class Feedback extends AppCompatActivity implements OnHttpResponseListener {
-    private Button button;
-    private Button cancle;
-    private View loading;
-    private View done;
-    private View error;
-    private View feedback;
+    private Button sendButton;
+    private Button cancleButton;
+
+    private RadioButton priorityLow;
+    private RadioButton priorityMedium;
+    private RadioButton priorityHigh;
+
+    private View loadingView;
+    private View doneSendingView;
+    private View errorSendingView;
+    private View feedbackView;
+
+    private ImageButton backToEditImageButton;
+
+    private EditText emailEditText;
+    private EditText descriptionEditText;
+
+    private FeedbackModel feedbackModel;
     private SharedPreferences pref;
-    private ImageView thumbnail;
-    private ImageButton backToEdit;
-    private EditText email;
-    private EditText description;
-    private bugbattle.io.bugbattle.model.Feedback service;
-    private RadioButton radioButton1;
-    private RadioButton radioButton2;
-    private RadioButton radioButton3;
 
-
-    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_feedback);
-        service = bugbattle.io.bugbattle.model.Feedback.getInstance();
-        pref = getApplicationContext().getSharedPreferences("prefs", 0);
+        feedbackModel = FeedbackModel.getInstance();
 
-        loading = (View) findViewById(R.id.bb_loading_view);
-        loading.setVisibility(View.INVISIBLE);
-        error = (View) findViewById(R.id.bb_done_error);
-        error.setVisibility(View.INVISIBLE);
-        done = (View) findViewById(R.id.bb_done_view);
-        done.setVisibility(View.INVISIBLE);
-        feedback = (View) findViewById(R.id.bb_feedback);
-        button = (Button) findViewById(R.id.bb_btnsend);
-        cancle = (Button) findViewById(R.id.bb_btncancle);
-        final bugbattle.io.bugbattle.model.Feedback service = bugbattle.io.bugbattle.model.Feedback.getInstance();
-        View headerView = findViewById(R.id.bb_header_view);
-        headerView.setBackgroundColor(Color.parseColor(service.getAppBarColor()));
-        description = (EditText) findViewById(R.id.description);
-        email = (EditText) findViewById(R.id.bb_email);
-        //service.setEmail(email.getText().toString());
-        if (pref.getString("email", null) != null && pref.getString("email", null) != "") {
-            email.setText(pref.getString("email", null));
-            description.requestFocus();
+        // customize app bar color
+        View appBar = findViewById(R.id.bb_header_view);
+        appBar.setBackgroundColor(Color.parseColor(feedbackModel.getAppBarColor()));
+
+        initComponents();
+        setOnClickListener();
+        priorityToggle();
+        loadEmail();
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
+            // do something on back.
+            Intent intent = new Intent(Feedback.this, ImageEditor.class);
+            startActivity(intent);
+            finish();
+            return true;
         }
-        if (pref.getString("description", null) != null && pref.getString("description", null)  != "") {
-            description.setText(pref.getString("description", null));
-            description.clearFocus();
+        return super.onKeyDown(keyCode, event);
+    }
+
+    private void storeEmail() {
+        SharedPreferences.Editor editor = pref.edit();
+        editor.putString("email", this.emailEditText.getText().toString()); // Storing the email
+        editor.apply();
+    }
+
+    private void storeDescription() {
+        SharedPreferences.Editor editor = pref.edit();
+        editor.putString("descriptionEditText", this.descriptionEditText.getText().toString()); // Storing the description
+        editor.apply();
+    }
+
+    private void resetDescription() {
+        SharedPreferences.Editor editor = pref.edit();
+        editor.putString("descriptionEditText", ""); // Storing the description
+        editor.apply();
+    }
+
+    private static void hideKeyboard(Activity activity) {
+        if (activity != null && activity.getWindow() != null && activity.getWindow().getDecorView() != null) {
+            InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
+            if (imm != null) {
+                imm.hideSoftInputFromWindow(activity.getWindow().getDecorView().getWindowToken(), 0);
+            }
         }
-        backToEdit = (ImageButton) findViewById(R.id.bb_edit_btn);
-        final Bitmap thumbnailImage = service.getImage();
+    }
+
+    @Override
+    public void onTaskComplete(int httpResponse) {
+        if (httpResponse == 200) {
+            doneSendingView.setVisibility(View.VISIBLE);
+            loadingView.setVisibility(View.INVISIBLE);
+            new android.os.Handler().postDelayed(
+                    new Runnable() {
+                        public void run() {
+                            resetDescription();
+                            feedbackModel.getShakeGestureDetector().resume();
+                            finish();
+
+                        }
+                    }, 1500);
+        } else {
+            loadingView.setVisibility(View.INVISIBLE);
+            doneSendingView.setVisibility(View.INVISIBLE);
+            errorSendingView.setVisibility(View.VISIBLE);
+            new android.os.Handler().postDelayed(
+                    new Runnable() {
+                        public void run() {
+                            errorSendingView.setVisibility(View.INVISIBLE);
+                            feedbackView.setVisibility(View.VISIBLE);
+                        }
+                    }, 1500);
+        }
+    }
+
+    private void initComponents() {
+        loadingView = findViewById(R.id.bb_loading_view);
+        loadingView.setVisibility(View.INVISIBLE);
+        errorSendingView = findViewById(R.id.bb_done_error);
+        errorSendingView.setVisibility(View.INVISIBLE);
+        doneSendingView = findViewById(R.id.bb_done_view);
+        doneSendingView.setVisibility(View.INVISIBLE);
+        feedbackView = findViewById(R.id.bb_feedback);
+        sendButton = findViewById(R.id.bb_btnsend);
+        cancleButton = findViewById(R.id.bb_btncancle);
+        descriptionEditText = findViewById(R.id.description);
+        emailEditText = findViewById(R.id.bb_email);
+        if (emailEditText.getText().length() == 0) {
+            sendButton.setEnabled(false);
+        }
+        backToEditImageButton = findViewById(R.id.bb_edit_btn);
+
+        // Prepare thumbnail of screenshot
+        ImageView thumbnailImageView = findViewById(R.id.bb_thumbnail);
+        final Bitmap thumbnailImage = feedbackModel.getScreenshot();
         int width = thumbnailImage.getWidth();
         int height = thumbnailImage.getHeight();
         // CREATE A MATRIX FOR THE MANIPULATION
@@ -93,11 +165,14 @@ public class Feedback extends AppCompatActivity implements OnHttpResponseListene
         // "RECREATE" THE NEW BITMAP
         Bitmap resizedBitmap = Bitmap.createBitmap(
                 thumbnailImage, 0, 0, width, height, matrix, false);
-        thumbnail = (ImageView) findViewById(R.id.bb_thumbnail);
-        thumbnail.setImageBitmap(resizedBitmap);
-        email.addTextChangedListener(new TextWatcher() {
+        thumbnailImageView.setImageBitmap(resizedBitmap);
+    }
 
-            public void afterTextChanged(Editable s) {}
+    private void setOnClickListener() {
+        emailEditText.addTextChangedListener(new TextWatcher() {
+
+            public void afterTextChanged(Editable s) {
+            }
 
             public void beforeTextChanged(CharSequence s, int start,
                                           int count, int after) {
@@ -105,37 +180,33 @@ public class Feedback extends AppCompatActivity implements OnHttpResponseListene
 
             public void onTextChanged(CharSequence s, int start,
                                       int before, int count) {
-                if( count > 0 || start > 0) {
-                    button.setEnabled(true);
+                if (count > 0 || start > 0) {
+                    sendButton.setEnabled(true);
                     storeEmail();
                 }
             }
         });
-        if(email.getText().length() == 0) {
-            button.setEnabled(false);
-        }
 
-        button.setOnClickListener(new View.OnClickListener() {
+        sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                    feedback.setVisibility(View.INVISIBLE);
-                    loading.setVisibility(View.VISIBLE);
-                    hideKeyboard(Feedback.this);
-                    service.setEmail(email.getText().toString());
-                    service.setDescription(description.getText().toString());
+                feedbackView.setVisibility(View.INVISIBLE);
+                loadingView.setVisibility(View.VISIBLE);
+                hideKeyboard(Feedback.this);
+                feedbackModel.setEmail(emailEditText.getText().toString());
+                feedbackModel.setDescription(descriptionEditText.getText().toString());
 
-                    storeEmail();
-                    resetDescription();
-                    try {
-                        new HttpHelper(Feedback.this).execute(service);
-                    } catch (Exception e) {
-                        System.out.println(e);
-                    }
+                storeEmail();
+                resetDescription();
+                try {
+                    new HttpHelper(Feedback.this).execute(feedbackModel);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         });
 
-
-        backToEdit.setOnClickListener(new View.OnClickListener() {
+        backToEditImageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 storeDescription();
@@ -145,174 +216,120 @@ public class Feedback extends AppCompatActivity implements OnHttpResponseListene
             }
         });
 
-        cancle.setOnClickListener(new View.OnClickListener() {
+        cancleButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 resetDescription();
-                service.getShakeGestureDetector().resume();
+                feedbackModel.getShakeGestureDetector().resume();
                 finish();
             }
         });
+    }
 
-        radioButton1 = findViewById(R.id.radioButton);
-        radioButton2 = findViewById(R.id.radioButton2);
-        radioButton3 = findViewById(R.id.radioButton3);
-        if(radioButton1.isChecked()) {
-            Drawable background = service.getContext().getResources().getDrawable(R.drawable.left_active);
-            background.setColorFilter(Color.parseColor(service.getAppBarColor()), PorterDuff.Mode.SRC_IN);
-            radioButton1.setTextColor(Color.WHITE);
-            radioButton1.setBackground(background);
+    private void priorityToggle() {
+        priorityLow = findViewById(R.id.priorityLow);
+        priorityMedium = findViewById(R.id.priorityMedium);
+        priorityHigh = findViewById(R.id.priorityHigh);
+        if (priorityLow.isChecked()) {
+            Drawable background = feedbackModel.getContext().getResources().getDrawable(R.drawable.left_active);
+            background.setColorFilter(Color.parseColor(feedbackModel.getAppBarColor()), PorterDuff.Mode.SRC_IN);
+            priorityLow.setTextColor(Color.WHITE);
+            priorityLow.setBackground(background);
         } else {
-            GradientDrawable drawable2 = (GradientDrawable)service.getContext().getResources().getDrawable(R.drawable.left_active);
-            drawable2.setStroke(((int)(2*Resources.getSystem().getDisplayMetrics().density)), Color.parseColor(service.getAppBarColor()));
-            radioButton1.setBackground(drawable2);
-            radioButton1.setTextColor(Color.parseColor(service.getAppBarColor()));
+            GradientDrawable drawable2 = (GradientDrawable) feedbackModel.getContext().getResources().getDrawable(R.drawable.left_active);
+            drawable2.setStroke(((int) (2 * Resources.getSystem().getDisplayMetrics().density)), Color.parseColor(feedbackModel.getAppBarColor()));
+            priorityLow.setBackground(drawable2);
+            priorityLow.setTextColor(Color.parseColor(feedbackModel.getAppBarColor()));
         }
-        if(radioButton2.isChecked()) {
-            Drawable background = service.getContext().getResources().getDrawable(R.drawable.center_active);
-            background.setColorFilter(Color.parseColor(service.getAppBarColor()), PorterDuff.Mode.SRC_IN);
-            radioButton2.setBackground(background);
-            radioButton2.setTextColor(Color.WHITE);
+        if (priorityMedium.isChecked()) {
+            Drawable background = feedbackModel.getContext().getResources().getDrawable(R.drawable.center_active);
+            background.setColorFilter(Color.parseColor(feedbackModel.getAppBarColor()), PorterDuff.Mode.SRC_IN);
+            priorityMedium.setBackground(background);
+            priorityMedium.setTextColor(Color.WHITE);
         } else {
-            GradientDrawable drawable2 = (GradientDrawable)service.getContext().getResources().getDrawable(R.drawable.center_active);
-            drawable2.setStroke(((int)(2*Resources.getSystem().getDisplayMetrics().density)), Color.parseColor(service.getAppBarColor()));
+            GradientDrawable drawable2 = (GradientDrawable) feedbackModel.getContext().getResources().getDrawable(R.drawable.center_active);
+            drawable2.setStroke(((int) (2 * Resources.getSystem().getDisplayMetrics().density)), Color.parseColor(feedbackModel.getAppBarColor()));
 
-            radioButton2.setBackground(drawable2);
-            radioButton2.setTextColor(Color.parseColor(service.getAppBarColor()));
+            priorityMedium.setBackground(drawable2);
+            priorityMedium.setTextColor(Color.parseColor(feedbackModel.getAppBarColor()));
         }
 
-        if(radioButton3.isChecked()) {
-            Drawable background = service.getContext().getResources().getDrawable(R.drawable.right_active);
-            background.setColorFilter(Color.parseColor(service.getAppBarColor()), PorterDuff.Mode.SRC_IN);
-            radioButton3.setBackground(background);
-            radioButton3.setTextColor(Color.WHITE);
-        }else {
-            GradientDrawable drawable2 = (GradientDrawable)service.getContext().getResources().getDrawable(R.drawable.right_active);
-            drawable2.setStroke(((int)(2*Resources.getSystem().getDisplayMetrics().density)), Color.parseColor(service.getAppBarColor()));
-            radioButton3.setBackground(drawable2);
-            radioButton3.setTextColor(Color.parseColor(service.getAppBarColor()));
+        if (priorityHigh.isChecked()) {
+            Drawable background = feedbackModel.getContext().getResources().getDrawable(R.drawable.right_active);
+            background.setColorFilter(Color.parseColor(feedbackModel.getAppBarColor()), PorterDuff.Mode.SRC_IN);
+            priorityHigh.setBackground(background);
+            priorityHigh.setTextColor(Color.WHITE);
+        } else {
+            GradientDrawable drawable2 = (GradientDrawable) feedbackModel.getContext().getResources().getDrawable(R.drawable.right_active);
+            drawable2.setStroke(((int) (2 * Resources.getSystem().getDisplayMetrics().density)), Color.parseColor(feedbackModel.getAppBarColor()));
+            priorityHigh.setBackground(drawable2);
+            priorityHigh.setTextColor(Color.parseColor(feedbackModel.getAppBarColor()));
         }
 
-        radioButton1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        priorityLow.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if(radioButton1.isChecked()) {
-                    service.setSeverity("low");
-                    Drawable background = service.getContext().getResources().getDrawable(R.drawable.left_active);
-                    background.setColorFilter(Color.parseColor(service.getAppBarColor()), PorterDuff.Mode.SRC_IN);
-                    radioButton1.setTextColor(Color.WHITE);
-                    radioButton1.setBackground(background);
+                if (priorityLow.isChecked()) {
+                    feedbackModel.setSeverity("low");
+                    Drawable background = feedbackModel.getContext().getResources().getDrawable(R.drawable.left_active);
+                    background.setColorFilter(Color.parseColor(feedbackModel.getAppBarColor()), PorterDuff.Mode.SRC_IN);
+                    priorityLow.setTextColor(Color.WHITE);
+                    priorityLow.setBackground(background);
                 } else {
-                   GradientDrawable drawable2 = (GradientDrawable)service.getContext().getResources().getDrawable(R.drawable.left_active);
-                    drawable2.setStroke(((int)(2*Resources.getSystem().getDisplayMetrics().density)), Color.parseColor(service.getAppBarColor()));
-                    radioButton1.setTextColor(Color.parseColor(service.getAppBarColor()));
-                    radioButton1.setBackground(drawable2);
+                    GradientDrawable drawable2 = (GradientDrawable) feedbackModel.getContext().getResources().getDrawable(R.drawable.left_active);
+                    drawable2.setStroke(((int) (2 * Resources.getSystem().getDisplayMetrics().density)), Color.parseColor(feedbackModel.getAppBarColor()));
+                    priorityLow.setTextColor(Color.parseColor(feedbackModel.getAppBarColor()));
+                    priorityLow.setBackground(drawable2);
                 }
             }
         });
 
-        radioButton2.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        priorityMedium.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if(radioButton2.isChecked()) {
-                    service.setSeverity("medium");
-                    Drawable background = service.getContext().getResources().getDrawable(R.drawable.center_active);
-                    background.setColorFilter(Color.parseColor(service.getAppBarColor()), PorterDuff.Mode.SRC_IN);
-                    radioButton2.setTextColor(Color.WHITE);
-                    radioButton2.setBackground(background);
+                if (priorityMedium.isChecked()) {
+                    feedbackModel.setSeverity("medium");
+                    Drawable background = feedbackModel.getContext().getResources().getDrawable(R.drawable.center_active);
+                    background.setColorFilter(Color.parseColor(feedbackModel.getAppBarColor()), PorterDuff.Mode.SRC_IN);
+                    priorityMedium.setTextColor(Color.WHITE);
+                    priorityMedium.setBackground(background);
                 } else {
-                    GradientDrawable drawable2 = (GradientDrawable)service.getContext().getResources().getDrawable(R.drawable.center_active);
-                    drawable2.setStroke(((int)(2*Resources.getSystem().getDisplayMetrics().density)), Color.parseColor(service.getAppBarColor()));
-                    radioButton2.setTextColor(Color.parseColor(service.getAppBarColor()));
-                    radioButton2.setBackground(drawable2);
+                    GradientDrawable drawable2 = (GradientDrawable) feedbackModel.getContext().getResources().getDrawable(R.drawable.center_active);
+                    drawable2.setStroke(((int) (2 * Resources.getSystem().getDisplayMetrics().density)), Color.parseColor(feedbackModel.getAppBarColor()));
+                    priorityMedium.setTextColor(Color.parseColor(feedbackModel.getAppBarColor()));
+                    priorityMedium.setBackground(drawable2);
                 }
             }
         });
-        radioButton3.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        priorityHigh.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if(radioButton3.isChecked()) {
-                    service.setSeverity("high");
-                    Drawable background = service.getContext().getResources().getDrawable(R.drawable.right_active);
-                    background.setColorFilter(Color.parseColor(service.getAppBarColor()), PorterDuff.Mode.SRC_IN);
-                    radioButton3.setTextColor(Color.WHITE);
-                    radioButton3.setBackground(background);
+                if (priorityHigh.isChecked()) {
+                    feedbackModel.setSeverity("high");
+                    Drawable background = feedbackModel.getContext().getResources().getDrawable(R.drawable.right_active);
+                    background.setColorFilter(Color.parseColor(feedbackModel.getAppBarColor()), PorterDuff.Mode.SRC_IN);
+                    priorityHigh.setTextColor(Color.WHITE);
+                    priorityHigh.setBackground(background);
                 } else {
-                    GradientDrawable drawable2 = (GradientDrawable)service.getContext().getResources().getDrawable(R.drawable.right_active);
-                    drawable2.setStroke(((int)(2*Resources.getSystem().getDisplayMetrics().density)), Color.parseColor(service.getAppBarColor()));
-                    radioButton3.setTextColor(Color.parseColor(service.getAppBarColor()));
-                    radioButton3.setBackground(drawable2);
+                    GradientDrawable drawable2 = (GradientDrawable) feedbackModel.getContext().getResources().getDrawable(R.drawable.right_active);
+                    drawable2.setStroke(((int) (2 * Resources.getSystem().getDisplayMetrics().density)), Color.parseColor(feedbackModel.getAppBarColor()));
+                    priorityHigh.setTextColor(Color.parseColor(feedbackModel.getAppBarColor()));
+                    priorityHigh.setBackground(drawable2);
                 }
             }
         });
-
     }
 
+    private void loadEmail() {
+        pref = getApplicationContext().getSharedPreferences("prefs", 0);
 
-
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event)  {
-        if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
-            // do something on back.
-            Intent intent = new Intent(Feedback.this, ImageEditor.class);
-            startActivity(intent);
-            finish();
-            return true;
+        if (pref.getString("email", null) != null && !pref.getString("email", null).equals("")) {
+            emailEditText.setText(pref.getString("email", null));
+            descriptionEditText.requestFocus();
         }
-
-        return super.onKeyDown(keyCode, event);
-    }
-
-    private void storeEmail() {
-        SharedPreferences.Editor editor = pref.edit();
-        editor.putString("email", this.email.getText().toString()); // Storing string
-        editor.commit();
-    }
-
-    private void storeDescription() {
-        SharedPreferences.Editor editor = pref.edit();
-        editor.putString("description", this.description.getText().toString()); // Storing string
-        editor.commit();
-    }
-
-    private void resetDescription(){
-        SharedPreferences.Editor editor = pref.edit();
-        editor.putString("description", ""); // Storing string
-        editor.commit();
-    }
-
-    private static void hideKeyboard(Activity activity) {
-        if (activity != null && activity.getWindow() != null && activity.getWindow().getDecorView() != null) {
-            InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.hideSoftInputFromWindow(activity.getWindow().getDecorView().getWindowToken(), 0);
-        }
-    }
-
-    @Override
-    public void onTaskComplete(int httpResponse) {
-        if(httpResponse == 200) {
-            done.setVisibility(View.VISIBLE);
-            loading.setVisibility(View.INVISIBLE);
-            new android.os.Handler().postDelayed(
-                    new Runnable() {
-                        public void run() {
-                            resetDescription();
-                            service.getShakeGestureDetector().resume();
-                            finish();
-
-                        }
-                    }, 1500);
-        }else {
-            loading.setVisibility(View.INVISIBLE);
-            done.setVisibility(View.INVISIBLE);
-            error.setVisibility(View.VISIBLE);
-            new android.os.Handler().postDelayed(
-                    new Runnable() {
-                        public void run() {
-                           error.setVisibility(View.INVISIBLE);
-                           feedback.setVisibility(View.VISIBLE);
-                        }
-                    }, 1500);
+        if (pref.getString("descriptionEditText", null) != null && !pref.getString("descriptionEditText", null).equals("")) {
+            descriptionEditText.setText(pref.getString("descriptionEditText", null));
+            descriptionEditText.clearFocus();
         }
     }
 }

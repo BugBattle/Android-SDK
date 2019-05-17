@@ -25,16 +25,16 @@ public class LogReader {
         String result = "";
         String[] splittedDate = date.split("-");
 
-        result += Calendar.getInstance().get(Calendar.YEAR)+ "-"+ splittedDate[1] + "-" + splittedDate[0] + " " + time;
+        result += Calendar.getInstance().get(Calendar.YEAR) + "-" + splittedDate[1] + "-" + splittedDate[0] + " " + time;
         return result;
     }
 
-     /**
-      * Reads the stacktrace, formats the string
-      * @return {@link JSONArray} formatted log
-      */
-
-    public JSONArray readLog(){
+    /**
+     * Reads the stacktrace, formats the string
+     *
+     * @return {@link JSONArray} formatted log
+     */
+    public JSONArray readLog() {
         try {
             Process process = Runtime.getRuntime().exec("logcat -d");
             BufferedReader bufferedReader = new BufferedReader(
@@ -45,22 +45,20 @@ public class LogReader {
             Pattern pattern = Pattern.compile("^\\d{1,2}-\\d{1,2} \\d{1,2}:\\d{1,2}:\\d{1,2}.\\d{1,3}");
             while ((line = bufferedReader.readLine()) != null) {
                 Matcher mt = pattern.matcher(line);
-                if(mt.lookingAt()) {
+                if (mt.lookingAt()) {
                     String[] splittedLine = line.split(" ");
                     JSONObject object = new JSONObject();
                     object.put("date", formatDate(splittedLine[1], splittedLine[0]));
-                    String text = "";
-                    for(int i = 7; i < splittedLine.length; i++) {
-                        text += splittedLine[i] +" ";
+                    StringBuilder text = new StringBuilder();
+                    for (int i = 7; i < splittedLine.length; i++) {
+                        text.append(splittedLine[i]).append(" ");
                     }
-                    object.put("log", text);
+                    object.put("log", text.toString());
                     log.put(object);
                 }
             }
             return log;
-
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             return null;
         } catch (JSONException e) {
             e.printStackTrace();

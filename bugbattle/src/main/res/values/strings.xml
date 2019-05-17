@@ -12,7 +12,7 @@
     <string name="report_priority_low">low</string>
     <string name="report_priority_medium">medium</string>
     <string name="report_priority_high">high</string>
-    <string name="report_loading">Sending your bug report ...</string>
+    <string name="report_loading">Sending your bug report &#8230;</string>
     <string name="report_done">Thank you for your bug report!</string>
     <string name="report_error">Ups, something went wrong.</string>
 </resources>

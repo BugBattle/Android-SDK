@@ -1,6 +1,7 @@
 package bugbattle.io.bugbattle.model;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
@@ -22,32 +23,27 @@ import bugbattle.io.bugbattle.BuildConfig;
  * Collected information, gathered from the phone
  */
 public class PhoneMeta {
+
     private static double startTime;
     private static String deviceModel;
     private static String deviceName;
-    private static String deviceIdentifier;
     private static String bundleID;
     private static String systemName;
     private static String systemVersion;
     private static String buildVersionNumber;
     private static String releaseVersionNumber;
-    private static PhoneMeta phoneMeta;
-    private static Feedback service;
 
-    private PhoneMeta() {
+    public PhoneMeta() {
         startTime = new Date().getTime();
         getPhoneMeta();
-
     }
 
-    public static PhoneMeta init() {
-        if (phoneMeta == null) {
-            phoneMeta = new PhoneMeta();
-        }
-        return phoneMeta;
-    }
-
-
+    /**
+     * get the meta information for the phone
+     *
+     * @return the metainformation gathered from the phone
+     * @throws JSONException
+     */
     public JSONObject getJSONObj() throws JSONException {
         JSONObject obj = new JSONObject();
         obj.put("deviceModel", deviceModel);
@@ -66,7 +62,6 @@ public class PhoneMeta {
     private void getPhoneMeta() {
         deviceModel = Build.MODEL;
         deviceName = Build.MODEL;
-        deviceIdentifier = "";
         bundleID = BuildConfig.APPLICATION_ID;
         systemName = "Android";
         systemVersion = Build.VERSION.RELEASE;
@@ -79,17 +74,22 @@ public class PhoneMeta {
         return Double.toString(timeDif);
     }
 
+    /**
+     * The phone network state is only gathered, if the ACCESS_NETWORK_STATE is requested in the AndroidManifest.xml
+     *
+     * @return status of the network
+     */
     private static JSONObject getNetworkStatus() {
-        service = Feedback.getInstance();
         JSONObject result = new JSONObject();
         if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_NETWORK_STATE)
                 == PackageManager.PERMISSION_GRANTED) {
-
             try {
                 ConnectivityManager cm =
                         (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
 
-                NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+                //Only called when the permission is granted
+                @SuppressLint("MissingPermission") NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+
                 boolean isConnected = activeNetwork != null &&
                         activeNetwork.isConnectedOrConnecting();
 
@@ -103,7 +103,6 @@ public class PhoneMeta {
         } else {
             return result;
         }
-
     }
 
     private static Activity getActivity() {
@@ -124,15 +123,12 @@ public class PhoneMeta {
                 if (!pausedField.getBoolean(activityRecord)) {
                     Field activityField = activityRecordClass.getDeclaredField("activity");
                     activityField.setAccessible(true);
-                    Activity activity = (Activity) activityField.get(activityRecord);
-                    return activity;
+                    return (Activity) activityField.get(activityRecord);
                 }
             }
-
             return null;
-        }catch (Exception e) {
-
-
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return null;
     }

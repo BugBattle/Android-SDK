@@ -11,66 +11,63 @@ import java.lang.reflect.Field;
 import java.util.Map;
 
 import bugbattle.io.bugbattle.view.ImageEditor;
-import bugbattle.io.bugbattle.model.Feedback;
+import bugbattle.io.bugbattle.model.FeedbackModel;
 
 
 /**
  * Takes a screenshot of the current view
  */
 public class ScreenshotTaker {
+    private FeedbackModel feedbackModel;
 
     public ScreenshotTaker() {
-        service = Feedback.getInstance();
+        feedbackModel = FeedbackModel.getInstance();
 
     }
-    private Feedback service;
 
+    private static Activity getActivity() {
+        try {
+            Class activityThreadClass = Class.forName("android.app.ActivityThread");
+            Object activityThread = activityThreadClass.getMethod("currentActivityThread").invoke(null);
+            Field activitiesField = activityThreadClass.getDeclaredField("mActivities");
+            activitiesField.setAccessible(true);
 
-     public static Activity getActivity() {
-         try {
-             Class activityThreadClass = Class.forName("android.app.ActivityThread");
-             Object activityThread = activityThreadClass.getMethod("currentActivityThread").invoke(null);
-             Field activitiesField = activityThreadClass.getDeclaredField("mActivities");
-             activitiesField.setAccessible(true);
+            Map<Object, Object> activities = (Map<Object, Object>) activitiesField.get(activityThread);
+            if (activities == null)
+                return null;
 
-             Map<Object, Object> activities = (Map<Object, Object>) activitiesField.get(activityThread);
-             if (activities == null)
-                 return null;
-
-             for (Object activityRecord : activities.values()) {
-                 Class activityRecordClass = activityRecord.getClass();
-                 Field pausedField = activityRecordClass.getDeclaredField("paused");
-                 pausedField.setAccessible(true);
-                 if (!pausedField.getBoolean(activityRecord)) {
-                     Field activityField = activityRecordClass.getDeclaredField("activity");
-                     activityField.setAccessible(true);
-                     Activity activity = (Activity) activityField.get(activityRecord);
-                     return activity;
-                 }
-             }
-
-             return null;
-         }catch (Exception e) {
-
-
-         }
-         return null;
-     }
+            for (Object activityRecord : activities.values()) {
+                Class activityRecordClass = activityRecord.getClass();
+                Field pausedField = activityRecordClass.getDeclaredField("paused");
+                pausedField.setAccessible(true);
+                if (!pausedField.getBoolean(activityRecord)) {
+                    Field activityField = activityRecordClass.getDeclaredField("activity");
+                    activityField.setAccessible(true);
+                    Activity activity = (Activity) activityField.get(activityRecord);
+                    return activity;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
     /**
      * Take a screenshot of the current view and opens it in the editor
      */
     public void takeScreenshot() {
-        View v1 = getActivity().getWindow().getDecorView().getRootView() ;
+        View v1 = getActivity().getWindow().getDecorView().getRootView();
         v1.setDrawingCacheEnabled(true);
         Bitmap bitmap = v1.getDrawingCache();
         bitmap = getResizedBitmap(bitmap);
         openScreenshot(bitmap);
         v1.setDrawingCacheEnabled(false);
     }
+
     private void openScreenshot(Bitmap imageFile) {
         Intent intent = new Intent(getActivity(), ImageEditor.class);
-        service.setImage(imageFile);
+        feedbackModel.setScreenshot(imageFile);
         getActivity().startActivity(intent);
     }
 
@@ -93,7 +90,6 @@ public class ScreenshotTaker {
         bm.recycle();
         return resizedBitmap;
     }
-
 
 
 }
