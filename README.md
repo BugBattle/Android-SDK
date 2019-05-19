@@ -23,7 +23,7 @@ In the same file ( build.gradle ) add the dependency to include the library.
 ```
 dependencies {
   ...
-  implementation 'com.github.BoehlerBrothers:bugbattle-android-sdk:1.3'
+  implementation 'com.github.BugBattle:BugBattle-Android-SDK:1.3'
 }
 ```
 You are now ready to use our SDK in your App. Let's carry on with the initialisation 🎉
