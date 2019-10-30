@@ -1,10 +1,8 @@
 <img src="https://www.bugbattle.io/wp-content/uploads/2019/03/LogoBB.png" width="70%"/> 
 
-<<<<<<< HEAD
-=======
+
 [![](https://jitpack.io/v/BugBattle/BugBattle-Android-SDK.svg)](https://jitpack.io/#BugBattle/BugBattle-Android-SDK)
 
->>>>>>> 591cf5cde3c222c82dd32b15ec3e5ef2fb53bd22
 With BugBattle we’ve put the lame task of bug fixing upside down and turned it into a gaming experience for you and the whole development team. As if by magic the quality of your apps and websites improves – and your customers will be delighted.
 
 ## How to start
@@ -26,11 +24,7 @@ In the same file ( build.gradle ) add the dependency to include the library.
 ```
 dependencies {
   ...
-<<<<<<< HEAD
-  implementation 'com.github.BoehlerBrothers:bugbattle-android-sdk:1.3'
-=======
   implementation 'com.github.BugBattle:BugBattle-Android-SDK:1.3'
->>>>>>> 591cf5cde3c222c82dd32b15ec3e5ef2fb53bd22
 }
 ```
 You are now ready to use our SDK in your App. Let's carry on with the initialisation 🎉
