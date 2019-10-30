@@ -84,4 +84,12 @@ public class BugBattle {
     public static void attachCustomData(JSONObject customData) {
         FeedbackModel.getInstance().setCustomData(customData);
     }
+
+    /**
+     * Set/Prefill the email address for the user.
+     * @param email address, which is fileld in.
+     */
+    public static void setUserEmail(String email) {
+        FeedbackModel.getInstance().setEmail(email);
+    }
 }

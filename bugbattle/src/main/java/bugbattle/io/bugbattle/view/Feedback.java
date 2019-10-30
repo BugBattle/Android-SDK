@@ -65,6 +65,10 @@ public class Feedback extends AppCompatActivity implements OnHttpResponseListene
         initComponents();
         setOnClickListener();
         priorityToggle();
+        pref = getApplicationContext().getSharedPreferences("prefs", 0);
+        if(FeedbackModel.getInstance().getEmail() != ""){
+            storeEmail(FeedbackModel.getInstance().getEmail());
+        }
         loadEmail();
     }
 
@@ -83,6 +87,12 @@ public class Feedback extends AppCompatActivity implements OnHttpResponseListene
     private void storeEmail() {
         SharedPreferences.Editor editor = pref.edit();
         editor.putString("email", this.emailEditText.getText().toString()); // Storing the email
+        editor.apply();
+    }
+
+    private void storeEmail(String email) {
+        SharedPreferences.Editor editor = pref.edit();
+        editor.putString("email", email); // Storing the email
         editor.apply();
     }
 
@@ -321,7 +331,7 @@ public class Feedback extends AppCompatActivity implements OnHttpResponseListene
     }
 
     private void loadEmail() {
-        pref = getApplicationContext().getSharedPreferences("prefs", 0);
+
 
         if (pref.getString("email", null) != null && !pref.getString("email", null).equals("")) {
             emailEditText.setText(pref.getString("email", null));
@@ -332,4 +342,5 @@ public class Feedback extends AppCompatActivity implements OnHttpResponseListene
             descriptionEditText.clearFocus();
         }
     }
+
 }
