@@ -1,10 +1,10 @@
 <resources>
     <string name="app_name">bugbattle</string>
     <string name="image" />
-    <string name="imageview_cancel">Cancle</string>
+    <string name="imageview_cancel">Cancel</string>
     <string name="imageview_next">Next</string>
     <string name="imageview_title">Report a bug</string>
-    <string name="report_cancel">Cancle</string>
+    <string name="report_cancel">Cancel</string>
     <string name="report_next">Send</string>
     <string name="report_title">Report a bug</string>
     <string name="report_email_placeholder">Enter your Email</string>
