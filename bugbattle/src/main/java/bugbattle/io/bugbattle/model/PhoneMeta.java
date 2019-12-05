@@ -4,10 +4,12 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
+import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 
 import org.json.JSONException;
@@ -33,9 +35,9 @@ public class PhoneMeta {
     private static String buildVersionNumber;
     private static String releaseVersionNumber;
 
-    public PhoneMeta() {
+    public PhoneMeta(@NonNull Context context) {
         startTime = new Date().getTime();
-        getPhoneMeta();
+        getPhoneMeta(context);
     }
 
     /**
@@ -59,14 +61,28 @@ public class PhoneMeta {
         return obj;
     }
 
-    private void getPhoneMeta() {
+    private void getPhoneMeta(Context context) {
+        PackageManager packageManager = context.getPackageManager();
+        if (packageManager != null) {
+            try {
+                PackageInfo packageInfo = packageManager.getPackageInfo(context.getPackageName(), 0);
+                buildVersionNumber = Integer.toString(packageInfo.versionCode);
+                releaseVersionNumber = packageInfo.versionName;
+                bundleID = packageInfo.packageName;
+            } catch (PackageManager.NameNotFoundException e) {
+                e.printStackTrace();
+                buildVersionNumber = Integer.toString(BuildConfig.VERSION_CODE);
+                releaseVersionNumber = BuildConfig.VERSION_NAME;
+                //noinspection deprecation
+                bundleID = BuildConfig.APPLICATION_ID;
+
+            }
+        }
+
         deviceModel = Build.MODEL;
-        deviceName = Build.MODEL;
-        bundleID = BuildConfig.APPLICATION_ID;
+        deviceName = Build.DEVICE;
         systemName = "Android";
         systemVersion = Build.VERSION.RELEASE;
-        buildVersionNumber = Integer.toString(BuildConfig.VERSION_CODE);
-        releaseVersionNumber = BuildConfig.VERSION_NAME;
     }
 
     private static String calculateDuration() {

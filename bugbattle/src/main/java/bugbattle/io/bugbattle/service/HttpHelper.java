@@ -20,6 +20,7 @@ import javax.net.ssl.HttpsURLConnection;
 
 import bugbattle.io.bugbattle.controller.OnHttpResponseListener;
 import bugbattle.io.bugbattle.model.FeedbackModel;
+import bugbattle.io.bugbattle.model.PhoneMeta;
 
 /**
  * Sends the report to the bugbattle dashboard.
@@ -71,7 +72,10 @@ public class HttpHelper extends AsyncTask<FeedbackModel, Void, Integer> {
         result.put("screenshot", imageURL);
         result.put("description", service.getDescription());
         result.put("reportedBy", service.getEmail());
-        result.put("meta", service.getPhoneMeta().getJSONObj());
+        PhoneMeta phoneMeta = service.getPhoneMeta();
+        if (phoneMeta != null) {
+            result.put("meta", phoneMeta.getJSONObj());
+        }
         result.put("consoleLog", service.getLogs());
         result.put("actionLog", service.getStepsToReproduce());
         result.put("customData", service.getCustomData());
