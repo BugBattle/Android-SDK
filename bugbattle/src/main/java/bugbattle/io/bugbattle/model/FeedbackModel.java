@@ -2,6 +2,7 @@ package bugbattle.io.bugbattle.model;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.support.annotation.Nullable;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -28,14 +29,13 @@ public class FeedbackModel {
     private Bitmap screenshot;
 
     private JSONObject customData;
-    private PhoneMeta phoneMeta;
+    private @Nullable PhoneMeta phoneMeta;
     private LogReader logReader;
     private StepsToReproduce stepsToReproduce;
     private ShakeGestureDetector shakeGestureDetector;
 
 
     private FeedbackModel() {
-        phoneMeta = new PhoneMeta();
         logReader = new LogReader();
         stepsToReproduce = StepsToReproduce.getInstance();
         customData = new JSONObject();
@@ -48,7 +48,7 @@ public class FeedbackModel {
         return instance;
     }
 
-    public PhoneMeta getPhoneMeta() {
+    public @Nullable PhoneMeta  getPhoneMeta() {
         return phoneMeta;
     }
 
@@ -98,6 +98,7 @@ public class FeedbackModel {
 
     public void setContext(Context context) {
         this.context = context;
+        phoneMeta = new PhoneMeta(context);
     }
 
     public String getAppBarColor() {
