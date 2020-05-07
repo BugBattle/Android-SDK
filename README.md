@@ -29,8 +29,6 @@ dependencies {
 ```
 You are now ready to use our SDK in your App. Let's carry on with the initialisation 🎉
 
-Check out our [documentation](https://developers.bugbattle.io) for more details.
-
 ### Initialise the SDK
 Open your preferred development tool and add the following imports.
 ```
