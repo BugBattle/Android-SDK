@@ -1,9 +1,9 @@
 # Bugbattle iOS SDK
+[![](https://jitpack.io/v/BugBattle/BugBattle-Android-SDK.svg)](https://jitpack.io/#BugBattle/BugBattle-Android-SDK)
 
 ![Bugbattle iOS SDK Intro](https://github.com/BugBattle/iOS-SDK/blob/master/imgs/bugbattle-intro.png)
 
 
-[![](https://jitpack.io/v/BugBattle/BugBattle-Android-SDK.svg)](https://jitpack.io/#BugBattle/BugBattle-Android-SDK)
 
 With BugBattle we’ve put the lame task of bug fixing upside down and turned it into a gaming experience for you and the whole development team. As if by magic the quality of your apps and websites improves – and your customers will be delighted.
 
