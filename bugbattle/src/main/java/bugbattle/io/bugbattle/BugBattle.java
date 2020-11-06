@@ -84,15 +84,6 @@ public class BugBattle {
     }
 
     /**
-     * Set a custom app bar color to fit the bug report more your app style.
-     *
-     * @param color the background color of the app bar.
-     */
-    public static void setTintColor(String color) {
-        FeedbackModel.getInstance().setAppBarColor(color);
-    }
-
-    /**
      * Attach cusom data, which can be view in the BugBattle dashboard.
      *
      * @param customData The data to attach to a bug report
