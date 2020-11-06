@@ -4,18 +4,51 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/white"
+    android:background="@color/background"
     tools:context=".view.ImageEditor">
 
-    <View
-        android:id="@+id/bb_header_view"
-        android:layout_width="wrap_content"
-        android:layout_height="60dp"
-        android:alpha="1"
-        android:visibility="visible"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/constraintLayout"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <Button
+            android:id="@+id/bb_close"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:background="#00FFFFFF"
+            android:text="@string/imageview_cancel"
+            android:textAllCaps="false"
+            android:textColor="@color/bb_blue"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/bb_header2"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:gravity="center"
+            android:text="@string/imageview_title"
+            android:textColor="@color/black"
+            android:textSize="16dp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@+id/bb_next"
+            app:layout_constraintStart_toEndOf="@+id/bb_close"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/bb_next"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:background="#00FFFFFF"
+            android:textAllCaps="false"
+            android:text="@string/imageview_next"
+            android:textColor="@color/bb_blue"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </android.support.constraint.ConstraintLayout>
 
     <View
         android:id="@+id/bb_view3"
@@ -27,8 +60,8 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0"
-        tools:background="@android:color/white" />
+        app:layout_constraintVertical_bias="0.0"
+        tools:background="@color/background" />
 
     <ImageView
         android:id="@+id/bb_image"
@@ -36,17 +69,15 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="40dp"
         android:layout_marginLeft="40dp"
-        android:layout_marginTop="65dp"
         android:layout_marginEnd="40dp"
         android:layout_marginRight="40dp"
-        android:layout_marginBottom="65dp"
+        android:background="@drawable/shadow_rect"
         android:contentDescription="@string/image"
         android:scaleType="centerCrop"
-        android:background="@drawable/shadow_rect"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/constraintLayout2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout"
         app:srcCompat="@android:color/transparent" />
 
     <bugbattle.io.bugbattle.view.DrawerView
@@ -58,172 +89,173 @@
         app:layout_constraintStart_toStartOf="@+id/bb_image"
         app:layout_constraintTop_toTopOf="@+id/bb_image" />
 
-    <LinearLayout
-        android:id="@+id/bb_linearLayout"
-        android:layout_width="0dp"
-        android:layout_height="50dp"
-        android:layout_marginBottom="5dp"
-        android:layout_marginEnd="12dp"
-        android:layout_marginLeft="12dp"
-        android:layout_marginRight="12dp"
-        android:layout_marginStart="12dp"
-        android:gravity="top|center_horizontal"
-        android:orientation="horizontal"
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/constraintLayout2"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
-        <Button
-            android:id="@+id/bb_redbutton"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:layout_marginBottom="24dp"
-            android:layout_weight="0"
-            android:width="40dp"
-            android:height="40dp"
-            android:background="@drawable/roundbutton_red_selected"
-            android:drawablePadding="5dp"
+        <LinearLayout
+            android:id="@+id/bb_colorpicker"
+            android:layout_width="0dp"
+            android:layout_height="80dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginEnd="30dp"
+            android:layout_marginRight="30dp"
+            android:gravity="center_horizontal|center_vertical"
+            android:orientation="horizontal"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
-            tools:layout_editor_absoluteX="80dp" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
 
-        <Space
-            android:layout_width="5dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0" />
+            <ImageButton
+                android:id="@+id/bb_close_colorpicker"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_weight="0"
+                android:background="#00FFFFFF"
+                android:scaleType="fitXY"
+                app:srcCompat="@drawable/crossicon" />
 
-        <Button
-            android:id="@+id/bb_violettebutton"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:layout_marginBottom="24dp"
-            android:layout_weight="0"
-            android:width="40dp"
-            android:height="40dp"
-            android:background="@drawable/roundbutton_violette"
+            <Space
+                android:layout_width="30dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0" />
+
+            <Button
+                android:id="@+id/bb_redbutton"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_weight="0"
+                android:width="40dp"
+                android:height="40dp"
+                android:textAllCaps="false"
+                android:background="@drawable/roundbutton_red_selected"
+                android:drawablePadding="5dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                tools:layout_editor_absoluteX="80dp" />
+
+            <Space
+                android:layout_width="30dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0" />
+
+            <Button
+                android:id="@+id/bb_greenbutton"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_weight="0"
+                android:width="40dp"
+                android:height="40dp"
+                android:textAllCaps="false"
+                android:background="@drawable/roundbutton_blue"
+                app:layout_constraintBottom_toBottomOf="parent"
+                tools:layout_editor_absoluteX="80dp" />
+
+            <Space
+                android:layout_width="30dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0" />
+
+            <Button
+                android:id="@+id/bb_yellowbutton"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_weight="0"
+                android:textAllCaps="false"
+                android:width="40dp"
+                android:height="40dp"
+                android:background="@drawable/roundbutton_yellow"
+                app:layout_constraintBottom_toBottomOf="parent"
+                tools:layout_editor_absoluteX="80dp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/bb_overview"
+            android:layout_width="match_parent"
+
+            android:layout_height="80dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginEnd="30dp"
+            android:layout_marginRight="30dp"
+            android:gravity="clip_horizontal|center_vertical"
+            android:orientation="horizontal"
             app:layout_constraintBottom_toBottomOf="parent"
-            tools:layout_editor_absoluteX="80dp" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
 
-        <Space
-            android:layout_width="5dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0" />
+            <ImageButton
+                android:id="@+id/bb_undobutton"
+                android:layout_width="1dp"
+                android:layout_height="40dp"
+                android:layout_weight="1"
+                android:background="#00FFFFFF"
+                android:scaleType="fitEnd"
+                app:srcCompat="@drawable/undo" />
 
-        <Button
-            android:id="@+id/bb_bluebutton"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:layout_marginBottom="24dp"
-            android:layout_weight="0"
-            android:width="40dp"
-            android:height="40dp"
-            android:background="@drawable/roundbutton_blue"
-            app:layout_constraintBottom_toBottomOf="parent"
-            tools:layout_editor_absoluteX="80dp" />
+            <android.support.constraint.ConstraintLayout
+                android:layout_width="40dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
 
-        <Space
-            android:layout_width="5dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0" />
+                <Button
+                    android:id="@+id/bb_color_yellow"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginTop="15dp"
+                    android:textAllCaps="false"
+                    android:background="@drawable/roundbutton_yellow"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-        <Button
-            android:id="@+id/bb_lightbluebutton"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:layout_marginBottom="24dp"
-            android:layout_weight="0"
-            android:width="40dp"
-            android:height="40dp"
-            android:background="@drawable/roundbutton_lightblue"
-            app:layout_constraintBottom_toBottomOf="parent"
-            tools:layout_editor_absoluteX="80dp" />
+                <Button
+                    android:id="@+id/bb_color_blue"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginBottom="15dp"
+                    android:textAllCaps="false"
+                    android:background="@drawable/roundbutton_blue"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-        <Space
-            android:layout_width="5dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0" />
+                <Button
+                    android:id="@+id/bb_color_red"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginEnd="15dp"
+                    android:layout_marginRight="15dp"
+                    android:textAllCaps="false"
+                    android:background="@drawable/roundbutton_red_selected"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-        <Button
-            android:id="@+id/bb_greenbutton"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:layout_marginBottom="24dp"
-            android:layout_weight="0"
-            android:width="40dp"
-            android:height="40dp"
-            android:background="@drawable/roundbutton_green"
-            app:layout_constraintBottom_toBottomOf="parent"
-            tools:layout_editor_absoluteX="80dp" />
+            </android.support.constraint.ConstraintLayout>
 
-        <Space
-            android:layout_width="5dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0" />
+            <ImageButton
+                android:id="@+id/bb_blurbutton"
+                android:layout_width="1dp"
+                android:layout_height="40dp"
+                android:layout_weight="1"
+                android:background="#00FFFFFF"
+                android:scaleType="fitStart"
+                app:srcCompat="@drawable/bluricon" />
 
-        <Button
-            android:id="@+id/bb_yellowbutton"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:layout_marginBottom="24dp"
-            android:layout_weight="0"
-            android:width="40dp"
-            android:height="40dp"
-            android:background="@drawable/roundbutton_yellow"
-            app:layout_constraintBottom_toBottomOf="parent"
-            tools:layout_editor_absoluteX="80dp" />
-
-        <Space
-            android:layout_width="5dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0" />
-
-        <Button
-            android:id="@+id/bb_graybutton"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:layout_marginBottom="24dp"
-            android:layout_weight="0"
-            android:width="40dp"
-            android:height="40dp"
-            android:background="@drawable/roundbutton_gray"
-            app:layout_constraintBottom_toBottomOf="parent"
-            tools:layout_editor_absoluteX="80dp" />
-    </LinearLayout>
-
-    <Button
-        android:id="@+id/bb_close"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="#00000000"
-        android:text="@string/imageview_cancel"
-        app:layout_constraintBottom_toBottomOf="@+id/bb_header_view"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/bb_next"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="#00000000"
-        android:text="@string/imageview_next"
-        app:layout_constraintBottom_toBottomOf="@+id/bb_header_view"
-        app:layout_constraintEnd_toEndOf="@+id/bb_header_view"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/bb_header2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:text="@string/imageview_title"
-        android:textColor="#ffffff"
-        android:textSize="16dp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/bb_header_view"
-        app:layout_constraintEnd_toStartOf="@+id/bb_next"
-        app:layout_constraintStart_toEndOf="@+id/bb_close"
-        app:layout_constraintTop_toTopOf="@+id/bb_header_view" />
+        </LinearLayout>
+    </android.support.constraint.ConstraintLayout>
 
 </android.support.constraint.ConstraintLayout>

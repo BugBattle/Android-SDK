@@ -1,6 +1,8 @@
 package bugbattle.io.bugbattle.service;
 
 
+import android.content.Context;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -14,6 +16,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import bugbattle.io.bugbattle.BuildConfig;
 
 
 /**
@@ -31,12 +35,12 @@ public class LogReader {
 
     /**
      * Reads the stacktrace, formats the string
-     *
+     * @param context needed to read the packagename to filter logs
      * @return {@link JSONArray} formatted log
      */
-    public JSONArray readLog() {
+    public JSONArray readLog(Context context) {
         try {
-            Process process = Runtime.getRuntime().exec("logcat -d");
+            Process process = Runtime.getRuntime().exec(new String[]{"logcat", "-d"});
             BufferedReader bufferedReader = new BufferedReader(
                     new InputStreamReader(process.getInputStream()));
 
@@ -57,6 +61,8 @@ public class LogReader {
                     log.put(object);
                 }
             }
+            Runtime.getRuntime().exec("logcat - c");
+
             return log;
         } catch (IOException e) {
             return null;

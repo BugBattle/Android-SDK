@@ -1,6 +1,7 @@
 package bugbattle.io.bugbattle;
 
 import android.app.Application;
+import android.graphics.Bitmap;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -11,6 +12,7 @@ import bugbattle.io.bugbattle.model.FeedbackModel;
 import bugbattle.io.bugbattle.controller.StepsToReproduce;
 import bugbattle.io.bugbattle.service.ScreenshotTaker;
 import bugbattle.io.bugbattle.service.ShakeGestureDetector;
+import bugbattle.io.bugbattle.view.Feedback;
 
 
 public class BugBattle {
@@ -20,6 +22,12 @@ public class BugBattle {
     private BugBattle(String sdkKey, BugBattleActivationMethod activationMethod, Application application) {
         FeedbackModel.getInstance().setContext(application.getApplicationContext());
         FeedbackModel.getInstance().setSdkKey(sdkKey);
+        //CLEAR logcat
+        try {
+            Runtime.getRuntime().exec("logcat - c");
+        }catch (Exception e) {
+            System.out.println(e);
+        }
         if (activationMethod == BugBattleActivationMethod.SHAKE) {
             FeedbackModel.getInstance().setShakeGestureDetector(new ShakeGestureDetector(application.getApplicationContext()));
         }
@@ -57,6 +65,14 @@ public class BugBattle {
     }
 
     /**
+     * Starts the bug reporting with a custom screenshot attached.
+     * @param bitmap the image will be used instead of the current
+     */
+    public static void startBugReporting(Bitmap bitmap) {
+        FeedbackModel.getInstance().setScreenshot(bitmap);
+    }
+
+    /**
      * Track a step to add more information to the bug report
      *
      * @param type Type of the step. (for eg. Button)
@@ -72,7 +88,7 @@ public class BugBattle {
      *
      * @param color the background color of the app bar.
      */
-    public static void setAppBarColor(String color) {
+    public static void setTintColor(String color) {
         FeedbackModel.getInstance().setAppBarColor(color);
     }
 
@@ -89,7 +105,15 @@ public class BugBattle {
      * Set/Prefill the email address for the user.
      * @param email address, which is fileld in.
      */
-    public static void setUserEmail(String email) {
+    public static void setCustomerEmail(String email) {
         FeedbackModel.getInstance().setEmail(email);
+    }
+
+    /**
+     * Sets the API url to your internal Bugbattle server. Please make sure that the server is reachable within the network.
+     * @param apiUrl url of the internal Bugbattle server
+     */
+    public static void setApiURL(String apiUrl) {
+        FeedbackModel.getInstance().setApiUrl(apiUrl);
     }
 }

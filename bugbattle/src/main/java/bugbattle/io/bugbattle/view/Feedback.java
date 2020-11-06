@@ -4,13 +4,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.graphics.Matrix;
-import android.graphics.PorterDuff;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.GradientDrawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
@@ -56,17 +51,15 @@ public class Feedback extends AppCompatActivity implements OnHttpResponseListene
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_feedback);
-        feedbackModel = FeedbackModel.getInstance();
+        getSupportActionBar().hide();
 
-        // customize app bar color
-        View appBar = findViewById(R.id.bb_header_view);
-        appBar.setBackgroundColor(Color.parseColor(feedbackModel.getAppBarColor()));
+        feedbackModel = FeedbackModel.getInstance();
 
         initComponents();
         setOnClickListener();
         priorityToggle();
         pref = getApplicationContext().getSharedPreferences("prefs", 0);
-        if(FeedbackModel.getInstance().getEmail() != ""){
+        if (FeedbackModel.getInstance().getEmail() != "") {
             storeEmail(FeedbackModel.getInstance().getEmail());
         }
         loadEmail();
@@ -119,7 +112,7 @@ public class Feedback extends AppCompatActivity implements OnHttpResponseListene
 
     @Override
     public void onTaskComplete(int httpResponse) {
-        if (httpResponse == 200) {
+        if (httpResponse == 201) {
             doneSendingView.setVisibility(View.VISIBLE);
             loadingView.setVisibility(View.INVISIBLE);
             new android.os.Handler().postDelayed(
@@ -209,7 +202,7 @@ public class Feedback extends AppCompatActivity implements OnHttpResponseListene
                 storeEmail();
                 resetDescription();
                 try {
-                    new HttpHelper(Feedback.this).execute(feedbackModel);
+                    new HttpHelper(Feedback.this, getApplicationContext()).execute(feedbackModel);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -220,76 +213,42 @@ public class Feedback extends AppCompatActivity implements OnHttpResponseListene
             @Override
             public void onClick(View view) {
                 storeDescription();
+                storeEmail();
                 Intent intent = new Intent(Feedback.this, ImageEditor.class);
                 startActivity(intent);
+
                 finish();
+                overridePendingTransition(R.anim.slide_in_left,
+                        R.anim.slide_out_right);
             }
         });
 
         cancleButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                resetDescription();
-                feedbackModel.getShakeGestureDetector().resume();
+                storeDescription();
+                storeEmail();
+                Intent intent = new Intent(Feedback.this, ImageEditor.class);
+                startActivity(intent);
                 finish();
+                overridePendingTransition(R.anim.slide_in_left,
+                        R.anim.slide_out_right);
             }
         });
     }
 
     private void priorityToggle() {
+
         priorityLow = findViewById(R.id.priorityLow);
         priorityMedium = findViewById(R.id.priorityMedium);
         priorityHigh = findViewById(R.id.priorityHigh);
-        if (priorityLow.isChecked()) {
-            Drawable background = feedbackModel.getContext().getResources().getDrawable(R.drawable.left_active);
-            background.setColorFilter(Color.parseColor(feedbackModel.getAppBarColor()), PorterDuff.Mode.SRC_IN);
-            priorityLow.setTextColor(Color.WHITE);
-            priorityLow.setBackground(background);
-        } else {
-            GradientDrawable drawable2 = (GradientDrawable) feedbackModel.getContext().getResources().getDrawable(R.drawable.left_active);
-            drawable2.setStroke(((int) (2 * Resources.getSystem().getDisplayMetrics().density)), Color.parseColor(feedbackModel.getAppBarColor()));
-            priorityLow.setBackground(drawable2);
-            priorityLow.setTextColor(Color.parseColor(feedbackModel.getAppBarColor()));
-        }
-        if (priorityMedium.isChecked()) {
-            Drawable background = feedbackModel.getContext().getResources().getDrawable(R.drawable.center_active);
-            background.setColorFilter(Color.parseColor(feedbackModel.getAppBarColor()), PorterDuff.Mode.SRC_IN);
-            priorityMedium.setBackground(background);
-            priorityMedium.setTextColor(Color.WHITE);
-        } else {
-            GradientDrawable drawable2 = (GradientDrawable) feedbackModel.getContext().getResources().getDrawable(R.drawable.center_active);
-            drawable2.setStroke(((int) (2 * Resources.getSystem().getDisplayMetrics().density)), Color.parseColor(feedbackModel.getAppBarColor()));
 
-            priorityMedium.setBackground(drawable2);
-            priorityMedium.setTextColor(Color.parseColor(feedbackModel.getAppBarColor()));
-        }
-
-        if (priorityHigh.isChecked()) {
-            Drawable background = feedbackModel.getContext().getResources().getDrawable(R.drawable.right_active);
-            background.setColorFilter(Color.parseColor(feedbackModel.getAppBarColor()), PorterDuff.Mode.SRC_IN);
-            priorityHigh.setBackground(background);
-            priorityHigh.setTextColor(Color.WHITE);
-        } else {
-            GradientDrawable drawable2 = (GradientDrawable) feedbackModel.getContext().getResources().getDrawable(R.drawable.right_active);
-            drawable2.setStroke(((int) (2 * Resources.getSystem().getDisplayMetrics().density)), Color.parseColor(feedbackModel.getAppBarColor()));
-            priorityHigh.setBackground(drawable2);
-            priorityHigh.setTextColor(Color.parseColor(feedbackModel.getAppBarColor()));
-        }
 
         priorityLow.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if (priorityLow.isChecked()) {
-                    feedbackModel.setSeverity("low");
-                    Drawable background = feedbackModel.getContext().getResources().getDrawable(R.drawable.left_active);
-                    background.setColorFilter(Color.parseColor(feedbackModel.getAppBarColor()), PorterDuff.Mode.SRC_IN);
-                    priorityLow.setTextColor(Color.WHITE);
-                    priorityLow.setBackground(background);
-                } else {
-                    GradientDrawable drawable2 = (GradientDrawable) feedbackModel.getContext().getResources().getDrawable(R.drawable.left_active);
-                    drawable2.setStroke(((int) (2 * Resources.getSystem().getDisplayMetrics().density)), Color.parseColor(feedbackModel.getAppBarColor()));
-                    priorityLow.setTextColor(Color.parseColor(feedbackModel.getAppBarColor()));
-                    priorityLow.setBackground(drawable2);
+                if(priorityLow.isChecked()) {
+                    feedbackModel.setSeverity("LOW");
                 }
             }
         });
@@ -297,42 +256,22 @@ public class Feedback extends AppCompatActivity implements OnHttpResponseListene
         priorityMedium.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if (priorityMedium.isChecked()) {
-                    feedbackModel.setSeverity("medium");
-                    Drawable background = feedbackModel.getContext().getResources().getDrawable(R.drawable.center_active);
-                    background.setColorFilter(Color.parseColor(feedbackModel.getAppBarColor()), PorterDuff.Mode.SRC_IN);
-                    priorityMedium.setTextColor(Color.WHITE);
-                    priorityMedium.setBackground(background);
-                } else {
-                    GradientDrawable drawable2 = (GradientDrawable) feedbackModel.getContext().getResources().getDrawable(R.drawable.center_active);
-                    drawable2.setStroke(((int) (2 * Resources.getSystem().getDisplayMetrics().density)), Color.parseColor(feedbackModel.getAppBarColor()));
-                    priorityMedium.setTextColor(Color.parseColor(feedbackModel.getAppBarColor()));
-                    priorityMedium.setBackground(drawable2);
+                if(priorityMedium.isChecked()) {
+                    feedbackModel.setSeverity("MEDIUM");
                 }
             }
         });
         priorityHigh.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if (priorityHigh.isChecked()) {
-                    feedbackModel.setSeverity("high");
-                    Drawable background = feedbackModel.getContext().getResources().getDrawable(R.drawable.right_active);
-                    background.setColorFilter(Color.parseColor(feedbackModel.getAppBarColor()), PorterDuff.Mode.SRC_IN);
-                    priorityHigh.setTextColor(Color.WHITE);
-                    priorityHigh.setBackground(background);
-                } else {
-                    GradientDrawable drawable2 = (GradientDrawable) feedbackModel.getContext().getResources().getDrawable(R.drawable.right_active);
-                    drawable2.setStroke(((int) (2 * Resources.getSystem().getDisplayMetrics().density)), Color.parseColor(feedbackModel.getAppBarColor()));
-                    priorityHigh.setTextColor(Color.parseColor(feedbackModel.getAppBarColor()));
-                    priorityHigh.setBackground(drawable2);
+                if(priorityHigh.isChecked()) {
+                    feedbackModel.setSeverity("HIGH");
                 }
             }
         });
     }
 
     private void loadEmail() {
-
-
         if (pref.getString("email", null) != null && !pref.getString("email", null).equals("")) {
             emailEditText.setText(pref.getString("email", null));
             descriptionEditText.requestFocus();

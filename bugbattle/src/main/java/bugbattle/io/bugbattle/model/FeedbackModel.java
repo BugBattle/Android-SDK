@@ -25,11 +25,13 @@ public class FeedbackModel {
     private String severity;
 
     //default color of the statusbar (bugbattle blue)
-    private String appBarColor = "#0169ff";
+    private String appBarColor = "#019AE8";
+    private String apiUrl = "https://apidev.bugbattle.io";
     private Bitmap screenshot;
 
     private JSONObject customData;
-    private @Nullable PhoneMeta phoneMeta;
+    private @Nullable
+    PhoneMeta phoneMeta;
     private LogReader logReader;
     private StepsToReproduce stepsToReproduce;
     private ShakeGestureDetector shakeGestureDetector;
@@ -48,7 +50,8 @@ public class FeedbackModel {
         return instance;
     }
 
-    public @Nullable PhoneMeta  getPhoneMeta() {
+    public @Nullable
+    PhoneMeta getPhoneMeta() {
         return phoneMeta;
     }
 
@@ -69,7 +72,7 @@ public class FeedbackModel {
     }
 
     public JSONArray getLogs() {
-        return logReader.readLog();
+        return logReader.readLog(context);
     }
 
     public JSONArray getStepsToReproduce() {
@@ -131,5 +134,14 @@ public class FeedbackModel {
 
     public void setSeverity(String severity) {
         this.severity = severity;
+    }
+
+
+    public String getApiUrl() {
+        return apiUrl;
+    }
+
+    public void setApiUrl(String apiUrl) {
+        this.apiUrl = apiUrl;
     }
 }

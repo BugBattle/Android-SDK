@@ -6,12 +6,12 @@
     <application>
         <activity
             android:name=".view.ImageEditor"
-            android:theme="@style/Theme.AppCompat.NoActionBar" />
+            android:theme="@style/AppTheme.TranslucentBG"  />
         <activity
             android:name=".view.Feedback"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/imageview_title"
-            android:theme="@style/Theme.AppCompat.NoActionBar" />
+            android:theme="@style/AppTheme.TranslucentBG" />
     </application>
 
 </manifest>

@@ -16,6 +16,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 
 import bugbattle.io.bugbattle.R;
@@ -26,34 +27,40 @@ public class ImageEditor extends AppCompatActivity {
     private ImageView imageView;
     private DrawerView drawerView;
     private Button red;
-    private Button violette;
     private Button blue;
-    private Button lightBlue;
-    private Button green;
     private Button yellow;
-    private Button gray;
 
     private FeedbackModel service;
+
     //Add Navigation
     private Button next;
     private Button back;
     private Boolean backClicked = false;
+
+    //menu
+    private ImageButton undo;
+    private Button colorWheelRed;
+    private Button colorWheelBlue;
+    private Button colorWheelYellow;
+    private ImageButton closeColorPicker;
+    private ImageButton blur;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_image_editor);
+        getSupportActionBar().hide();
 
         service = FeedbackModel.getInstance();
+        System.out.println(this.getApplicationContext().getPackageName());
+
         if (service.getScreenshot().getWidth() > service.getScreenshot().getHeight()) {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
         } else {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT);
         }
 
-        View headerView = findViewById(R.id.bb_header_view);
-        headerView.setBackgroundColor(Color.parseColor(service.getAppBarColor()));
         imageView = findViewById(R.id.bb_image);
         if (imageView != null) {
             imageView.setImageBitmap(service.getScreenshot());
@@ -61,13 +68,17 @@ public class ImageEditor extends AppCompatActivity {
         drawerView = findViewById(R.id.bb_drawerview);
         next = findViewById(R.id.bb_next);
         back = findViewById(R.id.bb_close);
+
+
         red = findViewById(R.id.bb_redbutton);
-        violette = findViewById(R.id.bb_violettebutton);
-        blue = findViewById(R.id.bb_bluebutton);
-        lightBlue = findViewById(R.id.bb_lightbluebutton);
-        green = findViewById(R.id.bb_greenbutton);
+        blue = findViewById(R.id.bb_greenbutton);
         yellow = findViewById(R.id.bb_yellowbutton);
-        gray = findViewById(R.id.bb_graybutton);
+        undo = findViewById(R.id.bb_undobutton);
+        blur = findViewById(R.id.bb_blurbutton);
+        colorWheelRed = findViewById(R.id.bb_color_red);
+        colorWheelBlue = findViewById(R.id.bb_color_blue);
+        colorWheelYellow = findViewById(R.id.bb_color_yellow);
+        closeColorPicker = findViewById(R.id.bb_close_colorpicker);
         setOnClickListener();
     }
 
@@ -104,59 +115,84 @@ public class ImageEditor extends AppCompatActivity {
     }
 
     private enum SELECTED_COLOR {
-        RED, VIOLETTE, BLUE, LIGHTBLUE, GREEN, YELLOW, GRAY
+        RED, BLUE, YELLOW, BLUR
+    }
+
+    private void generateColorPickerWheel(SELECTED_COLOR selectedColor) {
+        if (selectedColor == SELECTED_COLOR.YELLOW) {
+            colorWheelRed.setBackground(getResources().getDrawable(R.drawable.roundbutton_red));
+            colorWheelBlue.setBackground(getResources().getDrawable(R.drawable.roundbutton_blue));
+            colorWheelYellow.setBackground(getResources().getDrawable(R.drawable.roundbutton_yellow_selected));
+
+        }
+        if (selectedColor == SELECTED_COLOR.BLUE) {
+            colorWheelRed.setBackground(getResources().getDrawable(R.drawable.roundbutton_red));
+            colorWheelBlue.setBackground(getResources().getDrawable(R.drawable.roundbutton_blue_selected));
+            colorWheelYellow.setBackground(getResources().getDrawable(R.drawable.roundbutton_yellow));
+        }
+        if (selectedColor == SELECTED_COLOR.RED) {
+            colorWheelRed.setBackground(getResources().getDrawable(R.drawable.roundbutton_red_selected));
+            colorWheelBlue.setBackground(getResources().getDrawable(R.drawable.roundbutton_blue));
+            colorWheelYellow.setBackground(getResources().getDrawable(R.drawable.roundbutton_yellow));
+        }
+        if(selectedColor == SELECTED_COLOR.BLUR) {
+            colorWheelRed.setBackground(getResources().getDrawable(R.drawable.roundbutton_red));
+            colorWheelBlue.setBackground(getResources().getDrawable(R.drawable.roundbutton_blue));
+            colorWheelYellow.setBackground(getResources().getDrawable(R.drawable.roundbutton_yellow));
+        }
     }
 
     private void setBackgroundColor(SELECTED_COLOR selectedColor) {
         red.setBackground(getResources().getDrawable(R.drawable.roundbutton_red));
-        violette.setBackground(getResources().getDrawable(R.drawable.roundbutton_violette));
         blue.setBackground(getResources().getDrawable(R.drawable.roundbutton_blue));
-        lightBlue.setBackground(getResources().getDrawable(R.drawable.roundbutton_lightblue));
-        green.setBackground(getResources().getDrawable(R.drawable.roundbutton_green));
         yellow.setBackground(getResources().getDrawable(R.drawable.roundbutton_yellow));
-        gray.setBackground(getResources().getDrawable(R.drawable.roundbutton_gray));
         if (selectedColor == SELECTED_COLOR.RED) {
             if (drawerView != null) {
-                drawerView.setColor(Color.RED);
+                drawerView.setDrawWidth(15);
+                blur.setImageResource(R.drawable.bluricon);
+                drawerView.setColor(Color.rgb(254, 123, 140));
             }
             red.setBackground(getResources().getDrawable(R.drawable.roundbutton_red_selected));
         }
-        if (selectedColor == SELECTED_COLOR.VIOLETTE) {
-            if (drawerView != null) {
-                drawerView.setColor(Color.rgb(152, 34, 167));
-            }
-            violette.setBackground(getResources().getDrawable(R.drawable.roundbutton_violette_selected));
-        }
         if (selectedColor == SELECTED_COLOR.BLUE) {
             if (drawerView != null) {
-                drawerView.setColor(Color.BLUE);
+                drawerView.setDrawWidth(15);
+                blur.setImageResource(R.drawable.bluricon);
+                drawerView.setColor(Color.rgb(112, 185, 218));
             }
             blue.setBackground(getResources().getDrawable(R.drawable.roundbutton_blue_selected));
         }
-        if (selectedColor == SELECTED_COLOR.LIGHTBLUE) {
-            if (drawerView != null) {
-                drawerView.setColor(Color.rgb(0, 189, 208));
-            }
-            lightBlue.setBackground(getResources().getDrawable(R.drawable.roundbutton_lightblue_selected));
-        }
-        if (selectedColor == SELECTED_COLOR.GREEN) {
-            if (drawerView != null) {
-                drawerView.setColor(Color.rgb(80, 176, 96));
-            }
-            green.setBackground(getResources().getDrawable(R.drawable.roundbutton_green_selected));
-        }
         if (selectedColor == SELECTED_COLOR.YELLOW) {
             if (drawerView != null) {
-                drawerView.setColor(Color.rgb(255, 198, 79));
+                drawerView.setDrawWidth(15);
+                blur.setImageResource(R.drawable.bluricon);
+                drawerView.setColor(Color.rgb(236, 216, 83));
             }
             yellow.setBackground(getResources().getDrawable(R.drawable.roundbutton_yellow_selected));
         }
-        if (selectedColor == SELECTED_COLOR.GRAY) {
+        if (selectedColor == SELECTED_COLOR.BLUR) {
             if (drawerView != null) {
-                drawerView.setColor(Color.rgb(51, 51, 51));
+                drawerView.setDrawWidth(50);
+                blur.setImageResource(R.drawable.bluriconactive);
+                drawerView.setColor(Color.rgb(0, 0, 0));
             }
-            gray.setBackground(getResources().getDrawable(R.drawable.roundbutton_gray_selected));
         }
+        generateColorPickerWheel(selectedColor);
+        closeColorPickerMenu();
+    }
+
+    private void openColorPickerMenu() {
+        View colorPickerView = findViewById(R.id.bb_colorpicker);
+        colorPickerView.setVisibility(View.VISIBLE);
+        View overviewView = findViewById(R.id.bb_overview);
+        overviewView.setVisibility(View.GONE);
+    }
+
+    private void closeColorPickerMenu(){
+        View colorPickerView = findViewById(R.id.bb_colorpicker);
+        colorPickerView.setVisibility(View.GONE);
+        View overviewView = findViewById(R.id.bb_overview);
+        overviewView.setVisibility(View.VISIBLE);
     }
 
     private void setOnClickListener() {
@@ -166,28 +202,10 @@ public class ImageEditor extends AppCompatActivity {
                 setBackgroundColor(SELECTED_COLOR.RED);
             }
         });
-        violette.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                setBackgroundColor(SELECTED_COLOR.VIOLETTE);
-            }
-        });
         blue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 setBackgroundColor(SELECTED_COLOR.BLUE);
-            }
-        });
-        lightBlue.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                setBackgroundColor(SELECTED_COLOR.LIGHTBLUE);
-            }
-        });
-        green.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                setBackgroundColor(SELECTED_COLOR.GREEN);
             }
         });
         yellow.setOnClickListener(new View.OnClickListener() {
@@ -196,40 +214,82 @@ public class ImageEditor extends AppCompatActivity {
                 setBackgroundColor(SELECTED_COLOR.YELLOW);
             }
         });
-        gray.setOnClickListener(new View.OnClickListener() {
+
+        blur.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                setBackgroundColor(SELECTED_COLOR.GRAY);
+                setBackgroundColor(SELECTED_COLOR.BLUR);
+                generateColorPickerWheel(SELECTED_COLOR.BLUR);
+
             }
         });
+        colorWheelRed.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openColorPickerMenu();
+            }
+        });
+        colorWheelBlue.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openColorPickerMenu();
+            }
+        });
+        colorWheelYellow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openColorPickerMenu();
+            }
+        });
+        closeColorPicker.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                closeColorPickerMenu();
+            }
+        });
+        undo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (drawerView != null) {
+                    drawerView.undoLastStep();
+                }
+            }
+        });
+
 
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // File result = saveBitmap());
-                Intent intent = new Intent(ImageEditor.this, bugbattle.io.bugbattle.view.Feedback.class);
-                Bitmap mergedImage = ImageMerger.mergeImages(loadBitmapFromView(imageView), loadBitmapFromView(drawerView));
-                service.setScreenshot(mergedImage);
-                ImageEditor.this.startActivity(intent);
-                finish();
+                goToFeedbackScreen();
             }
         });
         back.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
             @Override
             public void onClick(View view) {
-                if (!backClicked) {
-                    backClicked = true;
-                    service.setScreenshot(null);
-                    SharedPreferences pref = getApplicationContext().getSharedPreferences("prefs", 0);
-                    SharedPreferences.Editor editor = pref.edit();
-                    editor.putString("description", ""); // Storing string
-                    editor.apply();
-                    service.getShakeGestureDetector().resume();
-                    finish();
-                }
+                    if (!backClicked) {
+                        backClicked = true;
+                        service.setScreenshot(null);
+                        SharedPreferences pref = getApplicationContext().getSharedPreferences("prefs", 0);
+                        SharedPreferences.Editor editor = pref.edit();
+                        editor.putString("description", ""); // Storing string
+                        editor.apply();
+                        service.getShakeGestureDetector().resume();
+                        finish();
+                        overridePendingTransition(R.anim.slide_down_revert,R.anim.slide_up_revert);
+                    }
             }
         });
+    }
+
+    private void goToFeedbackScreen() {
+        Intent intent = new Intent(ImageEditor.this, bugbattle.io.bugbattle.view.Feedback.class);
+        Bitmap mergedImage = ImageMerger.mergeImages(loadBitmapFromView(imageView), loadBitmapFromView(drawerView));
+        service.setScreenshot(mergedImage);
+        ImageEditor.this.startActivity(intent);
+        finish();
+        overridePendingTransition(R.anim.slide_in_right,
+                R.anim.slide_out_left);
     }
 
     private Bitmap loadBitmapFromView(View v) {

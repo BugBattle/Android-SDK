@@ -12,21 +12,29 @@ import android.view.View;
 import java.util.LinkedList;
 import java.util.List;
 
+import bugbattle.io.bugbattle.model.Drawing;
+
 class DrawerView extends View {
     // setup initial color
-    private int paintColor = Color.RED;
+    private int paintColor = Color.rgb(254, 123, 140);
     // defines paint and canvas
     private List<Paint> drawPaint = new LinkedList<>();
+    private List<Drawing> drawingList = new LinkedList<>();
     private Paint tmpPaint;
     // Store circles to draw each time the user touches down
     private List<Path> paths = new LinkedList<>();
     private Path tmpPath;
 
+    private int drawWidth = 15;
 
     public DrawerView(Context context, AttributeSet attrs) {
         super(context, attrs);
         setupPaint(); // same as before
 
+    }
+
+    public void setDrawWidth(int width) {
+        drawWidth = width;
     }
 
     public void setColor(int color) {
@@ -38,12 +46,19 @@ class DrawerView extends View {
         Paint paint = new Paint();
         paint.setColor(color);
         paint.setAntiAlias(true);
-        paint.setStrokeWidth(5);
+        paint.setStrokeWidth(drawWidth);
         paint.setStyle(Paint.Style.STROKE);
         paint.setStrokeJoin(Paint.Join.ROUND);
         paint.setStrokeCap(Paint.Cap.ROUND);
         paint.setStyle(Paint.Style.STROKE); // change to fill
         return paint;
+    }
+
+    public void undoLastStep() {
+        if(drawingList.size() > 0) {
+            drawingList.remove(drawingList.size() - 1);
+            postInvalidate(); // I
+        }
     }
 
     // Setup paint with color and stroke styles
@@ -55,8 +70,14 @@ class DrawerView extends View {
     // Draw each circle onto the view
     @Override
     protected void onDraw(Canvas canvas) {
+
+        for(Drawing drawing :drawingList) {
+            for (int i = 0; i < drawing.getPath().size(); i++) {
+                canvas.drawPath(drawing.getPath().get(i), drawing.getPaint().get(i));
+            }
+        }
         for (int i = 0; i < paths.size(); i++) {
-            canvas.drawPath(paths.get(i), drawPaint.get(i));
+            canvas.drawPath(paths.get(i),drawPaint.get(i));
         }
     }
 
@@ -77,6 +98,11 @@ class DrawerView extends View {
                 tmpPath.lineTo(pointX, pointY);
                 drawPaint.add(tmpPaint);
                 paths.add(tmpPath);
+                break;
+            case MotionEvent.ACTION_UP:
+                drawingList.add(new Drawing(drawPaint, paths));
+                drawPaint = new LinkedList<>();
+                paths = new LinkedList<>();
 
                 break;
             default:

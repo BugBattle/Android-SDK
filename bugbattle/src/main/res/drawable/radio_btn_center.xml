@@ -9,6 +9,5 @@
     <item
         android:drawable="@drawable/center_active"
         android:state_checked="true" />
-    <item
-        android:drawable="@drawable/center_inactive" />
+
 </selector>

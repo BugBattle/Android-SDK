@@ -11,6 +11,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        BugBattle.initialise("UpGjXX9qLCPd93JF0OHpkbcTVxfER1zN",BugBattleActivationMethod.SHAKE, this.getApplication());
+        BugBattle.setApiURL("http://192.168.0.10:9000");
     }
 }
 

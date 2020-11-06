@@ -10,6 +10,7 @@ import android.view.View;
 import java.lang.reflect.Field;
 import java.util.Map;
 
+import bugbattle.io.bugbattle.R;
 import bugbattle.io.bugbattle.view.ImageEditor;
 import bugbattle.io.bugbattle.model.FeedbackModel;
 
@@ -69,6 +70,7 @@ public class ScreenshotTaker {
         Intent intent = new Intent(getActivity(), ImageEditor.class);
         feedbackModel.setScreenshot(imageFile);
         getActivity().startActivity(intent);
+        getActivity().overridePendingTransition(R.anim.slide_down,R.anim.slide_up);
     }
 
     private Bitmap getResizedBitmap(Bitmap bm) {
