@@ -2,6 +2,7 @@ package bugbattle.io.bugbattle.service;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
@@ -67,6 +68,10 @@ public class ScreenshotTaker {
     }
 
     private void openScreenshot(Bitmap imageFile) {
+        SharedPreferences pref = feedbackModel.getContext().getApplicationContext().getSharedPreferences("prefs", 0);
+        SharedPreferences.Editor editor = pref.edit();
+        editor.putString("descriptionEditText", ""); // Storing the description
+        editor.apply();
         Intent intent = new Intent(getActivity(), ImageEditor.class);
         feedbackModel.setScreenshot(imageFile);
         getActivity().startActivity(intent);
