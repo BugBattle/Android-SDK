@@ -65,6 +65,19 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:srcCompat="@drawable/error" />
+
+                <View
+                    android:id="@+id/bb_loading_background"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:alpha="1"
+                    android:background="@android:color/background_light"
+                    android:visibility="visible"
+                    app:layout_constraintBottom_toTopOf="@+id/view"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
             </android.support.constraint.ConstraintLayout>
 
             <android.support.constraint.ConstraintLayout
@@ -127,18 +140,6 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.0">
 
-                <View
-                    android:id="@+id/bb_loading_background"
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:alpha="1"
-                    android:background="@android:color/background_light"
-                    android:visibility="visible"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
                 <TextView
                     android:id="@+id/bb_loading"
                     android:layout_width="wrap_content"
@@ -188,29 +189,43 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="1.0">
 
-                <android.support.constraint.ConstraintLayout
-                    android:id="@+id/constraintLayout3"
-                    android:layout_width="match_parent"
-                    android:layout_height="80dp"
+                <TextView
+                    android:id="@+id/policyText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="1dp"
+                    android:gravity="left"
+                    android:lines="2"
+                    android:text="@string/policy"
+                    android:textSize="16dp"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
+                    app:layout_constraintStart_toEndOf="@+id/bb_privacyswitch"
+                    app:layout_constraintTop_toTopOf="@+id/bb_privacyswitch" />
 
-                </android.support.constraint.ConstraintLayout>
+                <Switch
+                    android:id="@+id/bb_privacyswitch"
+                    android:theme="@style/SwitchCompatTheme"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="20dp"
+                    android:textColor="@color/bb_blue"
+                    android:textColorHighlight="@color/bb_blue"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/bb_view2" />
 
                 <ImageView
                     android:id="@+id/bb_thumbnail"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
-                    android:layout_marginLeft="20dp"
                     android:layout_marginTop="25dp"
                     android:contentDescription="screenshot"
                     android:minWidth="90dp"
                     android:minHeight="160dp"
                     android:scaleType="fitXY"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/radioGroup" />
+                    app:layout_constraintTop_toBottomOf="@+id/bb_privacyswitch" />
 
                 <ImageButton
                     android:id="@+id/bb_edit_btn"
@@ -251,21 +266,20 @@
                     android:layout_width="0dp"
                     android:layout_height="50dp"
                     android:layout_marginStart="20dp"
-                    android:layout_marginLeft="20dp"
                     android:layout_marginTop="20dp"
                     android:layout_marginEnd="20dp"
-                    android:layout_marginRight="20dp"
                     android:background="@null"
                     android:ems="10"
                     android:hint="@string/report_email_placeholder"
                     android:inputType="textEmailAddress"
                     android:textColor="#000000"
                     android:textColorHighlight="@android:color/black"
+                    android:autoLink="web"
                     android:textColorHint="#dddddd"
                     android:visibility="visible"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/bb_header" />
+                    app:layout_constraintTop_toBottomOf="@+id/radioGroup" />
 
                 <View
                     android:id="@+id/bb_view3"
@@ -338,10 +352,8 @@
                     android:layout_width="0dp"
                     android:layout_height="40dp"
                     android:layout_marginStart="16dp"
-                    android:layout_marginLeft="16dp"
                     android:layout_marginTop="25dp"
                     android:layout_marginEnd="16dp"
-                    android:layout_marginRight="16dp"
                     android:background="@drawable/segment_button_background"
                     android:checkedButton="@+id/priorityMedium"
                     android:orientation="horizontal"
@@ -349,7 +361,7 @@
                     android:radius="2dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/description">
+                    app:layout_constraintTop_toBottomOf="@+id/bb_header">
 
                     <RadioButton
                         android:id="@+id/priorityLow"

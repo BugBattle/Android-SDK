@@ -10,26 +10,24 @@ import java.net.URLConnection;
 
 import javax.net.ssl.HttpsURLConnection;
 
-public class FormDataHttpHelper {
-    private HttpURLConnection httpConn;
+public class FormDataHttpsHelper {
+    private HttpsURLConnection httpConn;
     private DataOutputStream request;
     private final String boundary =  "BBBOUNDARY";
     private final String crlf = "\r\n";
     private final String twoHyphens = "--";
 
     /**
-     * This constructor initializes a new HTTP POST request with content type
+     * This constructor initializes a new HTTPS POST request with content type
      * is set to multipart/form-data
      *
      * @param requestURL bugbattle url
      * @param apiToken token for the project
      */
-    public FormDataHttpHelper(String requestURL, String apiToken)
+    public FormDataHttpsHelper(String requestURL, String apiToken)
             throws IOException {
-
-        // creates a unique boundary based on time stamp
         URL url = new URL(requestURL);
-        httpConn = (HttpURLConnection) url.openConnection();
+        httpConn = (HttpsURLConnection) url.openConnection();
         httpConn.setUseCaches(false);
         httpConn.setDoOutput(true); // indicates POST method
         httpConn.setDoInput(true);
@@ -66,10 +64,8 @@ public class FormDataHttpHelper {
             buf.read(bytes, 0, bytes.length);
             buf.close();
         } catch (FileNotFoundException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         request.write(bytes);

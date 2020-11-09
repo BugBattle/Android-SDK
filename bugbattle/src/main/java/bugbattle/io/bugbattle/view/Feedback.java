@@ -6,9 +6,11 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.Html;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.View;
@@ -19,6 +21,8 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RadioButton;
+import android.widget.Switch;
+import android.widget.TextView;
 
 import bugbattle.io.bugbattle.R;
 import bugbattle.io.bugbattle.controller.OnHttpResponseListener;
@@ -34,6 +38,9 @@ public class Feedback extends AppCompatActivity implements OnHttpResponseListene
     private RadioButton priorityMedium;
     private RadioButton priorityHigh;
 
+    private Switch privacySwitch;
+    private boolean privacyIsToggled = false;
+
     private View loadingView;
     private View doneSendingView;
     private View errorSendingView;
@@ -43,6 +50,8 @@ public class Feedback extends AppCompatActivity implements OnHttpResponseListene
 
     private EditText emailEditText;
     private EditText descriptionEditText;
+
+    private TextView policyText;
 
     private FeedbackModel feedbackModel;
     private SharedPreferences pref;
@@ -63,6 +72,11 @@ public class Feedback extends AppCompatActivity implements OnHttpResponseListene
             storeEmail(FeedbackModel.getInstance().getEmail());
         }
         loadEmail();
+
+        if(!feedbackModel.isPrivacyEnabled()) {
+            policyText.setVisibility(View.GONE);
+            privacySwitch.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -150,6 +164,9 @@ public class Feedback extends AppCompatActivity implements OnHttpResponseListene
         cancleButton = findViewById(R.id.bb_btncancle);
         descriptionEditText = findViewById(R.id.description);
         emailEditText = findViewById(R.id.bb_email);
+        policyText = findViewById(R.id.policyText);
+        policyText.setText(Html.fromHtml(getString(R.string.policy)));
+        privacySwitch = findViewById(R.id.bb_privacyswitch);
         if (emailEditText.getText().length() == 0) {
             sendButton.setEnabled(false);
         }
@@ -193,18 +210,20 @@ public class Feedback extends AppCompatActivity implements OnHttpResponseListene
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                feedbackView.setVisibility(View.INVISIBLE);
-                loadingView.setVisibility(View.VISIBLE);
-                hideKeyboard(Feedback.this);
-                feedbackModel.setEmail(emailEditText.getText().toString());
-                feedbackModel.setDescription(descriptionEditText.getText().toString());
+                if(privacyIsToggled || !feedbackModel.isPrivacyEnabled()) {
+                    feedbackView.setVisibility(View.INVISIBLE);
+                    loadingView.setVisibility(View.VISIBLE);
+                    hideKeyboard(Feedback.this);
+                    feedbackModel.setEmail(emailEditText.getText().toString());
+                    feedbackModel.setDescription(descriptionEditText.getText().toString());
 
-                storeEmail();
-                resetDescription();
-                try {
-                    new HttpHelper(Feedback.this, getApplicationContext()).execute(feedbackModel);
-                } catch (Exception e) {
-                    e.printStackTrace();
+                    storeEmail();
+                    resetDescription();
+                    try {
+                        new HttpHelper(Feedback.this, getApplicationContext()).execute(feedbackModel);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         });
@@ -233,6 +252,23 @@ public class Feedback extends AppCompatActivity implements OnHttpResponseListene
                 finish();
                 overridePendingTransition(R.anim.slide_in_left,
                         R.anim.slide_out_right);
+            }
+        });
+
+        policyText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW);
+                browserIntent.setData(Uri.parse(feedbackModel.getPrivacyUrl()));
+                startActivity(browserIntent);
+            }
+        });
+
+        privacySwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                privacyIsToggled = isChecked;
+                // do something, the isChecked will be
+                // true if the switch is in the On position
             }
         });
     }

@@ -6,6 +6,9 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 
+import bugbattle.io.bugbattle.model.FeedbackModel;
+import bugbattle.io.bugbattle.view.Feedback;
+
 /**
  * Detects the shake gesture of the phone
  */
@@ -29,17 +32,16 @@ public class ShakeGestureDetector implements SensorEventListener {
      * @param mainActivity context is needed to access the sensor
      */
     public ShakeGestureDetector(Context mainActivity) {
+
         activity = mainActivity;
         //Init Sensors
         mSensorManager = (SensorManager) mainActivity.getSystemService(Context.SENSOR_SERVICE);
         mAccelerometer = mSensorManager
                 .getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-
-
         mSensorManager.registerListener(this, mAccelerometer, SensorManager.SENSOR_DELAY_UI);
-
         //init screenshot taker
         screenshotTaker = new ScreenshotTaker();
+
     }
 
     public void resume() {
@@ -72,8 +74,10 @@ public class ShakeGestureDetector implements SensorEventListener {
             mShakeTimestamp = now;
             mShakeCount++;
             try {
-                screenshotTaker.takeScreenshot();
-                pause();
+                if (!FeedbackModel.getInstance().isDisabled()) {
+                    screenshotTaker.takeScreenshot();
+                    pause();
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }

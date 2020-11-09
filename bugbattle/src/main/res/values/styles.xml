@@ -11,4 +11,8 @@
         <item name="metaButtonBarButtonStyle">?android:attr/buttonBarButtonStyle</item>
         <item name="android:windowContentTransitions">true</item>
     </style>
+
+    <style name="SwitchCompatTheme" >
+        <item name="colorControlActivated">@color/bb_blue</item>
+    </style>
 </resources>

@@ -15,4 +15,5 @@
     <string name="report_loading">Sending your bug report &#8230;</string>
     <string name="report_done">Thank you for your bug report!</string>
     <string name="report_error">Ups, something went wrong.</string>
+    <string name="policy">I have read and agree to the  &lt;font color="#019AE8"&gt;privacy policy&lt;/font&gt;.</string>
 </resources>

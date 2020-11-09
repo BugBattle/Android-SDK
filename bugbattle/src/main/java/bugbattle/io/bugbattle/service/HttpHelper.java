@@ -14,7 +14,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
@@ -65,7 +64,7 @@ public class HttpHelper extends AsyncTask<FeedbackModel, Void, Integer> {
     @RequiresApi(api = Build.VERSION_CODES.O)
     private JSONObject uploadImage (FeedbackModel service) throws IOException, JSONException {
         Bitmap image = service.getScreenshot();
-        FormDataHttpHelper multipart = new FormDataHttpHelper(service.getApiUrl() + UPLOAD_IMAGE_BACKEND_URL_POSTFIX, service.getSdkKey());
+        FormDataHttpsHelper multipart = new FormDataHttpsHelper(service.getApiUrl() + UPLOAD_IMAGE_BACKEND_URL_POSTFIX, service.getSdkKey());
         multipart.addFilePart(bitmapToFile(image));
         String response = multipart.finishAndUpload();
         return new JSONObject(response);
@@ -76,7 +75,7 @@ public class HttpHelper extends AsyncTask<FeedbackModel, Void, Integer> {
         JSONObject responseUploadImage = uploadImage(service);
 
         URL url = new URL(service.getApiUrl() + REPORT_BUG_URL_POSTFIX);
-        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
         conn.setRequestProperty("api-token", service.getSdkKey());
         conn.setDoOutput(true);
         conn.setRequestProperty("Accept", "application/json");

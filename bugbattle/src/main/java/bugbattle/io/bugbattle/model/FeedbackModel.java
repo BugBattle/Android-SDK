@@ -15,6 +15,7 @@ import bugbattle.io.bugbattle.service.ShakeGestureDetector;
  * Contains all relevant information gathered in the background.
  */
 public class FeedbackModel {
+    private boolean isDisabled = false;
     private static FeedbackModel instance;
 
     private Context context;
@@ -25,7 +26,6 @@ public class FeedbackModel {
     private String severity;
 
     //default color of the statusbar (bugbattle blue)
-    private String appBarColor = "#019AE8";
     private String apiUrl = "https://apidev.bugbattle.io";
     private Bitmap screenshot;
 
@@ -35,6 +35,9 @@ public class FeedbackModel {
     private LogReader logReader;
     private StepsToReproduce stepsToReproduce;
     private ShakeGestureDetector shakeGestureDetector;
+
+    private boolean privacyEnabled = false;
+    private String privacyUrl = "https://www.bugbattle.io/privacy-policy";
 
 
     private FeedbackModel() {
@@ -104,14 +107,6 @@ public class FeedbackModel {
         phoneMeta = new PhoneMeta(context);
     }
 
-    public String getAppBarColor() {
-        return appBarColor;
-    }
-
-    public void setAppBarColor(String appBarColor) {
-        this.appBarColor = appBarColor;
-    }
-
     public JSONObject getCustomData() {
         return customData;
     }
@@ -143,5 +138,29 @@ public class FeedbackModel {
 
     public void setApiUrl(String apiUrl) {
         this.apiUrl = apiUrl;
+    }
+
+    public void enablePrivacyPolicy(boolean enable) {
+        privacyEnabled = enable;
+    }
+
+    public boolean isPrivacyEnabled() {
+        return privacyEnabled;
+    }
+
+    public void setPrivacyPolicyUrl(String privacyUrl) {
+        this.privacyUrl = privacyUrl;
+    }
+
+    public String getPrivacyUrl() {
+        return privacyUrl;
+    }
+
+    public boolean isDisabled() {
+        return isDisabled;
+    }
+
+    public void setDisabled(boolean disabled) {
+        isDisabled = disabled;
     }
 }

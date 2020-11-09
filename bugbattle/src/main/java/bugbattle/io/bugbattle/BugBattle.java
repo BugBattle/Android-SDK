@@ -7,6 +7,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import bugbattle.io.bugbattle.controller.BugBattleActivationMethod;
+import bugbattle.io.bugbattle.controller.BugBattleHttpsException;
 import bugbattle.io.bugbattle.controller.BugBattleNotInitialisedException;
 import bugbattle.io.bugbattle.model.FeedbackModel;
 import bugbattle.io.bugbattle.controller.StepsToReproduce;
@@ -22,10 +23,9 @@ public class BugBattle {
     private BugBattle(String sdkKey, BugBattleActivationMethod activationMethod, Application application) {
         FeedbackModel.getInstance().setContext(application.getApplicationContext());
         FeedbackModel.getInstance().setSdkKey(sdkKey);
-        //CLEAR logcat
         try {
             Runtime.getRuntime().exec("logcat - c");
-        }catch (Exception e) {
+        } catch (Exception e) {
             System.out.println(e);
         }
         if (activationMethod == BugBattleActivationMethod.SHAKE) {
@@ -66,6 +66,7 @@ public class BugBattle {
 
     /**
      * Starts the bug reporting with a custom screenshot attached.
+     *
      * @param bitmap the image will be used instead of the current
      */
     public static void startBugReporting(Bitmap bitmap) {
@@ -94,6 +95,7 @@ public class BugBattle {
 
     /**
      * Set/Prefill the email address for the user.
+     *
      * @param email address, which is fileld in.
      */
     public static void setCustomerEmail(String email) {
@@ -101,10 +103,37 @@ public class BugBattle {
     }
 
     /**
-     * Sets the API url to your internal Bugbattle server. Please make sure that the server is reachable within the network.
-     * @param apiUrl url of the internal Bugbattle server
+     * Enables the privacy policy check.
+     *
+     * @param enable Enable the privacy policy.
      */
-    public static void setApiURL(String apiUrl) {
-        FeedbackModel.getInstance().setApiUrl(apiUrl);
+    public static void enablePrivacyPolicy(boolean enable) {
+        FeedbackModel.getInstance().enablePrivacyPolicy(enable);
+    }
+
+    /**
+     * Sets a custom privacy policy url.
+     *
+     * @param privacyUrl The URL pointing to your privacy policy.
+     */
+    public static void setPrivacyPolicyUrl(String privacyUrl) {
+        FeedbackModel.getInstance().setPrivacyPolicyUrl(privacyUrl);
+    }
+
+    /**
+     * Sets the API url to your internal Bugbattle server. Please make sure that the server is reachable within the network.
+     * Only HTTPS is allowed
+     *
+     * @param apiUrl url of the internal Bugbattle server
+     * @throws BugBattleHttpsException Only https urls supported
+     */
+    public static void setApiURL(String apiUrl) throws BugBattleHttpsException {
+        if (apiUrl.contains("https")) {
+            FeedbackModel.getInstance().setApiUrl(apiUrl);
+        } else {
+            FeedbackModel.getInstance().setDisabled(true);
+            throw new BugBattleHttpsException();
+        }
+
     }
 }
