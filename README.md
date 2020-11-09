@@ -1,5 +1,5 @@
 # Bugbattle Android SDK
-[![](https://jitpack.io/v/BugBattle/BugBattle-Android-SDK.svg)](https://jitpack.io/#BugBattle/BugBattle-Android-SDK)
+[![](https://jitpack.io/v/BugBattle/BugBattle-Android-SDK.svg)](https://jitpack.io/#BugBattle/BugBattle-Android-SDK) [![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://github.com/BugBattle/Android-SDK/graphs/commit-activity) [![Documentation Status](https://readthedocs.org/projects/ansicolortags/badge/?version=latest)](https://docs.bugbattle.io)
 
 ![Bugbattle iOS SDK Intro](https://github.com/BugBattle/iOS-SDK/blob/master/imgs/bugbattle-intro.png)
 
