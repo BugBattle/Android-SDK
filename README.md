@@ -41,10 +41,10 @@ Add the initialise method to your main activity's onCreate method.
 ```
 @Override protected void onCreate(Bundle savedInstanceState) {
   ....
-  BugBattle.initialise("5c5d811215244ab6e48e9751", BugBattleActivationMethod.SHAKE, getApplication());
+  BugBattle.initialise("5c5d811215244ab6e48e9751", BugBattleActivationMethod.SHAKE, this);
 } 
 ```
-The initialise method takes two parameters. The api key and the activation method. There are two ways to start the bug reporting flow. The default option is to activate the flow by shaking the device (*BugBattleActivationMethod.SHAKE*). You can also choose *BugBattleActivationMethod.NONE* and start the flow by yourself in order to implement a custom integration.
+The initialise method takes two parameters. The api key and the activation method. There are two ways to start the bug reporting flow. The default option is to activate the flow by shaking the device (*BugBattleActivationMethod.SHAKE*). You can also choose *BugBattleActivationMethod.NONE* and start the flow by yourself in order to implement a custom integration. Another Option is BugBattleActivationMethod.THREE_FINGER_DOUBLE_TAB.
 
 ### Simulator Restrictions
 Please notice, that the shake gesture wont work in the simulator.
