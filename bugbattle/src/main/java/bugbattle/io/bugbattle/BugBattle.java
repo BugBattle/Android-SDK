@@ -11,6 +11,7 @@ import bugbattle.io.bugbattle.controller.BugBattleHttpsException;
 import bugbattle.io.bugbattle.controller.BugBattleNotInitialisedException;
 import bugbattle.io.bugbattle.controller.StepsToReproduce;
 import bugbattle.io.bugbattle.model.FeedbackModel;
+import bugbattle.io.bugbattle.model.PhoneMeta;
 import bugbattle.io.bugbattle.service.BBDetector;
 import bugbattle.io.bugbattle.service.ScreenshotTaker;
 import bugbattle.io.bugbattle.service.ShakeGestureDetector;
@@ -22,7 +23,9 @@ public class BugBattle {
 
     private BugBattle(String sdkKey, BugBattleActivationMethod activationMethod, Activity application) {
         FeedbackModel.getInstance().setSdkKey(sdkKey);
+        FeedbackModel.getInstance().setPhoneMeta(new PhoneMeta(application));
         screenshotTaker = new ScreenshotTaker(application);
+
         try {
             Runtime.getRuntime().exec("logcat - c");
         } catch (Exception e) {

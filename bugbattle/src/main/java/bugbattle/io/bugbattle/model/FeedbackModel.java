@@ -49,6 +49,10 @@ public class FeedbackModel {
         return instance;
     }
 
+    public void setPhoneMeta(PhoneMeta phoneMeta) {
+        this.phoneMeta = phoneMeta;
+    }
+
     public @Nullable
     PhoneMeta getPhoneMeta() {
         return phoneMeta;
