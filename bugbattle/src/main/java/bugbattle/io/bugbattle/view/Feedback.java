@@ -71,7 +71,7 @@ public class Feedback extends AppCompatActivity implements OnHttpResponseListene
         setOnClickListener();
         priorityToggle();
         pref = getApplicationContext().getSharedPreferences("prefs", 0);
-        if (FeedbackModel.getInstance().getEmail().equals("")) {
+        if (FeedbackModel.getInstance().getEmail() == "") {
             storeEmail(FeedbackModel.getInstance().getEmail());
         }
         loadEmail();
