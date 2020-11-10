@@ -15,9 +15,7 @@ import android.support.v4.content.ContextCompat;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.lang.reflect.Field;
 import java.util.Date;
-import java.util.Map;
 
 import bugbattle.io.bugbattle.BuildConfig;
 
@@ -25,7 +23,7 @@ import bugbattle.io.bugbattle.BuildConfig;
  * Collected information, gathered from the phone
  */
 public class PhoneMeta {
-
+    private Activity activity;
     private static double startTime;
     private static String deviceModel;
     private static String deviceName;
@@ -35,16 +33,17 @@ public class PhoneMeta {
     private static String buildVersionNumber;
     private static String releaseVersionNumber;
 
-    public PhoneMeta(@NonNull Context context) {
+    public PhoneMeta(@NonNull Activity activity) {
         startTime = new Date().getTime();
-        getPhoneMeta(context);
+        this.activity = activity;
+        getPhoneMeta();
     }
 
     /**
      * get the meta information for the phone
      *
      * @return the metainformation gathered from the phone
-     * @throws JSONException
+     * @throws JSONException cant create JSON Object
      */
     public JSONObject getJSONObj() throws JSONException {
         JSONObject obj = new JSONObject();
@@ -61,11 +60,11 @@ public class PhoneMeta {
         return obj;
     }
 
-    private void getPhoneMeta(Context context) {
-        PackageManager packageManager = context.getPackageManager();
+    private void getPhoneMeta() {
+        PackageManager packageManager = activity.getApplicationContext().getPackageManager();
         if (packageManager != null) {
             try {
-                PackageInfo packageInfo = packageManager.getPackageInfo(context.getPackageName(), 0);
+                PackageInfo packageInfo = packageManager.getPackageInfo(activity.getApplicationContext().getPackageName(), 0);
                 buildVersionNumber = Integer.toString(packageInfo.versionCode);
                 releaseVersionNumber = packageInfo.versionName;
                 bundleID = packageInfo.packageName;
@@ -95,13 +94,13 @@ public class PhoneMeta {
      *
      * @return status of the network
      */
-    private static JSONObject getNetworkStatus() {
+    private JSONObject getNetworkStatus() {
         JSONObject result = new JSONObject();
-        if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_NETWORK_STATE)
+        if (ContextCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_NETWORK_STATE)
                 == PackageManager.PERMISSION_GRANTED) {
             try {
                 ConnectivityManager cm =
-                        (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+                        (ConnectivityManager) activity.getSystemService(Context.CONNECTIVITY_SERVICE);
 
                 //Only called when the permission is granted
                 @SuppressLint("MissingPermission") NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
@@ -119,33 +118,5 @@ public class PhoneMeta {
         } else {
             return result;
         }
-    }
-
-    private static Activity getActivity() {
-        try {
-            Class activityThreadClass = Class.forName("android.app.ActivityThread");
-            Object activityThread = activityThreadClass.getMethod("currentActivityThread").invoke(null);
-            Field activitiesField = activityThreadClass.getDeclaredField("mActivities");
-            activitiesField.setAccessible(true);
-
-            Map<Object, Object> activities = (Map<Object, Object>) activitiesField.get(activityThread);
-            if (activities == null)
-                return null;
-
-            for (Object activityRecord : activities.values()) {
-                Class activityRecordClass = activityRecord.getClass();
-                Field pausedField = activityRecordClass.getDeclaredField("paused");
-                pausedField.setAccessible(true);
-                if (!pausedField.getBoolean(activityRecord)) {
-                    Field activityField = activityRecordClass.getDeclaredField("activity");
-                    activityField.setAccessible(true);
-                    return (Activity) activityField.get(activityRecord);
-                }
-            }
-            return null;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
     }
 }

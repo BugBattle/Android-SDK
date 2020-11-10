@@ -7,8 +7,8 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.net.Uri;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.Html;
 import android.text.TextWatcher;
@@ -60,15 +60,18 @@ public class Feedback extends AppCompatActivity implements OnHttpResponseListene
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_feedback);
-        getSupportActionBar().hide();
-
+        try {
+            getSupportActionBar().hide();
+        } catch (NullPointerException ex) {
+            System.out.println(ex);
+        }
         feedbackModel = FeedbackModel.getInstance();
 
         initComponents();
         setOnClickListener();
         priorityToggle();
         pref = getApplicationContext().getSharedPreferences("prefs", 0);
-        if (FeedbackModel.getInstance().getEmail() != "") {
+        if (FeedbackModel.getInstance().getEmail().equals("")) {
             storeEmail(FeedbackModel.getInstance().getEmail());
         }
         loadEmail();
@@ -133,7 +136,9 @@ public class Feedback extends AppCompatActivity implements OnHttpResponseListene
                     new Runnable() {
                         public void run() {
                             resetDescription();
-                            feedbackModel.getShakeGestureDetector().resume();
+                            if (feedbackModel.getGestureDetector() != null) {
+                                feedbackModel.getGestureDetector().resume();
+                            }
                             finish();
 
                         }

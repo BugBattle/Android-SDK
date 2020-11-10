@@ -1,11 +1,7 @@
 package bugbattle.io.bugbattle_android_sdk;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-
-import bugbattle.io.bugbattle.BugBattle;
-import bugbattle.io.bugbattle.controller.BugBattleActivationMethod;
-import bugbattle.io.bugbattle.controller.BugBattleHttpsException;
+import android.support.v7.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
     @Override
@@ -13,5 +9,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
     }
+
 }
 

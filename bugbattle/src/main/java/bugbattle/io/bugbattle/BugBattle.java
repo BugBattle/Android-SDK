@@ -1,6 +1,6 @@
 package bugbattle.io.bugbattle;
 
-import android.app.Application;
+import android.app.Activity;
 import android.graphics.Bitmap;
 
 import org.json.JSONException;
@@ -9,27 +9,35 @@ import org.json.JSONObject;
 import bugbattle.io.bugbattle.controller.BugBattleActivationMethod;
 import bugbattle.io.bugbattle.controller.BugBattleHttpsException;
 import bugbattle.io.bugbattle.controller.BugBattleNotInitialisedException;
-import bugbattle.io.bugbattle.model.FeedbackModel;
 import bugbattle.io.bugbattle.controller.StepsToReproduce;
+import bugbattle.io.bugbattle.model.FeedbackModel;
+import bugbattle.io.bugbattle.service.BBDetector;
 import bugbattle.io.bugbattle.service.ScreenshotTaker;
 import bugbattle.io.bugbattle.service.ShakeGestureDetector;
-import bugbattle.io.bugbattle.view.Feedback;
-
+import bugbattle.io.bugbattle.service.TouchGestureDetector;
 
 public class BugBattle {
     private static BugBattle instance;
-    private ShakeGestureDetector shakeGestureDetector;
+    private static ScreenshotTaker screenshotTaker;
 
-    private BugBattle(String sdkKey, BugBattleActivationMethod activationMethod, Application application) {
-        FeedbackModel.getInstance().setContext(application.getApplicationContext());
+    private BugBattle(String sdkKey, BugBattleActivationMethod activationMethod, Activity application) {
         FeedbackModel.getInstance().setSdkKey(sdkKey);
+        screenshotTaker = new ScreenshotTaker(application);
         try {
             Runtime.getRuntime().exec("logcat - c");
         } catch (Exception e) {
             System.out.println(e);
         }
+
         if (activationMethod == BugBattleActivationMethod.SHAKE) {
-            FeedbackModel.getInstance().setShakeGestureDetector(new ShakeGestureDetector(application.getApplicationContext()));
+            BBDetector detector = new ShakeGestureDetector(application);
+            FeedbackModel.getInstance().setGestureDetector(detector);
+            detector.initialize();
+        }
+        if (activationMethod == BugBattleActivationMethod.THREE_FINGER_DOUBLE_TAB) {
+            BBDetector detector = new TouchGestureDetector(application);
+            FeedbackModel.getInstance().setGestureDetector(detector);
+            detector.initialize();
         }
     }
 
@@ -40,7 +48,7 @@ public class BugBattle {
      * @param sdkKey           The SDK key, which can be found on dashboard.bugbattle.io
      * @param activationMethod Activation method, which triggers a new bug report.
      */
-    public static BugBattle initialise(String sdkKey, BugBattleActivationMethod activationMethod, Application application) {
+    public static BugBattle initialise(String sdkKey, BugBattleActivationMethod activationMethod, Activity application) {
         if (instance == null) {
             instance = new BugBattle(sdkKey, activationMethod, application);
         }
@@ -55,7 +63,7 @@ public class BugBattle {
     public static void startBugReporting() throws BugBattleNotInitialisedException {
         if (instance != null) {
             try {
-                new ScreenshotTaker().takeScreenshot();
+                screenshotTaker.takeScreenshot();
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -71,6 +79,7 @@ public class BugBattle {
      */
     public static void startBugReporting(Bitmap bitmap) {
         FeedbackModel.getInstance().setScreenshot(bitmap);
+        screenshotTaker.openScreenshot(bitmap);
     }
 
     /**
@@ -78,7 +87,7 @@ public class BugBattle {
      *
      * @param type Type of the step. (for eg. Button)
      * @param data Custom data associated with the step.
-     * @throws JSONException
+     * @throws JSONException unable to create JSONObject
      */
     public static void trackStep(String type, String data) {
         StepsToReproduce.getInstance().setStep(type, data);

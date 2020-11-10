@@ -9,9 +9,9 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.os.Build;
+import android.os.Bundle;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
@@ -50,8 +50,11 @@ public class ImageEditor extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_image_editor);
-        getSupportActionBar().hide();
-
+        try {
+            getSupportActionBar().hide();
+        } catch (NullPointerException ex) {
+            System.out.println(ex);
+        }
         service = FeedbackModel.getInstance();
         System.out.println(this.getApplicationContext().getPackageName());
 
@@ -98,7 +101,9 @@ public class ImageEditor extends AppCompatActivity {
             alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Yes",
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
-                            service.getShakeGestureDetector().resume();
+                            if (service.getGestureDetector() != null) {
+                                service.getGestureDetector().resume();
+                            }
                             service.setScreenshot(null);
                             SharedPreferences pref = getApplicationContext().getSharedPreferences("prefs", 0);
                             SharedPreferences.Editor editor = pref.edit();
@@ -274,9 +279,11 @@ public class ImageEditor extends AppCompatActivity {
                         SharedPreferences.Editor editor = pref.edit();
                         editor.putString("description", ""); // Storing string
                         editor.apply();
-                        service.getShakeGestureDetector().resume();
+                        if (service.getGestureDetector() != null) {
+                            service.getGestureDetector().resume();
+                        }
                         finish();
-                        overridePendingTransition(R.anim.slide_down_revert,R.anim.slide_up_revert);
+                        overridePendingTransition(R.anim.slide_down_revert, R.anim.slide_up_revert);
                     }
             }
         });

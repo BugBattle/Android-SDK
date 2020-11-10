@@ -1,6 +1,5 @@
 package bugbattle.io.bugbattle.model;
 
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.support.annotation.Nullable;
 
@@ -8,8 +7,8 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import bugbattle.io.bugbattle.controller.StepsToReproduce;
+import bugbattle.io.bugbattle.service.BBDetector;
 import bugbattle.io.bugbattle.service.LogReader;
-import bugbattle.io.bugbattle.service.ShakeGestureDetector;
 
 /**
  * Contains all relevant information gathered in the background.
@@ -18,14 +17,11 @@ public class FeedbackModel {
     private boolean isDisabled = false;
     private static FeedbackModel instance;
 
-    private Context context;
-
     private String sdkKey;
     private String userEmail;
     private String description;
     private String severity;
 
-    //default color of the statusbar (bugbattle blue)
     private String apiUrl = "https://apidev.bugbattle.io";
     private Bitmap screenshot;
 
@@ -34,7 +30,7 @@ public class FeedbackModel {
     PhoneMeta phoneMeta;
     private LogReader logReader;
     private StepsToReproduce stepsToReproduce;
-    private ShakeGestureDetector shakeGestureDetector;
+    private BBDetector gestureDetector;
 
     private boolean privacyEnabled = false;
     private String privacyUrl = "https://www.bugbattle.io/privacy-policy";
@@ -75,7 +71,7 @@ public class FeedbackModel {
     }
 
     public JSONArray getLogs() {
-        return logReader.readLog(context);
+        return logReader.readLog();
     }
 
     public JSONArray getStepsToReproduce() {
@@ -98,15 +94,6 @@ public class FeedbackModel {
         this.description = description;
     }
 
-    public Context getContext() {
-        return context;
-    }
-
-    public void setContext(Context context) {
-        this.context = context;
-        phoneMeta = new PhoneMeta(context);
-    }
-
     public JSONObject getCustomData() {
         return customData;
     }
@@ -115,12 +102,12 @@ public class FeedbackModel {
         this.customData = customData;
     }
 
-    public ShakeGestureDetector getShakeGestureDetector() {
-        return shakeGestureDetector;
+    public BBDetector getGestureDetector() {
+        return gestureDetector;
     }
 
-    public void setShakeGestureDetector(ShakeGestureDetector shakeGestureDetector) {
-        this.shakeGestureDetector = shakeGestureDetector;
+    public void setGestureDetector(BBDetector gestureDetector) {
+        this.gestureDetector = gestureDetector;
     }
 
     public String getSeverity() {
