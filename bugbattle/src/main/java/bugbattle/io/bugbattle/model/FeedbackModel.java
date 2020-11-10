@@ -22,7 +22,7 @@ public class FeedbackModel {
     private String description;
     private String severity;
 
-    private String apiUrl = "https://apidev.bugbattle.io";
+    private String apiUrl = "https://api.bugbattle.io";
     private Bitmap screenshot;
 
     private JSONObject customData;
