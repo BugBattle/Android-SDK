@@ -1,8 +1,7 @@
 package bugbattle.io.bugbattle.model;
 
 import android.graphics.Bitmap;
-
-import androidx.annotation.Nullable;
+import android.support.annotation.Nullable;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
