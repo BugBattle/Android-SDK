@@ -13,9 +13,9 @@ import bugbattle.io.bugbattle.controller.StepsToReproduce;
 import bugbattle.io.bugbattle.model.FeedbackModel;
 import bugbattle.io.bugbattle.model.PhoneMeta;
 import bugbattle.io.bugbattle.service.BBDetector;
+import bugbattle.io.bugbattle.service.Interceptor;
 import bugbattle.io.bugbattle.service.ScreenshotTaker;
 import bugbattle.io.bugbattle.service.ShakeGestureDetector;
-import bugbattle.io.bugbattle.service.TouchGestureDetector;
 
 public class BugBattle {
     private static BugBattle instance;
@@ -24,7 +24,7 @@ public class BugBattle {
     private BugBattle(String sdkKey, BugBattleActivationMethod activationMethod, Activity application) {
         FeedbackModel.getInstance().setSdkKey(sdkKey);
         FeedbackModel.getInstance().setPhoneMeta(new PhoneMeta(application));
-        screenshotTaker = new ScreenshotTaker(application);
+        screenshotTaker = new ScreenshotTaker();
 
         try {
             Runtime.getRuntime().exec("logcat - c");
@@ -38,9 +38,8 @@ public class BugBattle {
             detector.initialize();
         }
         if (activationMethod == BugBattleActivationMethod.THREE_FINGER_DOUBLE_TAB) {
-            BBDetector detector = new TouchGestureDetector(application);
-            FeedbackModel.getInstance().setGestureDetector(detector);
-            detector.initialize();
+            Interceptor.infiltrate();
+
         }
     }
 

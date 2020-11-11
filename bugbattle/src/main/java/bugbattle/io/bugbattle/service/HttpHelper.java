@@ -4,7 +4,8 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Build;
-import android.support.annotation.RequiresApi;
+
+import androidx.annotation.RequiresApi;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -16,6 +17,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -96,7 +98,7 @@ public class HttpHelper extends AsyncTask<FeedbackModel, Void, Integer> {
         body.put("priority", service.getSeverity());
         body.put("consoleLog", service.getLogs());
         try (OutputStream os = conn.getOutputStream()) {
-            byte[] input = body.toString().getBytes("utf-8");
+            byte[] input = body.toString().getBytes(StandardCharsets.UTF_8);
             os.write(input, 0, input.length);
         }
 

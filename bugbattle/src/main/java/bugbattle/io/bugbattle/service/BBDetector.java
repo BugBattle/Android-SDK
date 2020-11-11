@@ -15,7 +15,7 @@ public abstract class BBDetector {
      */
     public BBDetector(Activity activity) {
         this.activity = activity;
-        screenshotTaker = new ScreenshotTaker(activity);
+        screenshotTaker = new ScreenshotTaker();
     }
 
     public abstract void initialize();
