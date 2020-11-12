@@ -140,7 +140,7 @@ public class Feedback extends AppCompatActivity implements OnHttpResponseListene
                                 feedbackModel.getGestureDetector().resume();
                             }
                             if (feedbackModel.getCloseCallback() != null) {
-                                feedbackModel.getCloseCallback();
+                                feedbackModel.getCloseCallback().close();
                             }
                             FeedbackModel.getInstance().setDisabled(false);
                             finish();

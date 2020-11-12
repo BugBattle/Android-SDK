@@ -105,7 +105,7 @@ public class ImageEditor extends AppCompatActivity {
                                 service.getGestureDetector().resume();
                             }
                             if (service.getCloseCallback() != null) {
-                                service.getCloseCallback();
+                                service.getCloseCallback().close();
                             }
                             FeedbackModel.getInstance().setDisabled(false);
                             service.setScreenshot(null);
@@ -288,7 +288,7 @@ public class ImageEditor extends AppCompatActivity {
 
                         }
                         if (service.getCloseCallback() != null) {
-                            service.getCloseCallback();
+                            service.getCloseCallback().close();
                         }
                         FeedbackModel.getInstance().setDisabled(false);
                         finish();
