@@ -104,9 +104,7 @@ public class ImageEditor extends AppCompatActivity {
                             if (service.getGestureDetector() != null) {
                                 service.getGestureDetector().resume();
                             }
-                            if (service.getCloseCallback() != null) {
-                                service.getCloseCallback().close();
-                            }
+
                             FeedbackModel.getInstance().setDisabled(false);
                             service.setScreenshot(null);
                             SharedPreferences pref = getApplicationContext().getSharedPreferences("prefs", 0);
@@ -115,6 +113,9 @@ public class ImageEditor extends AppCompatActivity {
                             editor.apply();
                             finish();
                             dialog.dismiss();
+                            if (service.getCloseCallback() != null) {
+                                service.getCloseCallback().close();
+                            }
                         }
                     });
             alertDialog.show();
@@ -287,12 +288,13 @@ public class ImageEditor extends AppCompatActivity {
                             service.getGestureDetector().resume();
 
                         }
-                        if (service.getCloseCallback() != null) {
-                            service.getCloseCallback().close();
-                        }
+
                         FeedbackModel.getInstance().setDisabled(false);
                         finish();
                         overridePendingTransition(R.anim.slide_down_revert, R.anim.slide_up_revert);
+                        if (service.getCloseCallback() != null) {
+                            service.getCloseCallback().close();
+                        }
                     }
             }
         });
