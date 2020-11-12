@@ -1,6 +1,8 @@
 package bugbattle.io.bugbattle.service;
 
+import android.view.View;
 import android.view.Window;
+import android.widget.PopupWindow;
 
 import java.lang.reflect.Field;
 
@@ -33,6 +35,27 @@ public class DecorateView {
 
     }
 
+    private static void useTouchListenerWrapper(Object decorViewObject) throws NoSuchFieldException, IllegalAccessException {
+
+        Field this$0Field = classPopupDecorView.getDeclaredField("this$0");
+
+        this$0Field.setAccessible(true);
+
+        Object popupWindowObject = this$0Field.get(decorViewObject);
+
+        Class classPopupWindow = PopupWindow.class;
+
+        Field mTouchInterceptorField = classPopupWindow.getDeclaredField("mTouchInterceptor");
+
+        mTouchInterceptorField.setAccessible(true);
+
+        View.OnTouchListener mTouchInterceptorObject = (View.OnTouchListener) mTouchInterceptorField.get(popupWindowObject);
+
+        View.OnTouchListener onTouchListenerWrapper = new TouchListener(mTouchInterceptorObject);
+
+        mTouchInterceptorField.set(popupWindowObject, onTouchListenerWrapper);
+
+    }
 
     static void infiltrateFor(Object objectDecorView) {
 
@@ -40,6 +63,10 @@ public class DecorateView {
             if (classDecorView.isInstance(objectDecorView)) {
 
                 useWindowCallbackWrapper(objectDecorView);
+
+            } else if (classPopupDecorView.isInstance(objectDecorView)) {
+
+                useTouchListenerWrapper(objectDecorView);
 
             }
 
