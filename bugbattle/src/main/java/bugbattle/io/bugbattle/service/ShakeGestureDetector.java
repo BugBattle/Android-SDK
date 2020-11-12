@@ -13,8 +13,8 @@ import bugbattle.io.bugbattle.model.FeedbackModel;
  * Detects the shake gesture of the phone
  */
 public class ShakeGestureDetector extends BBDetector implements SensorEventListener {
-    private static final float SHAKE_THRESHOLD_GRAVITY = 2.7F;
-    private static final int SHAKE_SLOP_TIME_MS = 500;
+    private static final float SHAKE_THRESHOLD_GRAVITY = 4F;
+    private static final int SHAKE_SLOP_TIME_MS = 600;
     private static final int SHAKE_COUNT_RESET_TIME_MS = 3000;
     private long mShakeTimestamp;
     private SensorManager mSensorManager;
