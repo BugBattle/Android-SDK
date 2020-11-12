@@ -13,7 +13,6 @@ import bugbattle.io.bugbattle.controller.StepsToReproduce;
 import bugbattle.io.bugbattle.model.FeedbackModel;
 import bugbattle.io.bugbattle.model.PhoneMeta;
 import bugbattle.io.bugbattle.service.BBDetector;
-import bugbattle.io.bugbattle.service.Interceptor;
 import bugbattle.io.bugbattle.service.ScreenshotTaker;
 import bugbattle.io.bugbattle.service.ShakeGestureDetector;
 
@@ -38,8 +37,11 @@ public class BugBattle {
             detector.initialize();
         }
         if (activationMethod == BugBattleActivationMethod.THREE_FINGER_DOUBLE_TAB) {
-            Interceptor.infiltrate();
-
+            //  Interceptor.infiltrate();
+            /*
+            TouchGestureDetector touchGestureDetector = new TouchGestureDetector(application);
+            FeedbackModel.getInstance().setGestureDetector(touchGestureDetector);
+            touchGestureDetector.initialize();*/
         }
     }
 
@@ -55,6 +57,10 @@ public class BugBattle {
             instance = new BugBattle(sdkKey, activationMethod, application);
         }
         return instance;
+    }
+
+    public void setCloseCallback(CloseCallback closeCallback) {
+        FeedbackModel.getInstance().setCloseCallback(closeCallback);
     }
 
     /**

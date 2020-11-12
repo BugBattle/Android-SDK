@@ -58,18 +58,12 @@ public class DecorateView {
     }
 
     static void infiltrateFor(Object objectDecorView) {
-
         try {
             if (classDecorView.isInstance(objectDecorView)) {
-
                 useWindowCallbackWrapper(objectDecorView);
-
             } else if (classPopupDecorView.isInstance(objectDecorView)) {
-
                 useTouchListenerWrapper(objectDecorView);
-
             }
-
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         } catch (NoSuchFieldException e) {

@@ -104,6 +104,9 @@ public class ImageEditor extends AppCompatActivity {
                             if (service.getGestureDetector() != null) {
                                 service.getGestureDetector().resume();
                             }
+                            if (service.getCloseCallback() != null) {
+                                service.getCloseCallback();
+                            }
                             FeedbackModel.getInstance().setDisabled(false);
                             service.setScreenshot(null);
                             SharedPreferences pref = getApplicationContext().getSharedPreferences("prefs", 0);
@@ -282,6 +285,10 @@ public class ImageEditor extends AppCompatActivity {
                         editor.apply();
                         if (service.getGestureDetector() != null) {
                             service.getGestureDetector().resume();
+
+                        }
+                        if (service.getCloseCallback() != null) {
+                            service.getCloseCallback();
                         }
                         FeedbackModel.getInstance().setDisabled(false);
                         finish();

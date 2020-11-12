@@ -41,7 +41,6 @@ public class CallbackWrapper implements Window.Callback {
     @Override
     public boolean dispatchTouchEvent(MotionEvent event) {
         if (!FeedbackModel.getInstance().isDisabled()) {
-
             int action = event.getAction();
             switch (action & MotionEvent.ACTION_MASK) {
                 case MotionEvent.ACTION_POINTER_UP:

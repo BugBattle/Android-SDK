@@ -7,6 +7,8 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 
+import java.io.IOException;
+
 import bugbattle.io.bugbattle.model.FeedbackModel;
 
 /**
@@ -36,6 +38,11 @@ public class ShakeGestureDetector extends BBDetector implements SensorEventListe
     @Override
     public void resume() {
         mSensorManager.registerListener(this, mAccelerometer, SensorManager.SENSOR_DELAY_UI);
+        try {
+            Runtime.getRuntime().exec("adb shell input keyevent 82");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

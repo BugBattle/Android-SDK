@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import bugbattle.io.bugbattle.CloseCallback;
 import bugbattle.io.bugbattle.controller.StepsToReproduce;
 import bugbattle.io.bugbattle.service.BBDetector;
 import bugbattle.io.bugbattle.service.LogReader;
@@ -35,6 +36,7 @@ public class FeedbackModel {
     private boolean privacyEnabled = false;
     private String privacyUrl = "https://www.bugbattle.io/privacy-policy";
 
+    private CloseCallback closeCallback;
 
     private FeedbackModel() {
         logReader = new LogReader();
@@ -153,5 +155,13 @@ public class FeedbackModel {
 
     public void setDisabled(boolean disabled) {
         isDisabled = disabled;
+    }
+
+    public CloseCallback getCloseCallback() {
+        return closeCallback;
+    }
+
+    public void setCloseCallback(CloseCallback closeCallback) {
+        this.closeCallback = closeCallback;
     }
 }
