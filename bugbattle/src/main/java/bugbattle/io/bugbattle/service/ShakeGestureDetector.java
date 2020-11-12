@@ -28,7 +28,7 @@ public class ShakeGestureDetector extends BBDetector implements SensorEventListe
     public void initialize() {
         mSensorManager = (SensorManager) activity.getSystemService(Context.SENSOR_SERVICE);
         mAccelerometer = mSensorManager
-                .getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+                .getDefaultSensor(Sensor.TYPE_ACCELEROMETER_UNCALIBRATED);
 
         mSensorManager.registerListener(this, mAccelerometer, SensorManager.SENSOR_DELAY_UI);
     }
