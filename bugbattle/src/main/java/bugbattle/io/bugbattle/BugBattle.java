@@ -59,7 +59,7 @@ public class BugBattle {
         return instance;
     }
 
-    public void setCloseCallback(CloseCallback closeCallback) {
+    public static void setCloseCallback(CloseCallback closeCallback) {
         FeedbackModel.getInstance().setCloseCallback(closeCallback);
     }
 

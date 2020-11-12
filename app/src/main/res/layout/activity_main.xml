@@ -18,5 +18,13 @@
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/logo_bug_all_white" />
 
+    <Button
+        android:id="@+id/button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Button"
+        tools:layout_editor_absoluteX="102dp"
+        tools:layout_editor_absoluteY="88dp" />
+
 
 </android.support.constraint.ConstraintLayout>
