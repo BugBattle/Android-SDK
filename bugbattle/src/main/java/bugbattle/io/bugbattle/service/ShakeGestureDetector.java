@@ -1,6 +1,6 @@
 package bugbattle.io.bugbattle.service;
 
-import android.app.Activity;
+import android.app.Application;
 import android.content.Context;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -20,13 +20,13 @@ public class ShakeGestureDetector extends BBDetector implements SensorEventListe
     private SensorManager mSensorManager;
     private Sensor mAccelerometer;
 
-    public ShakeGestureDetector(Activity activity) {
-        super(activity);
+    public ShakeGestureDetector(Application application) {
+        super(application);
     }
 
     @Override
     public void initialize() {
-        mSensorManager = (SensorManager) activity.getSystemService(Context.SENSOR_SERVICE);
+        mSensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
         mAccelerometer = mSensorManager
                 .getDefaultSensor(Sensor.TYPE_ACCELEROMETER_UNCALIBRATED);
 

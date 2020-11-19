@@ -1,20 +1,23 @@
 package bugbattle.io.bugbattle.service;
 
-import android.app.Activity;
+import android.app.Application;
+import android.content.Context;
 
 public abstract class BBDetector {
 
-    public Activity activity;
+    public Context context;
+    public Application application;
     private ScreenshotTaker screenshotTaker;
 
     /**
      * Abstract class for Detectors. All implemented detectors must extend
      * this class.
      *
-     * @param activity activity for access app
+     * @param application application for access app
      */
-    public BBDetector(Activity activity) {
-        this.activity = activity;
+    public BBDetector(Application application) {
+        this.context = application.getApplicationContext();
+        this.application = application;
         screenshotTaker = new ScreenshotTaker();
     }
 

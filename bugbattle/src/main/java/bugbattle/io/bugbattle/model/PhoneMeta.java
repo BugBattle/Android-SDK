@@ -2,7 +2,6 @@ package bugbattle.io.bugbattle.model;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -23,7 +22,7 @@ import bugbattle.io.bugbattle.BuildConfig;
  * Collected information, gathered from the phone
  */
 public class PhoneMeta {
-    private Activity activity;
+    private Context context;
     private static double startTime;
     private static String deviceModel;
     private static String deviceName;
@@ -33,9 +32,9 @@ public class PhoneMeta {
     private static String buildVersionNumber;
     private static String releaseVersionNumber;
 
-    public PhoneMeta(@NonNull Activity activity) {
+    public PhoneMeta(@NonNull Context context) {
         startTime = new Date().getTime();
-        this.activity = activity;
+        this.context = context;
         getPhoneMeta();
     }
 
@@ -61,10 +60,10 @@ public class PhoneMeta {
     }
 
     private void getPhoneMeta() {
-        PackageManager packageManager = activity.getApplicationContext().getPackageManager();
+        PackageManager packageManager = context.getPackageManager();
         if (packageManager != null) {
             try {
-                PackageInfo packageInfo = packageManager.getPackageInfo(activity.getApplicationContext().getPackageName(), 0);
+                PackageInfo packageInfo = packageManager.getPackageInfo(context.getPackageName(), 0);
                 buildVersionNumber = Integer.toString(packageInfo.versionCode);
                 releaseVersionNumber = packageInfo.versionName;
                 bundleID = packageInfo.packageName;
@@ -96,11 +95,11 @@ public class PhoneMeta {
      */
     private JSONObject getNetworkStatus() {
         JSONObject result = new JSONObject();
-        if (ContextCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_NETWORK_STATE)
+        if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_NETWORK_STATE)
                 == PackageManager.PERMISSION_GRANTED) {
             try {
                 ConnectivityManager cm =
-                        (ConnectivityManager) activity.getSystemService(Context.CONNECTIVITY_SERVICE);
+                        (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
 
                 //Only called when the permission is granted
                 @SuppressLint("MissingPermission") NetworkInfo activeNetwork = cm.getActiveNetworkInfo();

@@ -3,10 +3,11 @@
     package="bugbattle.io.bugbattle">
 
     <uses-permission android:name="android.permission.INTERNET" />
+
     <application>
         <activity
             android:name=".view.ImageEditor"
-            android:theme="@style/AppTheme.TranslucentBG"  />
+            android:theme="@style/AppTheme.TranslucentBG" />
         <activity
             android:name=".view.Feedback"
             android:configChanges="orientation|keyboardHidden|screenSize"

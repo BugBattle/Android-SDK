@@ -1,6 +1,6 @@
 package bugbattle.io.bugbattle;
 
-import android.app.Activity;
+import android.app.Application;
 import android.graphics.Bitmap;
 
 import org.json.JSONException;
@@ -15,14 +15,15 @@ import bugbattle.io.bugbattle.model.PhoneMeta;
 import bugbattle.io.bugbattle.service.BBDetector;
 import bugbattle.io.bugbattle.service.ScreenshotTaker;
 import bugbattle.io.bugbattle.service.ShakeGestureDetector;
+import bugbattle.io.bugbattle.service.TouchGestureDetector;
 
 public class BugBattle {
     private static BugBattle instance;
     private static ScreenshotTaker screenshotTaker;
 
-    private BugBattle(String sdkKey, BugBattleActivationMethod activationMethod, Activity application) {
+    private BugBattle(String sdkKey, BugBattleActivationMethod activationMethod, Application application) {
         FeedbackModel.getInstance().setSdkKey(sdkKey);
-        FeedbackModel.getInstance().setPhoneMeta(new PhoneMeta(application));
+        FeedbackModel.getInstance().setPhoneMeta(new PhoneMeta(application.getApplicationContext()));
         screenshotTaker = new ScreenshotTaker();
 
         try {
@@ -37,11 +38,9 @@ public class BugBattle {
             detector.initialize();
         }
         if (activationMethod == BugBattleActivationMethod.THREE_FINGER_DOUBLE_TAB) {
-            //  Interceptor.infiltrate();
-            /*
             TouchGestureDetector touchGestureDetector = new TouchGestureDetector(application);
             FeedbackModel.getInstance().setGestureDetector(touchGestureDetector);
-            touchGestureDetector.initialize();*/
+            touchGestureDetector.initialize();
         }
     }
 
@@ -52,7 +51,8 @@ public class BugBattle {
      * @param sdkKey           The SDK key, which can be found on dashboard.bugbattle.io
      * @param activationMethod Activation method, which triggers a new bug report.
      */
-    public static BugBattle initialise(String sdkKey, BugBattleActivationMethod activationMethod, Activity application) {
+    public static BugBattle initialise(String sdkKey, final BugBattleActivationMethod activationMethod, Application application) {
+
         if (instance == null) {
             instance = new BugBattle(sdkKey, activationMethod, application);
         }
