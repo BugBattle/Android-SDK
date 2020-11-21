@@ -20,16 +20,12 @@ public class TouchGestureDetector extends BBDetector {
 
     @Override
     public void initialize() {
+
         application.registerActivityLifecycleCallbacks(new Application.ActivityLifecycleCallbacks() {
             private View.OnClickListener onClickListener = null;
 
             @Override
             public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
-
-            }
-
-            @Override
-            public void onActivityStarted(Activity activity) {
                 View relativeLayout = (View) activity.getWindow().getDecorView().getRootView();
                 relativeLayout.setClickable(true);
                 relativeLayout.setOnTouchListener(new View.OnTouchListener() {
@@ -57,6 +53,11 @@ public class TouchGestureDetector extends BBDetector {
                         //do some stuff here
                     }
                 });
+            }
+
+            @Override
+            public void onActivityStarted(Activity activity) {
+
             }
 
             @Override
