@@ -1,5 +1,6 @@
 package bugbattle.io.bugbattle;
 
+import android.app.Activity;
 import android.app.Application;
 import android.graphics.Bitmap;
 
@@ -20,7 +21,7 @@ import bugbattle.io.bugbattle.service.TouchGestureDetector;
 public class BugBattle {
     private static BugBattle instance;
     private static ScreenshotTaker screenshotTaker;
-
+    private static Activity activity;
     private BugBattle(String sdkKey, BugBattleActivationMethod activationMethod, Application application) {
         FeedbackModel.getInstance().setSdkKey(sdkKey);
         FeedbackModel.getInstance().setPhoneMeta(new PhoneMeta(application.getApplicationContext()));
@@ -38,7 +39,12 @@ public class BugBattle {
             detector.initialize();
         }
         if (activationMethod == BugBattleActivationMethod.THREE_FINGER_DOUBLE_TAB) {
-            TouchGestureDetector touchGestureDetector = new TouchGestureDetector(application);
+            TouchGestureDetector touchGestureDetector;
+            if (activity != null) {
+                touchGestureDetector = new TouchGestureDetector(application, activity);
+            } else {
+                touchGestureDetector = new TouchGestureDetector(application);
+            }
             FeedbackModel.getInstance().setGestureDetector(touchGestureDetector);
             touchGestureDetector.initialize();
         }
@@ -57,6 +63,11 @@ public class BugBattle {
             instance = new BugBattle(sdkKey, activationMethod, application);
         }
         return instance;
+    }
+
+
+    public static void setReactNativeActivity(Activity rnActivity) {
+        activity = rnActivity;
     }
 
     public static void setCloseCallback(CloseCallback closeCallback) {
