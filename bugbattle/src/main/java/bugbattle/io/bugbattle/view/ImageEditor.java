@@ -57,11 +57,12 @@ public class ImageEditor extends AppCompatActivity {
         }
         service = FeedbackModel.getInstance();
         System.out.println(this.getApplicationContext().getPackageName());
-
-        if (service.getScreenshot().getWidth() > service.getScreenshot().getHeight()) {
-            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
-        } else {
-            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT);
+        if (android.os.Build.VERSION.SDK_INT > Build.VERSION_CODES.O) {
+            if (service.getScreenshot().getWidth() > service.getScreenshot().getHeight()) {
+                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
+            } else {
+                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT);
+            }
         }
 
         imageView = findViewById(R.id.bb_image);
