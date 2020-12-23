@@ -23,6 +23,7 @@ import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import bugbattle.io.bugbattle.R;
 import bugbattle.io.bugbattle.controller.OnHttpResponseListener;
@@ -226,7 +227,6 @@ public class Feedback extends AppCompatActivity implements OnHttpResponseListene
                     hideKeyboard(Feedback.this);
                     feedbackModel.setEmail(emailEditText.getText().toString());
                     feedbackModel.setDescription(descriptionEditText.getText().toString());
-
                     storeEmail();
                     resetDescription();
                     try {
@@ -234,6 +234,10 @@ public class Feedback extends AppCompatActivity implements OnHttpResponseListene
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
+                } else {
+                    Toast.makeText(getApplicationContext(),
+                            "You must confirm the privacy policy",
+                            Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -245,7 +249,6 @@ public class Feedback extends AppCompatActivity implements OnHttpResponseListene
                 storeEmail();
                 Intent intent = new Intent(Feedback.this, ImageEditor.class);
                 startActivity(intent);
-
                 finish();
                 overridePendingTransition(R.anim.slide_in_left,
                         R.anim.slide_out_right);
@@ -277,8 +280,6 @@ public class Feedback extends AppCompatActivity implements OnHttpResponseListene
         privacySwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 privacyIsToggled = isChecked;
-                // do something, the isChecked will be
-                // true if the switch is in the On position
             }
         });
     }

@@ -36,7 +36,7 @@ public class ScreenshotTaker {
         feedbackModel = FeedbackModel.getInstance();
     }
 
-    private static Activity getActivity() {
+    private static Activity getCurrentActivity() {
         try {
             Class activityThreadClass = Class.forName("android.app.ActivityThread");
             Object activityThread = activityThreadClass.getMethod("currentActivityThread").invoke(null);
@@ -66,52 +66,44 @@ public class ScreenshotTaker {
      * Take a screenshot of the current view and opens it in the editor
      */
     public void takeScreenshot() {
-        Bitmap bitmap = generateBitmap(getActivity());
+        Bitmap bitmap = generateBitmap(getCurrentActivity());
         openScreenshot(bitmap);
     }
 
     public Bitmap generateBitmap(Activity activity) {
-        final List<ViewMeta> viewRoots = getRootViews(activity);
+        final List<ViewMeta> viewRoots = getAvailableViewsEnriched(activity);
         int maxWidth = Integer.MIN_VALUE;
         int maxHeight = Integer.MIN_VALUE;
         for (ViewMeta viewMeta : viewRoots) {
-            if (viewMeta.getFrame().right > maxWidth) {
-                maxWidth = viewMeta.getFrame().right;
-            }
-
-            if (viewMeta.getFrame().bottom > maxHeight) {
-                maxHeight = viewMeta.getFrame().bottom;
-            }
+            maxWidth = Math.max(viewMeta.getFrame().right, maxWidth);
+            maxHeight = Math.max(viewMeta.getFrame().bottom, maxHeight);
         }
         final Bitmap bitmap = Bitmap.createBitmap(maxWidth, maxHeight, ARGB_8888);
         for (ViewMeta rootData : viewRoots) {
             if ((rootData.getLayoutParams().flags & FLAG_DIM_BEHIND) == FLAG_DIM_BEHIND) {
                 Canvas dimCanvas = new Canvas(bitmap);
-
                 int alpha = (int) (255 * rootData.getLayoutParams().dimAmount);
                 dimCanvas.drawARGB(alpha, 0, 0, 0);
             }
-
             Canvas canvas = new Canvas(bitmap);
             canvas.translate(rootData.getFrame().left, rootData.getFrame().top);
             rootData.getView().draw(canvas);
         }
-
         return bitmap;
     }
 
+
     public void openScreenshot(Bitmap imageFile) {
-        SharedPreferences pref = getActivity().getApplicationContext().getSharedPreferences("prefs", 0);
+        SharedPreferences pref = getCurrentActivity().getApplicationContext().getSharedPreferences("prefs", 0);
         SharedPreferences.Editor editor = pref.edit();
         editor.putString("descriptionEditText", ""); // Storing the description
         editor.apply();
-        Intent intent = new Intent(getActivity(), ImageEditor.class);
+        Intent intent = new Intent(getCurrentActivity(), ImageEditor.class);
         Bitmap bitmap = getResizedBitmap(imageFile);
         feedbackModel.setScreenshot(bitmap);
-        getActivity().startActivity(intent);
-        getActivity().overridePendingTransition(R.anim.slide_down, R.anim.slide_up);
+        getCurrentActivity().startActivity(intent);
+        getCurrentActivity().overridePendingTransition(R.anim.slide_down, R.anim.slide_up);
     }
-
 
     private void getOffset(List<ViewMeta> rootViews) {
         int minTop = Integer.MAX_VALUE;
@@ -133,7 +125,7 @@ public class ScreenshotTaker {
         int width = bm.getWidth();
         int height = bm.getHeight();
         Matrix matrix = new Matrix();
-        int orientation = getActivity().getResources().getConfiguration().orientation;
+        int orientation = getCurrentActivity().getResources().getConfiguration().orientation;
         if (orientation == Configuration.ORIENTATION_PORTRAIT) {
             matrix.postScale(0.7f, 0.7f);
         } else {
@@ -167,8 +159,8 @@ public class ScreenshotTaker {
         return null;
     }
 
-    @SuppressWarnings("unchecked") // no way to check
-    private List<ViewMeta> getRootViews(Activity activity) {
+    @SuppressWarnings("unchecked")
+    private List<ViewMeta> getAvailableViewsEnriched(Activity activity) {
         Object globalWindowManager = getField("mGlobal", activity.getWindowManager());
         Object rootObjects = getField("mRoots", globalWindowManager);
         Object paramsObject = getField("mParams", globalWindowManager);
@@ -180,11 +172,11 @@ public class ScreenshotTaker {
             return Collections.emptyList();
         }
         getOffset(rootViews);
-        ensureDialogsAreAfterItsParentActivities(rootViews);
+        reArrangeViews(rootViews);
         return rootViews;
     }
 
-    private void ensureDialogsAreAfterItsParentActivities(List<ViewMeta> metaViews) {
+    private void reArrangeViews(List<ViewMeta> metaViews) {
         if (metaViews.size() <= 1) {
             return;
         }
@@ -193,12 +185,9 @@ public class ScreenshotTaker {
             if (!viewRoot.isDialogType()) {
                 continue;
             }
-
             if (viewRoot.getWindowToken() == null) {
-                // make sure we will never compare null == null
                 return;
             }
-
             for (int parentIndex = dialogIndex + 1; parentIndex < metaViews.size(); parentIndex++) {
                 ViewMeta possibleParent = metaViews.get(parentIndex);
                 if (possibleParent.isActivityType()

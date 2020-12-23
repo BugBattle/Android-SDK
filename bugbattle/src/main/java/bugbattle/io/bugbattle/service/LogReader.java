@@ -7,7 +7,11 @@ import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -18,9 +22,20 @@ public class LogReader {
 
     private String formatDate(String time, String date) {
         String result = "";
-        String[] splittedDate = date.split("-");
+        date += "-" + Calendar.getInstance().get(Calendar.YEAR);
 
-        result += Calendar.getInstance().get(Calendar.YEAR) + "-" + splittedDate[1] + "-" + splittedDate[0] + " " + time;
+        String[] splittedDate = date.split("-");
+        SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy HH:mm:ss.SSS");
+        try {
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(sdf.parse(date + " " + time));
+            TimeZone tz = TimeZone.getTimeZone("UTC");
+            DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm'Z'"); // Quoted "Z" to indicate UTC, no timezone offset
+            df.setTimeZone(tz);
+            result += df.format(cal.getTime());
+        } catch (ParseException err) {
+            result += Calendar.getInstance().get(Calendar.YEAR) + "-" + splittedDate[1] + "-" + splittedDate[0] + " " + time;
+        }
         return result;
     }
 

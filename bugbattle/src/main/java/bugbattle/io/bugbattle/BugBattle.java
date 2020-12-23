@@ -8,12 +8,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import bugbattle.io.bugbattle.controller.BugBattleActivationMethod;
-import bugbattle.io.bugbattle.controller.BugBattleHttpsException;
 import bugbattle.io.bugbattle.controller.BugBattleNotInitialisedException;
 import bugbattle.io.bugbattle.controller.StepsToReproduce;
 import bugbattle.io.bugbattle.model.FeedbackModel;
 import bugbattle.io.bugbattle.model.PhoneMeta;
 import bugbattle.io.bugbattle.service.BBDetector;
+import bugbattle.io.bugbattle.service.ScreenshotGestureDetector;
 import bugbattle.io.bugbattle.service.ScreenshotTaker;
 import bugbattle.io.bugbattle.service.ShakeGestureDetector;
 import bugbattle.io.bugbattle.service.TouchGestureDetector;
@@ -22,7 +22,9 @@ public class BugBattle {
     private static BugBattle instance;
     private static ScreenshotTaker screenshotTaker;
     private static Activity activity;
+
     private BugBattle(String sdkKey, BugBattleActivationMethod activationMethod, Application application) {
+
         FeedbackModel.getInstance().setSdkKey(sdkKey);
         FeedbackModel.getInstance().setPhoneMeta(new PhoneMeta(application.getApplicationContext()));
         screenshotTaker = new ScreenshotTaker();
@@ -48,6 +50,16 @@ public class BugBattle {
             FeedbackModel.getInstance().setGestureDetector(touchGestureDetector);
             touchGestureDetector.initialize();
         }
+        if (activationMethod == BugBattleActivationMethod.SCREENSHOT) {
+            ScreenshotGestureDetector screenshotGestureDetector;
+            if (activity != null) {
+                screenshotGestureDetector = new ScreenshotGestureDetector(application, activity);
+            } else {
+                screenshotGestureDetector = new ScreenshotGestureDetector(application);
+            }
+            FeedbackModel.getInstance().setGestureDetector(screenshotGestureDetector);
+            screenshotGestureDetector.initialize();
+        }
     }
 
     /**
@@ -63,15 +75,6 @@ public class BugBattle {
             instance = new BugBattle(sdkKey, activationMethod, application);
         }
         return instance;
-    }
-
-
-    public static void setReactNativeActivity(Activity rnActivity) {
-        activity = rnActivity;
-    }
-
-    public static void setCloseCallback(CloseCallback closeCallback) {
-        FeedbackModel.getInstance().setCloseCallback(closeCallback);
     }
 
     /**
@@ -149,19 +152,30 @@ public class BugBattle {
     }
 
     /**
-     * Sets the API url to your internal Bugbattle server. Please make sure that the server is reachable within the network.
-     * Only HTTPS is allowed
+     * Sets the API url to your internal Bugbattle server. Please make sure that the server is reachable within the network
+     * If you use a http url pls add android:usesCleartextTraffic="true" to your main activity to allow cleartext traffic
      *
      * @param apiUrl url of the internal Bugbattle server
-     * @throws BugBattleHttpsException Only https urls supported
      */
-    public static void setApiURL(String apiUrl) throws BugBattleHttpsException {
-        if (apiUrl.contains("https")) {
-            FeedbackModel.getInstance().setApiUrl(apiUrl);
-        } else {
-            FeedbackModel.getInstance().setDisabled(true);
-            throw new BugBattleHttpsException();
-        }
+    public static void setApiURL(String apiUrl) {
+        FeedbackModel.getInstance().setApiUrl(apiUrl);
+    }
 
+    /**
+     * This method is triggered, when the bugbattle flow is closed
+     *
+     * @param closeCallback
+     */
+    public static void setCloseCallback(CloseCallback closeCallback) {
+        FeedbackModel.getInstance().setCloseCallback(closeCallback);
+    }
+
+    /**
+     * This is called, when the bugbattle flow is started
+     *
+     * @param flowInvoked
+     */
+    public static void setFlowInvoked(FlowInvoked flowInvoked) {
+        FeedbackModel.getInstance().setFlowInvoked(flowInvoked);
     }
 }

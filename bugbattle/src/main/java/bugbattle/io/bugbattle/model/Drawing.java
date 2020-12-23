@@ -5,6 +5,9 @@ import android.graphics.Path;
 
 import java.util.List;
 
+/**
+ * Represents a line
+ */
 public class Drawing {
     private List<Paint> paint;
     private List<Path> path;

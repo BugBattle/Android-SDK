@@ -14,6 +14,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
@@ -76,7 +77,12 @@ public class HttpHelper extends AsyncTask<FeedbackModel, Void, Integer> {
         JSONObject responseUploadImage = uploadImage(service);
 
         URL url = new URL(service.getApiUrl() + REPORT_BUG_URL_POSTFIX);
-        HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
+        HttpURLConnection conn;
+        if (service.getApiUrl().contains("https")) {
+            conn = (HttpsURLConnection) url.openConnection();
+        } else {
+            conn = (HttpURLConnection) url.openConnection();
+        }
         conn.setRequestProperty("api-token", service.getSdkKey());
         conn.setDoOutput(true);
         conn.setRequestProperty("Accept", "application/json");

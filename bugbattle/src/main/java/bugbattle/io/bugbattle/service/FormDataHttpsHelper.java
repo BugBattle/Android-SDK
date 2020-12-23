@@ -18,8 +18,11 @@ import java.net.URLConnection;
 
 import javax.net.ssl.HttpsURLConnection;
 
+/**
+ * Upload the image as form-data
+ */
 public class FormDataHttpsHelper {
-    private HttpsURLConnection httpConn;
+    private HttpURLConnection httpConn;
     private DataOutputStream request;
     private final String boundary =  "BBBOUNDARY";
     private final String crlf = "\r\n";
@@ -35,7 +38,11 @@ public class FormDataHttpsHelper {
     public FormDataHttpsHelper(String requestURL, String apiToken)
             throws IOException {
         URL url = new URL(requestURL);
-        httpConn = (HttpsURLConnection) url.openConnection();
+        if (requestURL.contains("https")) {
+            httpConn = (HttpsURLConnection) url.openConnection();
+        } else {
+            httpConn = (HttpURLConnection) url.openConnection();
+        }
         httpConn.setUseCaches(false);
         httpConn.setDoOutput(true); // indicates POST method
         httpConn.setDoInput(true);
@@ -43,7 +50,7 @@ public class FormDataHttpsHelper {
         httpConn.setRequestMethod("POST");
         httpConn.setRequestProperty("Connection", "Keep-Alive");
         httpConn.setRequestProperty("Cache-Control", "no-cache");
-        httpConn.setRequestProperty("api-token",apiToken);
+        httpConn.setRequestProperty("api-token", apiToken);
         httpConn.setRequestProperty(
                 "Content-Type", "multipart/form-data;boundary=" + this.boundary);
 

@@ -7,7 +7,7 @@ import android.view.View;
 import android.view.WindowManager;
 
 /**
- * Enriched View with dimensions and type.
+ * Enriched View with dimensions and type. To take a correct screenshot
  */
 public class ViewMeta {
     final View view;
