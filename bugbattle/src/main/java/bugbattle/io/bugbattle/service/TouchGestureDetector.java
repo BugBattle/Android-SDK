@@ -72,7 +72,6 @@ public class TouchGestureDetector extends BBDetector {
                                     if (count >= NUMBER_OF_FINGERS) {
                                         long clickTime = System.currentTimeMillis();
                                         if (clickTime - lastClickTime < DOUBLE_CLICK_TIME_DELTA) {
-
                                             pause();
                                             takeScreenshot();
                                             lastClickTime = 0;
