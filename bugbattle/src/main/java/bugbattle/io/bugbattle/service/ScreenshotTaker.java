@@ -62,11 +62,17 @@ public class ScreenshotTaker {
         return null;
     }
 
+
     /**
      * Take a screenshot of the current view and opens it in the editor
      */
     public void takeScreenshot() {
-        Bitmap bitmap = generateBitmap(getCurrentActivity());
+        Bitmap bitmap = null;
+        if (feedbackModel.getGetBitmapCallback() != null) {
+            bitmap = feedbackModel.getGetBitmapCallback().getBitmap();
+        } else {
+            bitmap = generateBitmap(getCurrentActivity());
+        }
         openScreenshot(bitmap);
     }
 

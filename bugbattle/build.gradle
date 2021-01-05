@@ -1,4 +1,29 @@
 apply plugin: 'com.android.library'
+
+ext {
+    bintrayRepo = 'BugBattle-Android'
+    bintrayName = 'BugBattle-Android-SDK'
+
+    publishedGroupId = 'io.bugbattle'
+    libraryName = 'Bugbattle-Android-SDK'
+    artifact = 'Bugbattle-Android-SDK'
+
+    libraryDescription = 'BugBattle SDK for Android'
+
+    siteUrl = 'https://github.com/BugBattle/Android-SDK'
+    gitUrl = 'https://github.com/BugBattle/Android-SDK.git'
+
+    libraryVersion = '3.0.28'
+
+    developerId = 'BugBattle GmbH'
+    developerName = 'BugBattle'
+    developerEmail = 'hello@bugbattle.io'
+
+    licenseName = 'MIT'
+    licenseUrl = 'https://opensource.org/licenses/MIT'
+    allLicenses = ["MIT"]
+}
+
 apply plugin: 'com.github.dcendents.android-maven'
 group='com.github.BoehlerBrothers'
 
@@ -13,10 +38,11 @@ buildscript {
 }
 
 android {
+
     compileSdkVersion 28
 
     defaultConfig {
-        minSdkVersion 21
+        minSdkVersion 18
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
@@ -34,15 +60,20 @@ android {
             manifestPlaceholders.cleartextTrafficPermitted ="true"
         }
     }
+
 }
+
+
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'com.android.support:appcompat-v7:28.0.0'
-    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
+    implementation 'com.android.support.constraint:constraint-layout:2.0.4'
     implementation 'com.android.support:design:28.0.0'
-
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
 }
+
+apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/installv1.gradle'
+apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/bintrayv1.gradle'

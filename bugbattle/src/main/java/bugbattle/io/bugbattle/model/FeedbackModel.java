@@ -8,6 +8,7 @@ import org.json.JSONObject;
 
 import bugbattle.io.bugbattle.CloseCallback;
 import bugbattle.io.bugbattle.FlowInvoked;
+import bugbattle.io.bugbattle.GetBitmapCallback;
 import bugbattle.io.bugbattle.controller.StepsToReproduce;
 import bugbattle.io.bugbattle.service.BBDetector;
 import bugbattle.io.bugbattle.service.LogReader;
@@ -38,8 +39,8 @@ public class FeedbackModel {
     private String privacyUrl = "https://www.bugbattle.io/privacy-policy";
 
     private CloseCallback closeCallback;
-
     private FlowInvoked flowInvoked;
+    private GetBitmapCallback getBitmapCallback;
 
     private FeedbackModel() {
         logReader = new LogReader();
@@ -176,4 +177,11 @@ public class FeedbackModel {
         this.flowInvoked = flowInvoked;
     }
 
+    public GetBitmapCallback getGetBitmapCallback() {
+        return getBitmapCallback;
+    }
+
+    public void setGetBitmapCallback(GetBitmapCallback getBitmapCallback) {
+        this.getBitmapCallback = getBitmapCallback;
+    }
 }

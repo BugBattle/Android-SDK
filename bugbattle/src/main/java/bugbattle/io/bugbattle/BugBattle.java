@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.Application;
 import android.graphics.Bitmap;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import bugbattle.io.bugbattle.controller.BugBattleActivationMethod;
@@ -109,7 +108,6 @@ public class BugBattle {
      *
      * @param type Type of the step. (for eg. Button)
      * @param data Custom data associated with the step.
-     * @throws JSONException unable to create JSONObject
      */
     public static void trackStep(String type, String data) {
         StepsToReproduce.getInstance().setStep(type, data);
@@ -177,5 +175,15 @@ public class BugBattle {
      */
     public static void setFlowInvoked(FlowInvoked flowInvoked) {
         FeedbackModel.getInstance().setFlowInvoked(flowInvoked);
+    }
+
+    /**
+     * Customize the way, the Bitmap is generated. If this is overritten,
+     * only the custom way is used
+     *
+     * @param getBitmapCallback get the Bitmap
+     */
+    public static void setBitmapCallback(GetBitmapCallback getBitmapCallback) {
+        FeedbackModel.getInstance().setGetBitmapCallback(getBitmapCallback);
     }
 }

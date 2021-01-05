@@ -3,7 +3,6 @@ package bugbattle.io.bugbattle.controller;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -14,7 +13,6 @@ public class StepsToReproduce {
     private JSONArray steps = new JSONArray();
 
     private StepsToReproduce() {
-
     }
 
     public static StepsToReproduce getInstance() {
