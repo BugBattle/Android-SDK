@@ -1,5 +1,5 @@
 # Bugbattle Android SDK
-[![](https://jitpack.io/v/BugBattle/BugBattle-Android-SDK.svg)](https://jitpack.io/#BugBattle/BugBattle-Android-SDK) [![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://github.com/BugBattle/Android-SDK/graphs/commit-activity) [![Documentation Status](https://readthedocs.org/projects/ansicolortags/badge/?version=latest)](https://docs.bugbattle.io)
+[ ![Download](https://api.bintray.com/packages/bugbattle/BugBattle-Android/BugBattle-Android-SDK/images/download.svg) ](https://bintray.com/bugbattle/BugBattle-Android/BugBattle-Android-SDK/_latestVersion) [![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://github.com/BugBattle/Android-SDK/graphs/commit-activity) [![Documentation Status](https://readthedocs.org/projects/ansicolortags/badge/?version=latest)](https://docs.bugbattle.io)
 
 ![Bugbattle iOS SDK Intro](https://github.com/BugBattle/iOS-SDK/blob/master/imgs/bugbattle-intro.png)
 
@@ -9,24 +9,13 @@ With BugBattle we’ve put the lame task of bug fixing upside down and turned it
 
 ## How to start
 Open your App in your preferred development tool, for e.g. Android Studio.
-### Add the repository
-As already mentioned, it’s very simple to include our SDK. Add the following repository to your root build.gradle, to get access to the JitPack repository, which hosts our SDK.
-```
-allprojects {
-  repositories {
-    ...
-    maven {
-    url 'https://jitpack.io'
-    }
-  }
-}
-```
-Add the dependency
+
+## Add the dependency
 In the same file ( build.gradle ) add the dependency to include the library.
 ```
 dependencies {
   ...
-  implementation 'com.github.BugBattle:BugBattle-Android-SDK:3.0.13'
+  implementation 'io.bugbattle:Bugbattle-Android-SDK:3.0.28'
 }
 ```
 You are now ready to use our SDK in your App. Let's carry on with the initialisation 🎉
