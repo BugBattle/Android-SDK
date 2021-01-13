@@ -8,7 +8,7 @@ import org.json.JSONObject;
 
 import bugbattle.io.bugbattle.controller.BugBattleActivationMethod;
 import bugbattle.io.bugbattle.controller.BugBattleNotInitialisedException;
-import bugbattle.io.bugbattle.controller.StepsToReproduce;
+import bugbattle.io.bugbattle.model.APPLICATIONTYPE;
 import bugbattle.io.bugbattle.model.FeedbackModel;
 import bugbattle.io.bugbattle.model.PhoneMeta;
 import bugbattle.io.bugbattle.service.BBDetector;
@@ -104,16 +104,6 @@ public class BugBattle {
     }
 
     /**
-     * Track a step to add more information to the bug report
-     *
-     * @param type Type of the step. (for eg. Button)
-     * @param data Custom data associated with the step.
-     */
-    public static void trackStep(String type, String data) {
-        StepsToReproduce.getInstance().setStep(type, data);
-    }
-
-    /**
      * Attach cusom data, which can be view in the BugBattle dashboard.
      *
      * @param customData The data to attach to a bug report
@@ -185,5 +175,10 @@ public class BugBattle {
      */
     public static void setBitmapCallback(GetBitmapCallback getBitmapCallback) {
         FeedbackModel.getInstance().setGetBitmapCallback(getBitmapCallback);
+    }
+
+
+    public static void setApplicationType(APPLICATIONTYPE applicationType) {
+        FeedbackModel.getInstance().setApplicationtype(applicationType);
     }
 }

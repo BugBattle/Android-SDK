@@ -24,6 +24,7 @@ public class FeedbackModel {
     private String userEmail;
     private String description;
     private String severity;
+    private APPLICATIONTYPE applicationtype;
 
     private String apiUrl = "https://api.bugbattle.io";
     private Bitmap screenshot;
@@ -183,5 +184,13 @@ public class FeedbackModel {
 
     public void setGetBitmapCallback(GetBitmapCallback getBitmapCallback) {
         this.getBitmapCallback = getBitmapCallback;
+    }
+
+    public APPLICATIONTYPE getApplicationtype() {
+        return applicationtype;
+    }
+
+    public void setApplicationtype(APPLICATIONTYPE applicationtype) {
+        this.applicationtype = applicationtype;
     }
 }

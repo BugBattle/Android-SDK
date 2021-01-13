@@ -56,6 +56,14 @@ public class PhoneMeta {
         obj.put("releaseVersionNumber", releaseVersionNumber);
         obj.put("sessionDuration", calculateDuration());
         obj.put("networkStatus", getNetworkStatus());
+        String applicationType = "Native";
+        if (FeedbackModel.getInstance().getApplicationtype() == APPLICATIONTYPE.FLUTTER) {
+            applicationType = "Flutter";
+        }
+        if (FeedbackModel.getInstance().getApplicationtype() == APPLICATIONTYPE.REACTNATIVE) {
+            applicationType = "ReactNative";
+        }
+        obj.put("applicationType", applicationType);
         return obj;
     }
 
