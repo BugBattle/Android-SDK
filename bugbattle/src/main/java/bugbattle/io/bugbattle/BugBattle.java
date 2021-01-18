@@ -2,9 +2,13 @@ package bugbattle.io.bugbattle;
 
 import android.app.Activity;
 import android.app.Application;
+import android.content.Intent;
 import android.graphics.Bitmap;
 
 import org.json.JSONObject;
+
+import java.util.LinkedList;
+import java.util.List;
 
 import bugbattle.io.bugbattle.controller.BugBattleActivationMethod;
 import bugbattle.io.bugbattle.controller.BugBattleNotInitialisedException;
@@ -12,17 +16,19 @@ import bugbattle.io.bugbattle.model.APPLICATIONTYPE;
 import bugbattle.io.bugbattle.model.FeedbackModel;
 import bugbattle.io.bugbattle.model.PhoneMeta;
 import bugbattle.io.bugbattle.service.BBDetector;
+import bugbattle.io.bugbattle.service.ReplaysDetector;
 import bugbattle.io.bugbattle.service.ScreenshotGestureDetector;
 import bugbattle.io.bugbattle.service.ScreenshotTaker;
 import bugbattle.io.bugbattle.service.ShakeGestureDetector;
 import bugbattle.io.bugbattle.service.TouchGestureDetector;
+import bugbattle.io.bugbattle.view.OnBoarding;
 
 public class BugBattle {
     private static BugBattle instance;
     private static ScreenshotTaker screenshotTaker;
     private static Activity activity;
 
-    private BugBattle(String sdkKey, BugBattleActivationMethod activationMethod, Application application) {
+    private BugBattle(String sdkKey, BugBattleActivationMethod[] activationMethods, Application application) {
 
         FeedbackModel.getInstance().setSdkKey(sdkKey);
         FeedbackModel.getInstance().setPhoneMeta(new PhoneMeta(application.getApplicationContext()));
@@ -33,45 +39,67 @@ public class BugBattle {
         } catch (Exception e) {
             System.out.println(e);
         }
-
-        if (activationMethod == BugBattleActivationMethod.SHAKE) {
-            BBDetector detector = new ShakeGestureDetector(application);
-            FeedbackModel.getInstance().setGestureDetector(detector);
-            detector.initialize();
-        }
-        if (activationMethod == BugBattleActivationMethod.THREE_FINGER_DOUBLE_TAB) {
-            TouchGestureDetector touchGestureDetector;
-            if (activity != null) {
-                touchGestureDetector = new TouchGestureDetector(application, activity);
-            } else {
-                touchGestureDetector = new TouchGestureDetector(application);
+        List<BBDetector> detectorList = new LinkedList<>();
+        for (BugBattleActivationMethod activationMethod : activationMethods) {
+            if (activationMethod == BugBattleActivationMethod.SHAKE) {
+                BBDetector detector = new ShakeGestureDetector(application);
+                detector.initialize();
+                detectorList.add(detector);
             }
-            FeedbackModel.getInstance().setGestureDetector(touchGestureDetector);
-            touchGestureDetector.initialize();
-        }
-        if (activationMethod == BugBattleActivationMethod.SCREENSHOT) {
-            ScreenshotGestureDetector screenshotGestureDetector;
-            if (activity != null) {
-                screenshotGestureDetector = new ScreenshotGestureDetector(application, activity);
-            } else {
-                screenshotGestureDetector = new ScreenshotGestureDetector(application);
+            if (activationMethod == BugBattleActivationMethod.THREE_FINGER_DOUBLE_TAB) {
+                TouchGestureDetector touchGestureDetector;
+                if (activity != null) {
+                    touchGestureDetector = new TouchGestureDetector(application, activity);
+                } else {
+                    touchGestureDetector = new TouchGestureDetector(application);
+                }
+                touchGestureDetector.initialize();
+                detectorList.add(touchGestureDetector);
             }
-            FeedbackModel.getInstance().setGestureDetector(screenshotGestureDetector);
-            screenshotGestureDetector.initialize();
+            if (activationMethod == BugBattleActivationMethod.SCREENSHOT) {
+                ScreenshotGestureDetector screenshotGestureDetector;
+                if (activity != null) {
+                    screenshotGestureDetector = new ScreenshotGestureDetector(application, activity);
+                } else {
+                    screenshotGestureDetector = new ScreenshotGestureDetector(application);
+                }
+                screenshotGestureDetector.initialize();
+                detectorList.add(screenshotGestureDetector);
+            }
         }
+        ReplaysDetector replaysDetector = new ReplaysDetector(application);
+        replaysDetector.initialize();
+        detectorList.add(replaysDetector);
+        FeedbackModel.getInstance().setGestureDetectors(detectorList);
     }
 
     /**
      * Initialises the Bugbattle SDK.
      *
-     * @param application      The application (this)
-     * @param sdkKey           The SDK key, which can be found on dashboard.bugbattle.io
-     * @param activationMethod Activation method, which triggers a new bug report.
+     * @param application       The application (this)
+     * @param sdkKey            The SDK key, which can be found on dashboard.bugbattle.io
+     * @param activationMethods Activation method, which triggers a new bug report.
+     * @param activity main activity
      */
-    public static BugBattle initialise(String sdkKey, final BugBattleActivationMethod activationMethod, Application application) {
+    public static BugBattle initialise(String sdkKey, final BugBattleActivationMethod[] activationMethods, Application application, Activity activity) {
+        BugBattle.activity = activity;
+        if (instance == null) {
+            instance = new BugBattle(sdkKey, activationMethods, application);
+        }
+        return instance;
+    }
+
+    /**
+     * Initialises the Bugbattle SDK.
+     *
+     * @param application       The application (this)
+     * @param sdkKey            The SDK key, which can be found on dashboard.bugbattle.io
+     * @param activationMethods Activation method, which triggers a new bug report.
+     */
+    public static BugBattle initialise(String sdkKey, final BugBattleActivationMethod[] activationMethods, Application application) {
 
         if (instance == null) {
-            instance = new BugBattle(sdkKey, activationMethod, application);
+            instance = new BugBattle(sdkKey, activationMethods, application);
         }
         return instance;
     }
@@ -152,7 +180,7 @@ public class BugBattle {
     /**
      * This method is triggered, when the bugbattle flow is closed
      *
-     * @param closeCallback
+     * @param closeCallback this callback is called when the flow is called
      */
     public static void setCloseCallback(CloseCallback closeCallback) {
         FeedbackModel.getInstance().setCloseCallback(closeCallback);
@@ -161,7 +189,7 @@ public class BugBattle {
     /**
      * This is called, when the bugbattle flow is started
      *
-     * @param flowInvoked
+     * @param flowInvoked is called when BB is opened
      */
     public static void setFlowInvoked(FlowInvoked flowInvoked) {
         FeedbackModel.getInstance().setFlowInvoked(flowInvoked);
@@ -178,7 +206,12 @@ public class BugBattle {
     }
 
 
+    /**
+     * Set Application Type
+     * @param applicationType "Android", "RN", "Flutter"
+     */
     public static void setApplicationType(APPLICATIONTYPE applicationType) {
         FeedbackModel.getInstance().setApplicationtype(applicationType);
     }
+
 }

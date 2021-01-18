@@ -6,6 +6,10 @@ import android.support.annotation.Nullable;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.text.ParseException;
+import java.util.Date;
+import java.util.List;
+
 import bugbattle.io.bugbattle.CloseCallback;
 import bugbattle.io.bugbattle.FlowInvoked;
 import bugbattle.io.bugbattle.GetBitmapCallback;
@@ -17,6 +21,7 @@ import bugbattle.io.bugbattle.service.LogReader;
  * Contains all relevant information gathered in the background.
  */
 public class FeedbackModel {
+    private Date startUpDate = new Date();
     private boolean isDisabled = false;
     private static FeedbackModel instance;
 
@@ -28,13 +33,13 @@ public class FeedbackModel {
 
     private String apiUrl = "https://api.bugbattle.io";
     private Bitmap screenshot;
-
+    private Replay replay;
     private JSONObject customData;
     private @Nullable
     PhoneMeta phoneMeta;
     private LogReader logReader;
     private StepsToReproduce stepsToReproduce;
-    private BBDetector gestureDetector;
+    private List<BBDetector> gestureDetectors;
 
     private boolean privacyEnabled = false;
     private String privacyUrl = "https://www.bugbattle.io/privacy-policy";
@@ -47,6 +52,7 @@ public class FeedbackModel {
         logReader = new LogReader();
         stepsToReproduce = StepsToReproduce.getInstance();
         customData = new JSONObject();
+        replay = new Replay(30, 1000);
     }
 
     public static FeedbackModel getInstance() {
@@ -81,7 +87,7 @@ public class FeedbackModel {
         return screenshot;
     }
 
-    public JSONArray getLogs() {
+    public JSONArray getLogs() throws ParseException {
         return logReader.readLog();
     }
 
@@ -113,12 +119,12 @@ public class FeedbackModel {
         this.customData = customData;
     }
 
-    public BBDetector getGestureDetector() {
-        return gestureDetector;
+    public List<BBDetector> getGestureDetectors() {
+        return gestureDetectors;
     }
 
-    public void setGestureDetector(BBDetector gestureDetector) {
-        this.gestureDetector = gestureDetector;
+    public void setGestureDetectors(List<BBDetector> gestureDetectors) {
+        this.gestureDetectors = gestureDetectors;
     }
 
     public String getSeverity() {
@@ -192,5 +198,17 @@ public class FeedbackModel {
 
     public void setApplicationtype(APPLICATIONTYPE applicationtype) {
         this.applicationtype = applicationtype;
+    }
+
+    public Replay getReplay() {
+        return replay;
+    }
+
+    public void setReplay(Replay replay) {
+        this.replay = replay;
+    }
+
+    public Date getStartUpDate() {
+        return startUpDate;
     }
 }

@@ -54,7 +54,7 @@ public class TouchGestureDetector extends BBDetector {
         /**
          * Attach listener to each new activity
          */
-        application.registerActivityLifecycleCallbacks(new Application.ActivityLifecycleCallbacks() {
+       application.registerActivityLifecycleCallbacks(new Application.ActivityLifecycleCallbacks() {
             private View.OnClickListener onClickListener = null;
 
             @Override

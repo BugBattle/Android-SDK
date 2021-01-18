@@ -84,6 +84,13 @@ public class FormDataHttpsHelper {
             e.printStackTrace();
         }
         request.write(bytes);
+        request.writeBytes(this.crlf);
+
+    }
+
+
+    public void addMultipleFiles(File[] uploadFiles) {
+
     }
 
     /**
@@ -94,10 +101,8 @@ public class FormDataHttpsHelper {
      */
     public String finishAndUpload() throws IOException {
         String response ="";
+        request.writeBytes(this.twoHyphens + this.boundary + this.twoHyphens + this.crlf);
 
-        request.writeBytes(this.crlf);
-        request.writeBytes(this.twoHyphens + this.boundary +
-                this.twoHyphens + this.crlf);
 
         request.flush();
         request.close();

@@ -10,6 +10,8 @@ public class MainApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        BugBattle.initialise("v3l957lDVxJkVBZjlNx4L7KAMoWrnndi", BugBattleActivationMethod.SHAKE, this);
+        BugBattleActivationMethod[] detectorList = {BugBattleActivationMethod.SHAKE, BugBattleActivationMethod.SCREENSHOT, BugBattleActivationMethod.THREE_FINGER_DOUBLE_TAB};
+        BugBattle.setApiURL("https://93d5920f0035.ngrok.io");
+        BugBattle.initialise("U1FeTUrxnzbtB8ebJj2unNweR6pzgIWg", detectorList, this);
     }
 }

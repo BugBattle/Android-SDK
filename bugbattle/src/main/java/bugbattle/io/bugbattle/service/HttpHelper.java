@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -18,18 +19,25 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.text.ParseException;
+import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
 
 import javax.net.ssl.HttpsURLConnection;
 
 import bugbattle.io.bugbattle.controller.OnHttpResponseListener;
 import bugbattle.io.bugbattle.model.FeedbackModel;
 import bugbattle.io.bugbattle.model.PhoneMeta;
+import bugbattle.io.bugbattle.model.ScreenshotReplay;
+import bugbattle.io.bugbattle.util.DateUtil;
 
 /**
  * Sends the report to the bugbattle dashboard.
  */
 public class HttpHelper extends AsyncTask<FeedbackModel, Void, Integer> {
     private static final String UPLOAD_IMAGE_BACKEND_URL_POSTFIX = "/uploads/sdk";
+    private static final String UPLOAD_IMAGE_MULTI_BACKEND_URL_POSTFIX = "/uploads/sdksteps";
     private static final String REPORT_BUG_URL_POSTFIX = "/bugs";
     private Context context;
 
@@ -53,6 +61,8 @@ public class HttpHelper extends AsyncTask<FeedbackModel, Void, Integer> {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
+        } catch (ParseException e) {
+            e.printStackTrace();
         }
 
         return httpResult;
@@ -64,8 +74,8 @@ public class HttpHelper extends AsyncTask<FeedbackModel, Void, Integer> {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    private JSONObject uploadImage (FeedbackModel service) throws IOException, JSONException {
-        Bitmap image = service.getScreenshot();
+    private JSONObject uploadImage (Bitmap image) throws IOException, JSONException {
+        FeedbackModel service = FeedbackModel.getInstance();
         FormDataHttpsHelper multipart = new FormDataHttpsHelper(service.getApiUrl() + UPLOAD_IMAGE_BACKEND_URL_POSTFIX, service.getSdkKey());
         multipart.addFilePart(bitmapToFile(image));
         String response = multipart.finishAndUpload();
@@ -73,9 +83,49 @@ public class HttpHelper extends AsyncTask<FeedbackModel, Void, Integer> {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    private Integer postFeedback(FeedbackModel service) throws JSONException, IOException {
-        JSONObject responseUploadImage = uploadImage(service);
+    private JSONObject uploadImages (Bitmap[] images) throws IOException, JSONException {
+        FeedbackModel service = FeedbackModel.getInstance();
+        FormDataHttpsHelper multipart = new FormDataHttpsHelper(service.getApiUrl() + UPLOAD_IMAGE_MULTI_BACKEND_URL_POSTFIX, service.getSdkKey());
+        for(Bitmap bitmap : images) {
+            multipart.addFilePart(bitmapToFile(bitmap));
+        }
+        String response = multipart.finishAndUpload();
+        return new JSONObject(response);
+    }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private JSONArray generateReplayImageUrls() throws IOException, JSONException {
+        JSONArray result = new JSONArray();
+        ScreenshotReplay[] replays = FeedbackModel.getInstance().getReplay().getScreenshots();
+        List<Bitmap> bitmapList = new LinkedList<>();
+
+        for (int i = 0; i < replays.length; i++) {
+            ScreenshotReplay replay = replays[i];
+            if(replay != null) {
+                bitmapList.add(replay.getScreenshot());
+            }
+        }
+
+        JSONObject obj = uploadImages(bitmapList.toArray(new Bitmap[bitmapList.size()]));
+        System.out.println(obj);
+        JSONArray fileUrls = (JSONArray) obj.get("fileUrls");
+        for(int i = 0; i < fileUrls.length(); i++){
+            JSONObject entry = new JSONObject();
+            entry.put("url", fileUrls.get(i));
+            entry.put("createdAt", DateUtil.dateToString(replays[i].getDate()));
+            result.put(entry);
+        }
+        FeedbackModel.getInstance().getReplay().reset();
+        return result;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private Integer postFeedback(FeedbackModel service) throws JSONException, IOException, ParseException {
+     /*   System.out.println(new Date());
+        JSONArray frames = generateReplayImageUrls();
+        System.out.println(new Date());
+        JSONObject responseUploadImage = uploadImage(service.getScreenshot());
+*/
         URL url = new URL(service.getApiUrl() + REPORT_BUG_URL_POSTFIX);
         HttpURLConnection conn;
         if (service.getApiUrl().contains("https")) {
@@ -90,7 +140,10 @@ public class HttpHelper extends AsyncTask<FeedbackModel, Void, Integer> {
         conn.setRequestMethod("POST");
 
         JSONObject body = new JSONObject();
-        body.put("screenshotUrl", responseUploadImage.get("fileUrl"));
+      //  body.put("screenshotUrl", responseUploadImage.get("fileUrl"));
+        JSONObject replay = new JSONObject();
+     //   replay.put("frames", frames);
+       // body.put("replay", replay);
         body.put("description", service.getDescription());
         body.put("reportedBy", service.getEmail());
         PhoneMeta phoneMeta = service.getPhoneMeta();
@@ -102,6 +155,7 @@ public class HttpHelper extends AsyncTask<FeedbackModel, Void, Integer> {
         body.put("customData", service.getCustomData());
         body.put("priority", service.getSeverity());
         body.put("consoleLog", service.getLogs());
+
         try (OutputStream os = conn.getOutputStream()) {
             byte[] input = body.toString().getBytes(StandardCharsets.UTF_8);
             os.write(input, 0, input.length);

@@ -20,6 +20,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 
 import bugbattle.io.bugbattle.R;
+import bugbattle.io.bugbattle.util.BBDetectorUtil;
 import bugbattle.io.bugbattle.model.FeedbackModel;
 import bugbattle.io.bugbattle.service.ImageMerger;
 
@@ -102,10 +103,7 @@ public class ImageEditor extends AppCompatActivity {
             alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Yes",
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
-                            if (service.getGestureDetector() != null) {
-                                service.getGestureDetector().resume();
-                            }
-
+                            BBDetectorUtil.resumeAllDetectors();
                             FeedbackModel.getInstance().setDisabled(false);
                             service.setScreenshot(null);
                             SharedPreferences pref = getApplicationContext().getSharedPreferences("prefs", 0);
@@ -285,10 +283,7 @@ public class ImageEditor extends AppCompatActivity {
                         SharedPreferences.Editor editor = pref.edit();
                         editor.putString("description", ""); // Storing string
                         editor.apply();
-                        if (service.getGestureDetector() != null) {
-                            service.getGestureDetector().resume();
-
-                        }
+                        BBDetectorUtil.resumeAllDetectors();
 
                         FeedbackModel.getInstance().setDisabled(false);
                         finish();

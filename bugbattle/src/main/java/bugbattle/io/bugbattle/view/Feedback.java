@@ -26,6 +26,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import bugbattle.io.bugbattle.R;
+import bugbattle.io.bugbattle.util.BBDetectorUtil;
 import bugbattle.io.bugbattle.controller.OnHttpResponseListener;
 import bugbattle.io.bugbattle.model.FeedbackModel;
 import bugbattle.io.bugbattle.service.HttpHelper;
@@ -137,10 +138,7 @@ public class Feedback extends AppCompatActivity implements OnHttpResponseListene
                     new Runnable() {
                         public void run() {
                             resetDescription();
-                            if (feedbackModel.getGestureDetector() != null) {
-                                feedbackModel.getGestureDetector().resume();
-                            }
-
+                            BBDetectorUtil.resumeAllDetectors();
                             FeedbackModel.getInstance().setDisabled(false);
                             finish();
                             if (feedbackModel.getCloseCallback() != null) {
