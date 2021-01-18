@@ -27,9 +27,10 @@ public class BugBattle {
     private static BugBattle instance;
     private static ScreenshotTaker screenshotTaker;
     private static Activity activity;
+    private static Application application;
 
     private BugBattle(String sdkKey, BugBattleActivationMethod[] activationMethods, Application application) {
-
+        this.application = application;
         FeedbackModel.getInstance().setSdkKey(sdkKey);
         FeedbackModel.getInstance().setPhoneMeta(new PhoneMeta(application.getApplicationContext()));
         screenshotTaker = new ScreenshotTaker();
@@ -67,9 +68,6 @@ public class BugBattle {
                 detectorList.add(screenshotGestureDetector);
             }
         }
-        ReplaysDetector replaysDetector = new ReplaysDetector(application);
-        replaysDetector.initialize();
-        detectorList.add(replaysDetector);
         FeedbackModel.getInstance().setGestureDetectors(detectorList);
     }
 
@@ -212,6 +210,16 @@ public class BugBattle {
      */
     public static void setApplicationType(APPLICATIONTYPE applicationType) {
         FeedbackModel.getInstance().setApplicationtype(applicationType);
+    }
+
+    /**
+     * Enable Replay function for BB
+     * Use with care, check performance on phone
+     */
+    public static void enableReplay() {
+        ReplaysDetector replaysDetector = new ReplaysDetector(application);
+        replaysDetector.initialize();
+        FeedbackModel.getInstance().getGestureDetectors().add(replaysDetector);
     }
 
 }

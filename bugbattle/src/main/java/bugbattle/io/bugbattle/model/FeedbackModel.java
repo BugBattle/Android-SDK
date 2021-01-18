@@ -29,7 +29,7 @@ public class FeedbackModel {
     private String userEmail;
     private String description;
     private String severity;
-    private APPLICATIONTYPE applicationtype;
+    private APPLICATIONTYPE applicationtype = APPLICATIONTYPE.NATIVE;
 
     private String apiUrl = "https://api.bugbattle.io";
     private Bitmap screenshot;
