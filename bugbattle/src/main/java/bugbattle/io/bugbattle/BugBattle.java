@@ -2,7 +2,6 @@ package bugbattle.io.bugbattle;
 
 import android.app.Activity;
 import android.app.Application;
-import android.content.Intent;
 import android.graphics.Bitmap;
 
 import org.json.JSONObject;
@@ -21,7 +20,6 @@ import bugbattle.io.bugbattle.service.ScreenshotGestureDetector;
 import bugbattle.io.bugbattle.service.ScreenshotTaker;
 import bugbattle.io.bugbattle.service.ShakeGestureDetector;
 import bugbattle.io.bugbattle.service.TouchGestureDetector;
-import bugbattle.io.bugbattle.view.OnBoarding;
 
 public class BugBattle {
     private static BugBattle instance;
@@ -30,16 +28,11 @@ public class BugBattle {
     private static Application application;
 
     private BugBattle(String sdkKey, BugBattleActivationMethod[] activationMethods, Application application) {
-        this.application = application;
+        BugBattle.application = application;
         FeedbackModel.getInstance().setSdkKey(sdkKey);
         FeedbackModel.getInstance().setPhoneMeta(new PhoneMeta(application.getApplicationContext()));
         screenshotTaker = new ScreenshotTaker();
 
-        try {
-            Runtime.getRuntime().exec("logcat - c");
-        } catch (Exception e) {
-            System.out.println(e);
-        }
         List<BBDetector> detectorList = new LinkedList<>();
         for (BugBattleActivationMethod activationMethod : activationMethods) {
             if (activationMethod == BugBattleActivationMethod.SHAKE) {
@@ -69,6 +62,7 @@ public class BugBattle {
             }
         }
         FeedbackModel.getInstance().setGestureDetectors(detectorList);
+
     }
 
     /**
