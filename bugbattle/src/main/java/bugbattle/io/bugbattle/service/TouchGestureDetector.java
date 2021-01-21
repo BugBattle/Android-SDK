@@ -63,7 +63,6 @@ public class TouchGestureDetector extends BBDetector {
                 relativeLayout.setClickable(true);
                 relativeLayout.setOnTouchListener(new View.OnTouchListener() {
                     public boolean onTouch(View v, MotionEvent event) {
-                        System.out.println(event.getX() + "," + event.getY());
                         if (!isDisabled) {
                             int action = event.getAction();
                             switch (action & MotionEvent.ACTION_MASK) {
@@ -84,7 +83,6 @@ public class TouchGestureDetector extends BBDetector {
 
                         }
                         return true;
-                        //do some stuff here
                     }
                 });
             }

@@ -20,9 +20,9 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 
 import bugbattle.io.bugbattle.R;
-import bugbattle.io.bugbattle.util.BBDetectorUtil;
 import bugbattle.io.bugbattle.model.FeedbackModel;
 import bugbattle.io.bugbattle.service.ImageMerger;
+import bugbattle.io.bugbattle.util.BBDetectorUtil;
 
 public class ImageEditor extends AppCompatActivity {
     private ImageView imageView;
@@ -48,8 +48,8 @@ public class ImageEditor extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image_editor);
         try {
             getSupportActionBar().hide();

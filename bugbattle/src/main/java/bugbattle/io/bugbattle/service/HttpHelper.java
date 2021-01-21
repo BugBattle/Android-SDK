@@ -20,7 +20,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.text.ParseException;
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -28,6 +27,7 @@ import javax.net.ssl.HttpsURLConnection;
 
 import bugbattle.io.bugbattle.controller.OnHttpResponseListener;
 import bugbattle.io.bugbattle.model.FeedbackModel;
+import bugbattle.io.bugbattle.model.Interaction;
 import bugbattle.io.bugbattle.model.PhoneMeta;
 import bugbattle.io.bugbattle.model.ScreenshotReplay;
 import bugbattle.io.bugbattle.util.DateUtil;
@@ -74,7 +74,7 @@ public class HttpHelper extends AsyncTask<FeedbackModel, Void, Integer> {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    private JSONObject uploadImage (Bitmap image) throws IOException, JSONException {
+    private JSONObject uploadImage(Bitmap image) throws IOException, JSONException {
         FeedbackModel service = FeedbackModel.getInstance();
         FormDataHttpsHelper multipart = new FormDataHttpsHelper(service.getApiUrl() + UPLOAD_IMAGE_BACKEND_URL_POSTFIX, service.getSdkKey());
         multipart.addFilePart(bitmapToFile(image));
@@ -83,10 +83,10 @@ public class HttpHelper extends AsyncTask<FeedbackModel, Void, Integer> {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    private JSONObject uploadImages (Bitmap[] images) throws IOException, JSONException {
+    private JSONObject uploadImages(Bitmap[] images) throws IOException, JSONException {
         FeedbackModel service = FeedbackModel.getInstance();
         FormDataHttpsHelper multipart = new FormDataHttpsHelper(service.getApiUrl() + UPLOAD_IMAGE_MULTI_BACKEND_URL_POSTFIX, service.getSdkKey());
-        for(Bitmap bitmap : images) {
+        for (Bitmap bitmap : images) {
             multipart.addFilePart(bitmapToFile(bitmap));
         }
         String response = multipart.finishAndUpload();
@@ -97,23 +97,14 @@ public class HttpHelper extends AsyncTask<FeedbackModel, Void, Integer> {
     private JSONArray generateReplayImageUrls() throws IOException, JSONException {
         JSONArray result = new JSONArray();
         ScreenshotReplay[] replays = FeedbackModel.getInstance().getReplay().getScreenshots();
-        List<Bitmap> bitmapList = new LinkedList<>();
+        List<Bitmap> bitmapList = filterScreenshotReplays(replays);
 
-        for (int i = 0; i < replays.length; i++) {
-            ScreenshotReplay replay = replays[i];
-            if(replay != null) {
-                bitmapList.add(replay.getScreenshot());
+        if (bitmapList.size() > 0) {
+            JSONObject obj = uploadImages(bitmapList.toArray(new Bitmap[bitmapList.size()]));
+            JSONArray fileUrls = (JSONArray) obj.get("fileUrls");
+            for (int i = 0; i < fileUrls.length(); i++) {
+                result.put(generateReplay(replays[i], fileUrls.get(i)));
             }
-        }
-
-        JSONObject obj = uploadImages(bitmapList.toArray(new Bitmap[bitmapList.size()]));
-        System.out.println(obj);
-        JSONArray fileUrls = (JSONArray) obj.get("fileUrls");
-        for(int i = 0; i < fileUrls.length(); i++){
-            JSONObject entry = new JSONObject();
-            entry.put("url", fileUrls.get(i));
-            entry.put("createdAt", DateUtil.dateToString(replays[i].getDate()));
-            result.put(entry);
         }
         FeedbackModel.getInstance().getReplay().reset();
         return result;
@@ -121,11 +112,9 @@ public class HttpHelper extends AsyncTask<FeedbackModel, Void, Integer> {
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     private Integer postFeedback(FeedbackModel service) throws JSONException, IOException, ParseException {
-     /*   System.out.println(new Date());
         JSONArray frames = generateReplayImageUrls();
-        System.out.println(new Date());
         JSONObject responseUploadImage = uploadImage(service.getScreenshot());
-*/
+
         URL url = new URL(service.getApiUrl() + REPORT_BUG_URL_POSTFIX);
         HttpURLConnection conn;
         if (service.getApiUrl().contains("https")) {
@@ -140,10 +129,14 @@ public class HttpHelper extends AsyncTask<FeedbackModel, Void, Integer> {
         conn.setRequestMethod("POST");
 
         JSONObject body = new JSONObject();
-      //  body.put("screenshotUrl", responseUploadImage.get("fileUrl"));
+        body.put("screenshotUrl", responseUploadImage.get("fileUrl"));
+
         JSONObject replay = new JSONObject();
-     //   replay.put("frames", frames);
-       // body.put("replay", replay);
+        replay.put("frames", frames);
+        replay.put("interval", FeedbackModel.getInstance().getReplay().getInterval());
+        replay.put("startedAt", DateUtil.dateToString(FeedbackModel.getInstance().getReplay().getStartedAt()));
+
+        body.put("replay", replay);
         body.put("description", service.getDescription());
         body.put("reportedBy", service.getEmail());
         PhoneMeta phoneMeta = service.getPhoneMeta();
@@ -166,6 +159,7 @@ public class HttpHelper extends AsyncTask<FeedbackModel, Void, Integer> {
 
     /**
      * Convert the Bitmap to a File in the cache
+     *
      * @param bitmap image which is uploaded
      * @return return the file
      */
@@ -192,6 +186,33 @@ public class HttpHelper extends AsyncTask<FeedbackModel, Void, Integer> {
         return baos.toByteArray();
     }
 
+    private JSONObject generateReplay(ScreenshotReplay screenshotReplay, Object fileurl) throws JSONException {
+        JSONObject entry = new JSONObject();
+        entry.put("screenName", screenshotReplay.getScreenName());
+        entry.put("url", fileurl);
+        JSONArray interactions = new JSONArray();
+        for (Interaction interaction : screenshotReplay.getInteractions()) {
+            JSONObject interactionObj = new JSONObject();
+            interactionObj.put("x", interaction.getX());
+            interactionObj.put("y", interaction.getY());
+            interactionObj.put("offset", interaction.getOffset());
+            interactionObj.put("type", interaction.getInteraction());
+            interactions.put(interactionObj);
+        }
+        entry.put("interactions", interactions);
+        return entry;
+    }
+
+    private List<Bitmap> filterScreenshotReplays(ScreenshotReplay[] replays) {
+        List<Bitmap> bitmapList = new LinkedList<>();
+        for (int i = 0; i < replays.length; i++) {
+            ScreenshotReplay replay = replays[i];
+            if (replay != null) {
+                bitmapList.add(replay.getScreenshot());
+            }
+        }
+        return bitmapList;
+    }
 }
 
 

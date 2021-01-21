@@ -61,6 +61,10 @@ public class BugBattle {
                 detectorList.add(screenshotGestureDetector);
             }
         }
+
+        ReplaysDetector replaysDetector = new ReplaysDetector(application);
+        replaysDetector.initialize();
+        detectorList.add(replaysDetector);
         FeedbackModel.getInstance().setGestureDetectors(detectorList);
 
     }

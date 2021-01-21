@@ -1,8 +1,6 @@
 package bugbattle.io.bugbattle.util;
 
 import android.app.Activity;
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -16,7 +14,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 import bugbattle.io.bugbattle.model.FeedbackModel;
 import bugbattle.io.bugbattle.model.ViewMeta;
@@ -28,24 +25,30 @@ public class ScreenshotUtil {
 
     public static Bitmap takeScreenshot() {
         FeedbackModel feedbackModel = FeedbackModel.getInstance();
-        Bitmap bitmap = null;
+        Bitmap bitmap;
         if (feedbackModel.getGetBitmapCallback() != null) {
             bitmap = feedbackModel.getGetBitmapCallback().getBitmap();
         } else {
             bitmap = generateBitmap(ActivityUtil.getCurrentActivity());
         }
-       return getResizedBitmap(bitmap);
+        if (bitmap == null) {
+            return null;
+        }
+        return getResizedBitmap(bitmap);
     }
 
     public static Bitmap takeScreenshot(float downScale) {
         FeedbackModel feedbackModel = FeedbackModel.getInstance();
-        Bitmap bitmap = null;
+        Bitmap bitmap;
         if (feedbackModel.getGetBitmapCallback() != null) {
             bitmap = feedbackModel.getGetBitmapCallback().getBitmap();
         } else {
             bitmap = generateBitmap(ActivityUtil.getCurrentActivity());
         }
-        return getResizedBitmap(bitmap, downScale);
+        if (bitmap != null) {
+            return getResizedBitmap(bitmap, downScale);
+        }
+        return null;
     }
 
     private static Bitmap generateBitmap(Activity activity) {
@@ -55,6 +58,9 @@ public class ScreenshotUtil {
         for (ViewMeta viewMeta : viewRoots) {
             maxWidth = Math.max(viewMeta.getFrame().right, maxWidth);
             maxHeight = Math.max(viewMeta.getFrame().bottom, maxHeight);
+        }
+        if (maxHeight <= 0 && maxWidth <= 0) {
+            return null;
         }
         final Bitmap bitmap = Bitmap.createBitmap(maxWidth, maxHeight, ARGB_8888);
         for (ViewMeta rootData : viewRoots) {
@@ -99,6 +105,7 @@ public class ScreenshotUtil {
         return Bitmap.createBitmap(
                 bm, 0, 0, width, height, matrix, false);
     }
+
     private static Bitmap getResizedBitmap(Bitmap bm, float downScale) {
         int width = bm.getWidth();
         int height = bm.getHeight();
@@ -107,13 +114,13 @@ public class ScreenshotUtil {
         if (orientation == Configuration.ORIENTATION_PORTRAIT) {
             matrix.postScale(downScale, downScale);
         } else {
-            matrix.postScale(downScale-0.2f, downScale-0.2f);
+            matrix.postScale(downScale - 0.2f, downScale - 0.2f);
         }
         return Bitmap.createBitmap(
                 bm, 0, 0, width, height, matrix, false);
     }
 
-    private static  Field getFieldForName(String name, Object obj) throws NullPointerException {
+    private static Field getFieldForName(String name, Object obj) throws NullPointerException {
         Class currentClass = obj.getClass();
         while (currentClass != Object.class) {
             for (Field field : currentClass.getDeclaredFields()) {
@@ -139,7 +146,7 @@ public class ScreenshotUtil {
 
     @SuppressWarnings("unchecked")
     private static List<ViewMeta> getAvailableViewsEnriched(Activity activity) {
-        if(activity != null) {
+        if (activity != null) {
             Object globalWindowManager = getField("mGlobal", activity.getWindowManager());
             Object rootObjects = getField("mRoots", globalWindowManager);
             Object paramsObject = getField("mParams", globalWindowManager);
