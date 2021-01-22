@@ -6,6 +6,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 
+import bugbattle.io.bugbattle.BugBattle;
+import bugbattle.io.bugbattle.controller.BugBattleNotInitialisedException;
+
 
 public class MainActivity extends AppCompatActivity {
     @Override
@@ -16,8 +19,11 @@ public class MainActivity extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, MainActivity2.class);
-                MainActivity.this.startActivity(intent);
+                try {
+                    BugBattle.startBugReporting();
+                } catch (BugBattleNotInitialisedException e) {
+                    e.printStackTrace();
+                }
             }
         });
 

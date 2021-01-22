@@ -14,11 +14,9 @@ import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-
 import bugbattle.io.bugbattle.R;
 import bugbattle.io.bugbattle.util.BBDetectorUtil;
 import bugbattle.io.bugbattle.model.FeedbackModel;
@@ -30,7 +28,6 @@ public class ImageEditor extends AppCompatActivity {
     private Button red;
     private Button blue;
     private Button yellow;
-
     private FeedbackModel service;
 
     //Add Navigation
@@ -49,7 +46,6 @@ public class ImageEditor extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_image_editor);
         try {
             getSupportActionBar().hide();
@@ -57,7 +53,6 @@ public class ImageEditor extends AppCompatActivity {
             System.out.println(ex);
         }
         service = FeedbackModel.getInstance();
-        System.out.println(this.getApplicationContext().getPackageName());
         if (android.os.Build.VERSION.SDK_INT > Build.VERSION_CODES.O) {
             if (service.getScreenshot().getWidth() > service.getScreenshot().getHeight()) {
                 setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
@@ -313,5 +308,4 @@ public class ImageEditor extends AppCompatActivity {
         v.draw(c);
         return b;
     }
-
 }
