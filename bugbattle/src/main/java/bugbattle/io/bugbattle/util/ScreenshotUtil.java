@@ -1,8 +1,6 @@
 package bugbattle.io.bugbattle.util;
 
 import android.app.Activity;
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -16,7 +14,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 import bugbattle.io.bugbattle.model.FeedbackModel;
 import bugbattle.io.bugbattle.model.ViewMeta;
@@ -34,7 +31,10 @@ public class ScreenshotUtil {
         } else {
             bitmap = generateBitmap(ActivityUtil.getCurrentActivity());
         }
-       return getResizedBitmap(bitmap);
+        if (bitmap != null) {
+            return getResizedBitmap(bitmap);
+        }
+        return null;
     }
 
     public static Bitmap takeScreenshot(float downScale) {
@@ -45,7 +45,10 @@ public class ScreenshotUtil {
         } else {
             bitmap = generateBitmap(ActivityUtil.getCurrentActivity());
         }
-        return getResizedBitmap(bitmap, downScale);
+        if (bitmap != null) {
+            return getResizedBitmap(bitmap, downScale);
+        }
+        return null;
     }
 
     private static Bitmap generateBitmap(Activity activity) {
@@ -55,6 +58,9 @@ public class ScreenshotUtil {
         for (ViewMeta viewMeta : viewRoots) {
             maxWidth = Math.max(viewMeta.getFrame().right, maxWidth);
             maxHeight = Math.max(viewMeta.getFrame().bottom, maxHeight);
+        }
+        if (maxWidth < 1 && maxHeight < 1) {
+            return null;
         }
         final Bitmap bitmap = Bitmap.createBitmap(maxWidth, maxHeight, ARGB_8888);
         for (ViewMeta rootData : viewRoots) {

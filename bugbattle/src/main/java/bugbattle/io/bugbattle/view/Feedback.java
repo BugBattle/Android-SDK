@@ -14,6 +14,7 @@ import android.text.Html;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CompoundButton;
@@ -26,10 +27,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import bugbattle.io.bugbattle.R;
-import bugbattle.io.bugbattle.util.BBDetectorUtil;
 import bugbattle.io.bugbattle.controller.OnHttpResponseListener;
 import bugbattle.io.bugbattle.model.FeedbackModel;
 import bugbattle.io.bugbattle.service.HttpHelper;
+import bugbattle.io.bugbattle.util.BBDetectorUtil;
 
 
 public class Feedback extends AppCompatActivity implements OnHttpResponseListener {
@@ -61,6 +62,7 @@ public class Feedback extends AppCompatActivity implements OnHttpResponseListene
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_feedback);
         try {
             getSupportActionBar().hide();
@@ -176,9 +178,8 @@ public class Feedback extends AppCompatActivity implements OnHttpResponseListene
         policyText = findViewById(R.id.policyText);
         policyText.setText(Html.fromHtml(getString(R.string.policy)));
         privacySwitch = findViewById(R.id.bb_privacyswitch);
-        if (emailEditText.getText().length() == 0) {
-            sendButton.setEnabled(false);
-        }
+
+
         backToEditImageButton = findViewById(R.id.bb_edit_btn);
 
         // Prepare thumbnail of screenshot
@@ -210,7 +211,6 @@ public class Feedback extends AppCompatActivity implements OnHttpResponseListene
             public void onTextChanged(CharSequence s, int start,
                                       int before, int count) {
                 if (count > 0 || start > 0) {
-                    sendButton.setEnabled(true);
                     storeEmail();
                 }
             }
@@ -219,7 +219,11 @@ public class Feedback extends AppCompatActivity implements OnHttpResponseListene
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(privacyIsToggled || !feedbackModel.isPrivacyEnabled()) {
+                if (emailEditText.length() <= 0) {
+                    Toast.makeText(getApplicationContext(), "You have to enter an email.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (privacyIsToggled || !feedbackModel.isPrivacyEnabled()) {
                     feedbackView.setVisibility(View.INVISIBLE);
                     loadingView.setVisibility(View.VISIBLE);
                     hideKeyboard(Feedback.this);

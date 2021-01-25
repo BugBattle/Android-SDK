@@ -11,8 +11,7 @@ public class MainApplication extends Application {
     public void onCreate() {
         super.onCreate();
         BugBattleActivationMethod[] detectorList = {BugBattleActivationMethod.SHAKE, BugBattleActivationMethod.SCREENSHOT, BugBattleActivationMethod.THREE_FINGER_DOUBLE_TAB};
-        BugBattle.setApiURL("https://93d5920f0035.ngrok.io");
         BugBattle.initialise("U1FeTUrxnzbtB8ebJj2unNweR6pzgIWg", detectorList, this);
-       // BugBattle.enableReplay();
+        BugBattle.enableReplay();
     }
 }

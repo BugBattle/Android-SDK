@@ -20,7 +20,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.text.ParseException;
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -28,6 +27,7 @@ import javax.net.ssl.HttpsURLConnection;
 
 import bugbattle.io.bugbattle.controller.OnHttpResponseListener;
 import bugbattle.io.bugbattle.model.FeedbackModel;
+import bugbattle.io.bugbattle.model.Interaction;
 import bugbattle.io.bugbattle.model.PhoneMeta;
 import bugbattle.io.bugbattle.model.ScreenshotReplay;
 import bugbattle.io.bugbattle.util.DateUtil;
@@ -93,39 +93,10 @@ public class HttpHelper extends AsyncTask<FeedbackModel, Void, Integer> {
         return new JSONObject(response);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    private JSONArray generateReplayImageUrls() throws IOException, JSONException {
-        JSONArray result = new JSONArray();
-        ScreenshotReplay[] replays = FeedbackModel.getInstance().getReplay().getScreenshots();
-        List<Bitmap> bitmapList = new LinkedList<>();
-
-        for (int i = 0; i < replays.length; i++) {
-            ScreenshotReplay replay = replays[i];
-            if(replay != null) {
-                bitmapList.add(replay.getScreenshot());
-            }
-        }
-
-        JSONObject obj = uploadImages(bitmapList.toArray(new Bitmap[bitmapList.size()]));
-        System.out.println(obj);
-        JSONArray fileUrls = (JSONArray) obj.get("fileUrls");
-        for(int i = 0; i < fileUrls.length(); i++){
-            JSONObject entry = new JSONObject();
-            entry.put("url", fileUrls.get(i));
-            entry.put("createdAt", DateUtil.dateToString(replays[i].getDate()));
-            result.put(entry);
-        }
-        FeedbackModel.getInstance().getReplay().reset();
-        return result;
-    }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     private Integer postFeedback(FeedbackModel service) throws JSONException, IOException, ParseException {
-     /*   System.out.println(new Date());
-        JSONArray frames = generateReplayImageUrls();
-        System.out.println(new Date());
         JSONObject responseUploadImage = uploadImage(service.getScreenshot());
-*/
         URL url = new URL(service.getApiUrl() + REPORT_BUG_URL_POSTFIX);
         HttpURLConnection conn;
         if (service.getApiUrl().contains("https")) {
@@ -140,10 +111,8 @@ public class HttpHelper extends AsyncTask<FeedbackModel, Void, Integer> {
         conn.setRequestMethod("POST");
 
         JSONObject body = new JSONObject();
-      //  body.put("screenshotUrl", responseUploadImage.get("fileUrl"));
-        JSONObject replay = new JSONObject();
-     //   replay.put("frames", frames);
-       // body.put("replay", replay);
+        body.put("screenshotUrl", responseUploadImage.get("fileUrl"));
+        body.put("replay", generateFrames());
         body.put("description", service.getDescription());
         body.put("reportedBy", service.getEmail());
         PhoneMeta phoneMeta = service.getPhoneMeta();
@@ -192,6 +161,55 @@ public class HttpHelper extends AsyncTask<FeedbackModel, Void, Integer> {
         return baos.toByteArray();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private JSONObject generateFrames() throws IOException, JSONException {
+        JSONObject replay = new JSONObject();
+        replay.put("interval", FeedbackModel.getInstance().getReplay().getInterval());
+        JSONArray frames = generateReplayImageUrls();
+        replay.put("frames", frames);
+        return replay;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private JSONArray generateReplayImageUrls() throws IOException, JSONException {
+        JSONArray result = new JSONArray();
+        ScreenshotReplay[] replays = FeedbackModel.getInstance().getReplay().getScreenshots();
+        List<Bitmap> bitmapList = new LinkedList<>();
+
+        for (int i = 0; i < replays.length; i++) {
+            ScreenshotReplay replay = replays[i];
+            if (replay != null) {
+                bitmapList.add(replay.getScreenshot());
+            }
+        }
+
+        JSONObject obj = uploadImages(bitmapList.toArray(new Bitmap[bitmapList.size()]));
+        System.out.println(obj);
+        JSONArray fileUrls = (JSONArray) obj.get("fileUrls");
+        for (int i = 0; i < fileUrls.length(); i++) {
+            JSONObject entry = new JSONObject();
+            entry.put("url", fileUrls.get(i));
+            entry.put("screenname", replays[i].getScreenName());
+            entry.put("createdAt", DateUtil.dateToString(replays[i].getDate()));
+            entry.put("interactions", generateInteractions(replays[i]));
+            result.put(entry);
+        }
+        FeedbackModel.getInstance().getReplay().reset();
+        return result;
+    }
+
+    public JSONArray generateInteractions(ScreenshotReplay replay) throws JSONException {
+        JSONArray result = new JSONArray();
+        for (Interaction interaction : replay.getInteractions()) {
+            JSONObject obj = new JSONObject();
+            obj.put("x", interaction.getX());
+            obj.put("y", interaction.getY());
+            obj.put("createdAt", DateUtil.dateToString(interaction.getOffset()));
+            obj.put("type", interaction.getInteractiontype());
+            result.put(obj);
+        }
+        return result;
+    }
 }
 
 

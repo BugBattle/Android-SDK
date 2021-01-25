@@ -7,11 +7,7 @@ import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -45,7 +41,6 @@ public class LogReader {
             String line;
             Pattern pattern = Pattern.compile("^\\d{1,2}-\\d{1,2} \\d{1,2}:\\d{1,2}:\\d{1,2}.\\d{1,3}");
             TimeZone tz = TimeZone.getTimeZone("UTC");
-
 
             while ((line = bufferedReader.readLine()) != null) {
                 Matcher mt = pattern.matcher(line);

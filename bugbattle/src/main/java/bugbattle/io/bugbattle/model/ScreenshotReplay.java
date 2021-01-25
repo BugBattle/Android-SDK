@@ -3,14 +3,28 @@ package bugbattle.io.bugbattle.model;
 import android.graphics.Bitmap;
 
 import java.util.Date;
+import java.util.LinkedList;
 
 public class ScreenshotReplay {
     private Bitmap screenshot;
+    private String screenName;
+    private LinkedList<Interaction> interactions;
     private Date date;
 
-    public ScreenshotReplay(Bitmap screenshot, Date date) {
+    public ScreenshotReplay(Bitmap screenshot, String screenName, Date date) {
         this.screenshot = screenshot;
+        this.screenName = screenName;
         this.date = date;
+        this.interactions = new LinkedList<>();
+    }
+
+    public void addInteraction(Interaction interaction) {
+        this.interactions.add(interaction);
+        System.out.println(this.interactions.size());
+    }
+
+    public LinkedList<Interaction> getInteractions() {
+        return interactions;
     }
 
     public Bitmap getScreenshot() {
@@ -19,5 +33,9 @@ public class ScreenshotReplay {
 
     public Date getDate() {
         return date;
+    }
+
+    public String getScreenName() {
+        return screenName;
     }
 }
