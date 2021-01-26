@@ -184,7 +184,6 @@ public class HttpHelper extends AsyncTask<FeedbackModel, Void, Integer> {
         }
 
         JSONObject obj = uploadImages(bitmapList.toArray(new Bitmap[bitmapList.size()]));
-        System.out.println(obj);
         JSONArray fileUrls = (JSONArray) obj.get("fileUrls");
         for (int i = 0; i < fileUrls.length(); i++) {
             JSONObject entry = new JSONObject();

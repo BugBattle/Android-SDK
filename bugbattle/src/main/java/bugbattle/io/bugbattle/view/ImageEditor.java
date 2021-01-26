@@ -20,9 +20,9 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 
 import bugbattle.io.bugbattle.R;
-import bugbattle.io.bugbattle.util.BBDetectorUtil;
 import bugbattle.io.bugbattle.model.FeedbackModel;
 import bugbattle.io.bugbattle.service.ImageMerger;
+import bugbattle.io.bugbattle.util.BBDetectorUtil;
 
 public class ImageEditor extends AppCompatActivity {
     private ImageView imageView;
@@ -57,7 +57,6 @@ public class ImageEditor extends AppCompatActivity {
             System.out.println(ex);
         }
         service = FeedbackModel.getInstance();
-        System.out.println(this.getApplicationContext().getPackageName());
         if (android.os.Build.VERSION.SDK_INT > Build.VERSION_CODES.O) {
             if (service.getScreenshot().getWidth() > service.getScreenshot().getHeight()) {
                 setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);

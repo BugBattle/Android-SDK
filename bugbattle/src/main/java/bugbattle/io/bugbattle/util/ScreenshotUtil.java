@@ -93,10 +93,14 @@ public class ScreenshotUtil {
     }
 
     private static Bitmap getResizedBitmap(Bitmap bm) {
+        Activity activity = ActivityUtil.getCurrentActivity();
+        if (activity == null) {
+            return null;
+        }
         int width = bm.getWidth();
         int height = bm.getHeight();
         Matrix matrix = new Matrix();
-        int orientation = ActivityUtil.getCurrentActivity().getResources().getConfiguration().orientation;
+        int orientation = activity.getResources().getConfiguration().orientation;
         if (orientation == Configuration.ORIENTATION_PORTRAIT) {
             matrix.postScale(0.7f, 0.7f);
         } else {
@@ -106,14 +110,18 @@ public class ScreenshotUtil {
                 bm, 0, 0, width, height, matrix, false);
     }
     private static Bitmap getResizedBitmap(Bitmap bm, float downScale) {
+        Activity activity = ActivityUtil.getCurrentActivity();
+        if (activity == null) {
+            return null;
+        }
         int width = bm.getWidth();
         int height = bm.getHeight();
         Matrix matrix = new Matrix();
-        int orientation = ActivityUtil.getCurrentActivity().getResources().getConfiguration().orientation;
+        int orientation = activity.getResources().getConfiguration().orientation;
         if (orientation == Configuration.ORIENTATION_PORTRAIT) {
             matrix.postScale(downScale, downScale);
         } else {
-            matrix.postScale(downScale-0.2f, downScale-0.2f);
+            matrix.postScale(downScale - 0.2f, downScale - 0.2f);
         }
         return Bitmap.createBitmap(
                 bm, 0, 0, width, height, matrix, false);

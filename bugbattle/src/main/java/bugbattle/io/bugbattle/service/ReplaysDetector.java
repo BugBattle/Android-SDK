@@ -69,7 +69,6 @@ public class ReplaysDetector extends BBDetector {
                             // if(event.getAction() == MotionEvent.ACTION_MOVE) {
                             //    replay.addInteractionToCurrentReplay(new Interaction(event.getX(), event.getY(), new Date(), INTERACTIONTYPE.TM));
                             //}
-                            System.out.println(event.getAction());
                             if (event.getAction() == MotionEvent.ACTION_UP) {
                                 replay.addInteractionToCurrentReplay(new Interaction(event.getX(), event.getY(), new Date(), INTERACTIONTYPE.TU));
                             }
