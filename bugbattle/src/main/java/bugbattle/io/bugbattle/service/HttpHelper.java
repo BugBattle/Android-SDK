@@ -190,7 +190,7 @@ public class HttpHelper extends AsyncTask<FeedbackModel, Void, Integer> {
             JSONObject entry = new JSONObject();
             entry.put("url", fileUrls.get(i));
             entry.put("screenname", replays[i].getScreenName());
-            entry.put("createdAt", DateUtil.dateToString(replays[i].getDate()));
+            entry.put("date", DateUtil.dateToString(replays[i].getDate()));
             entry.put("interactions", generateInteractions(replays[i]));
             result.put(entry);
         }
@@ -204,7 +204,7 @@ public class HttpHelper extends AsyncTask<FeedbackModel, Void, Integer> {
             JSONObject obj = new JSONObject();
             obj.put("x", interaction.getX());
             obj.put("y", interaction.getY());
-            obj.put("createdAt", DateUtil.dateToString(interaction.getOffset()));
+            obj.put("date", DateUtil.dateToString(interaction.getOffset()));
             obj.put("type", interaction.getInteractiontype());
             result.put(obj);
         }

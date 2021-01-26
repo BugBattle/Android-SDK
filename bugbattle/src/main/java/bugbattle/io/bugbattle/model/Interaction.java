@@ -6,7 +6,7 @@ public class Interaction {
     private float x;
     private float y;
     private Date offset;
-    private INTERACTIONTYPE interactiontype = INTERACTIONTYPE.TOUCH;
+    private INTERACTIONTYPE interactiontype = INTERACTIONTYPE.TM;
 
     public Interaction(float x, float y, Date offset, INTERACTIONTYPE interactiontype) {
         this.x = x;
