@@ -7,44 +7,31 @@ import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import bugbattle.io.bugbattle.model.FeedbackModel;
+import bugbattle.io.bugbattle.util.DateUtil;
+
+import static bugbattle.io.bugbattle.util.DateUtil.formatDate;
 
 /**
  * Read the log of the application.
  */
 public class LogReader {
-
-    private String formatDate(String time, String date) {
-        String result = "";
-        date += "-" + Calendar.getInstance().get(Calendar.YEAR);
-
-        String[] splittedDate = date.split("-");
-        SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy HH:mm:ss.SSS");
-        try {
-            Calendar cal = Calendar.getInstance();
-            cal.setTime(sdf.parse(date + " " + time));
-            TimeZone tz = TimeZone.getTimeZone("UTC");
-            DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm'Z'"); // Quoted "Z" to indicate UTC, no timezone offset
-            df.setTimeZone(tz);
-            result += df.format(cal.getTime());
-        } catch (ParseException err) {
-            result += Calendar.getInstance().get(Calendar.YEAR) + "-" + splittedDate[1] + "-" + splittedDate[0] + " " + time;
-        }
-        return result;
+    private enum CONSOLELOGTYPE {
+        INFO, WARNING, ERROR
     }
+
 
     /**
      * Reads the stacktrace, formats the string
      *
      * @return {@link JSONArray} formatted log
      */
-    public JSONArray readLog() {
+    public JSONArray readLog() throws ParseException {
         try {
             Process process = Runtime.getRuntime().exec(new String[]{"logcat", "-d"});
             BufferedReader bufferedReader = new BufferedReader(
@@ -53,18 +40,25 @@ public class LogReader {
             JSONArray log = new JSONArray();
             String line;
             Pattern pattern = Pattern.compile("^\\d{1,2}-\\d{1,2} \\d{1,2}:\\d{1,2}:\\d{1,2}.\\d{1,3}");
+            TimeZone tz = TimeZone.getTimeZone("UTC");
+
             while ((line = bufferedReader.readLine()) != null) {
                 Matcher mt = pattern.matcher(line);
                 if (mt.lookingAt()) {
                     String[] splittedLine = line.split(" ");
-                    JSONObject object = new JSONObject();
-                    object.put("date", formatDate(splittedLine[1], splittedLine[0]));
-                    StringBuilder text = new StringBuilder();
-                    for (int i = 7; i < splittedLine.length; i++) {
-                        text.append(splittedLine[i]).append(" ");
+                    String formattedDate = formatDate(splittedLine[1], splittedLine[0]);
+                    if (FeedbackModel.getInstance().getStartUpDate().before(DateUtil.stringToDate(formattedDate))) {
+                        JSONObject object = new JSONObject();
+                        object.put("date", formattedDate);
+                        object.put("priority", getConsoleLineType(splittedLine[4]));
+
+                        StringBuilder text = new StringBuilder();
+                        for (int i = 5; i < splittedLine.length; i++) {
+                            text.append(splittedLine[i]).append(" ");
+                        }
+                        object.put("log", text.toString());
+                        log.put(object);
                     }
-                    object.put("log", text.toString());
-                    log.put(object);
                 }
             }
             Runtime.getRuntime().exec("logcat - c");
@@ -76,5 +70,15 @@ public class LogReader {
             e.printStackTrace();
         }
         return null;
+    }
+
+    private String getConsoleLineType(String input) {
+        if (input.toLowerCase().equals("e")) {
+            return "ERROR";
+        }
+        if (input.toLowerCase().equals("w")) {
+            return "WARNING";
+        }
+        return "INFO";
     }
 }

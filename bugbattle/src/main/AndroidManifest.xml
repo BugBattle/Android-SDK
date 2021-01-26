@@ -5,6 +5,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application>
+        <activity android:name=".view.OnBoarding"  android:theme="@style/AppTheme.TranslucentBG"></activity>
         <activity
             android:name=".view.ImageEditor"
             android:theme="@style/AppTheme.TranslucentBG" />
