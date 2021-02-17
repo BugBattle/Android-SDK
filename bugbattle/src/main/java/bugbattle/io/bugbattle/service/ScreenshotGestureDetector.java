@@ -1,6 +1,5 @@
 package bugbattle.io.bugbattle.service;
 
-import android.app.Activity;
 import android.app.Application;
 import android.database.ContentObserver;
 import android.net.Uri;
@@ -8,15 +7,9 @@ import android.os.Handler;
 import android.provider.MediaStore;
 
 public class ScreenshotGestureDetector extends BBDetector {
-    private Activity activity;
 
     public ScreenshotGestureDetector(Application application) {
         super(application);
-    }
-
-    public ScreenshotGestureDetector(Application application, Activity activity) {
-        super(application);
-        this.activity = activity;
     }
 
     @Override

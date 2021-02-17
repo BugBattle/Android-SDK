@@ -5,8 +5,8 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 
 import bugbattle.io.bugbattle.R;
-import bugbattle.io.bugbattle.util.BBDetectorUtil;
 import bugbattle.io.bugbattle.model.FeedbackModel;
+import bugbattle.io.bugbattle.util.BBDetectorUtil;
 import bugbattle.io.bugbattle.util.ScreenshotUtil;
 import bugbattle.io.bugbattle.view.ImageEditor;
 

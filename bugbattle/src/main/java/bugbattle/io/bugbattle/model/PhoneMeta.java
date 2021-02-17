@@ -79,7 +79,6 @@ public class PhoneMeta {
                 e.printStackTrace();
                 buildVersionNumber = Integer.toString(BuildConfig.VERSION_CODE);
                 releaseVersionNumber = BuildConfig.VERSION_NAME;
-                //noinspection deprecation
                 bundleID = context.getPackageName();
 
             }

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">bugbattle</string>
+    <string name="image" />
+    <string name="imageview_cancel">Fermer</string>
+    <string name="imageview_next">Suivant</string>
+    <string name="imageview_title">Signaler un bug</string>
+    <string name="report_cancel">Retour</string>
+    <string name="report_next">Envoyer</string>
+    <string name="report_title">Signaler un bug</string>
+    <string name="report_email_placeholder">Entrez votre adresse mail</string>
+    <string name="report_description_placeholder">Décrivez votre problème</string>
+    <string name="report_priority_low">Faible</string>
+    <string name="report_priority_medium">Moyenne</string>
+    <string name="report_priority_high">Haute</string>
+    <string name="report_loading">Envoyer votre rapport de bug &#8230;</string>
+    <string name="report_done">Merci de votre rapport de bug!</string>
+    <string name="report_error">Oups, il y a eu un problème.</string>
+    <string name="policy">J\'ai lu et j\'accepte la &lt;font color="#019AE8"&gt;politique de privacité&lt;/font&gt;.</string>
+</resources>

@@ -100,7 +100,7 @@ public class FormDataHttpsHelper {
      * @throws IOException
      */
     public String finishAndUpload() throws IOException {
-        String response ="";
+        String response;
         request.writeBytes(this.twoHyphens + this.boundary + this.twoHyphens + this.crlf);
 
 
@@ -116,7 +116,7 @@ public class FormDataHttpsHelper {
             BufferedReader responseStreamReader =
                     new BufferedReader(new InputStreamReader(responseStream));
 
-            String line = "";
+            String line;
             StringBuilder stringBuilder = new StringBuilder();
 
             while ((line = responseStreamReader.readLine()) != null) {

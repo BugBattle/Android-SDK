@@ -17,10 +17,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+
 import bugbattle.io.bugbattle.R;
-import bugbattle.io.bugbattle.util.BBDetectorUtil;
+import bugbattle.io.bugbattle.controller.LanguageController;
 import bugbattle.io.bugbattle.model.FeedbackModel;
 import bugbattle.io.bugbattle.service.ImageMerger;
+import bugbattle.io.bugbattle.util.BBDetectorUtil;
 
 public class ImageEditor extends AppCompatActivity {
     private ImageView imageView;
@@ -45,6 +47,7 @@ public class ImageEditor extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        LanguageController.setLocale(this, FeedbackModel.getInstance().getLanguage().toString());
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image_editor);
         try {

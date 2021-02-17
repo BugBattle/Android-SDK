@@ -14,6 +14,7 @@ import bugbattle.io.bugbattle.controller.BugBattleActivationMethod;
 import bugbattle.io.bugbattle.controller.BugBattleNotInitialisedException;
 import bugbattle.io.bugbattle.model.APPLICATIONTYPE;
 import bugbattle.io.bugbattle.model.FeedbackModel;
+import bugbattle.io.bugbattle.model.LANGUAGE;
 import bugbattle.io.bugbattle.model.PhoneMeta;
 import bugbattle.io.bugbattle.service.BBDetector;
 import bugbattle.io.bugbattle.service.ReplaysDetector;
@@ -58,11 +59,7 @@ public class BugBattle {
             }
             if (activationMethod == BugBattleActivationMethod.SCREENSHOT) {
                 ScreenshotGestureDetector screenshotGestureDetector;
-                if (activity != null) {
-                    screenshotGestureDetector = new ScreenshotGestureDetector(application, activity);
-                } else {
-                    screenshotGestureDetector = new ScreenshotGestureDetector(application);
-                }
+                screenshotGestureDetector = new ScreenshotGestureDetector(application);
                 screenshotGestureDetector.initialize();
                 detectorList.add(screenshotGestureDetector);
             }
@@ -76,7 +73,7 @@ public class BugBattle {
      * @param application       The application (this)
      * @param sdkKey            The SDK key, which can be found on dashboard.bugbattle.io
      * @param activationMethods Activation method, which triggers a new bug report.
-     * @param activity main activity
+     * @param activity          main activity
      */
     public static BugBattle initialise(String sdkKey, final BugBattleActivationMethod[] activationMethods, Application application, Activity activity) {
         BugBattle.activity = activity;
@@ -112,7 +109,7 @@ public class BugBattle {
         List<BugBattleActivationMethod> activationMethods = new ArrayList<>();
         activationMethods.add(activationMethod);
         if (instance == null) {
-            instance = new BugBattle(sdkKey, activationMethods.toArray(new BugBattleActivationMethod[activationMethods.size()]), application);
+            instance = new BugBattle(sdkKey, activationMethods.toArray(new BugBattleActivationMethod[0]), application);
         }
         return instance;
     }
@@ -221,6 +218,7 @@ public class BugBattle {
 
     /**
      * Set Application Type
+     *
      * @param applicationType "Android", "RN", "Flutter"
      */
     public static void setApplicationType(APPLICATIONTYPE applicationType) {
@@ -235,6 +233,10 @@ public class BugBattle {
         ReplaysDetector replaysDetector = new ReplaysDetector(application);
         replaysDetector.initialize();
         FeedbackModel.getInstance().getGestureDetectors().add(replaysDetector);
+    }
+
+    public static void setLanguage(LANGUAGE language) {
+        FeedbackModel.getInstance().setLanguage(language);
     }
 
 }

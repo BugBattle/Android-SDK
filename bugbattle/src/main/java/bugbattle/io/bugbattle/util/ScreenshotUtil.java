@@ -25,7 +25,7 @@ public class ScreenshotUtil {
 
     public static Bitmap takeScreenshot() {
         FeedbackModel feedbackModel = FeedbackModel.getInstance();
-        Bitmap bitmap = null;
+        Bitmap bitmap;
         if (feedbackModel.getGetBitmapCallback() != null) {
             bitmap = feedbackModel.getGetBitmapCallback().getBitmap();
         } else {
@@ -39,7 +39,7 @@ public class ScreenshotUtil {
 
     public static Bitmap takeScreenshot(float downScale) {
         FeedbackModel feedbackModel = FeedbackModel.getInstance();
-        Bitmap bitmap = null;
+        Bitmap bitmap;
         if (feedbackModel.getGetBitmapCallback() != null) {
             bitmap = feedbackModel.getGetBitmapCallback().getBitmap();
         } else {
@@ -151,7 +151,7 @@ public class ScreenshotUtil {
             Object paramsObject = getField("mParams", globalWindowManager);
             Object[] roots = ((List) rootObjects).toArray();
             List<WindowManager.LayoutParams> paramsList = (List<WindowManager.LayoutParams>) paramsObject;
-            WindowManager.LayoutParams[] params = paramsList.toArray(new WindowManager.LayoutParams[paramsList.size()]);
+            WindowManager.LayoutParams[] params = paramsList.toArray(new WindowManager.LayoutParams[0]);
             List<ViewMeta> rootViews = enrichViewsWithMeta(roots, params);
             if (rootViews.isEmpty()) {
                 return Collections.emptyList();

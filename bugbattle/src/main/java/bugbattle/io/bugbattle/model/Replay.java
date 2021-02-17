@@ -6,7 +6,7 @@ import java.util.Date;
 
 public class Replay {
     private ScreenshotReplay[] screenshots;
-    private int interval = 1000;
+    private int interval;
     private int ringBufferCounter = 0;
 
     /**
