@@ -15,7 +15,7 @@ In the same file ( build.gradle ) add the dependency to include the library.
 ```
 dependencies {
   ...
-  implementation 'io.bugbattle:Bugbattle-Android-SDK:3.1.5'
+  implementation 'io.bugbattle:Bugbattle-Android-SDK:3.1.6'
 }
 ```
 You are now ready to use our SDK in your App. Let's carry on with the initialisation 🎉
