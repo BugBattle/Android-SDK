@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">BugBattle-Android-SDK</string>
+    <string name="btn_text">Report DEFAULT</string>
     <string name="logo">logo</string>
     <string name="title_activity_main2">MainActivity</string>
     <!-- Strings used for fragments for navigation -->

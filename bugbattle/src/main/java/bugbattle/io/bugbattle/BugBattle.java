@@ -14,7 +14,6 @@ import bugbattle.io.bugbattle.controller.BugBattleActivationMethod;
 import bugbattle.io.bugbattle.controller.BugBattleNotInitialisedException;
 import bugbattle.io.bugbattle.model.APPLICATIONTYPE;
 import bugbattle.io.bugbattle.model.FeedbackModel;
-import bugbattle.io.bugbattle.model.LANGUAGE;
 import bugbattle.io.bugbattle.model.PhoneMeta;
 import bugbattle.io.bugbattle.service.BBDetector;
 import bugbattle.io.bugbattle.service.ReplaysDetector;
@@ -235,7 +234,12 @@ public class BugBattle {
         FeedbackModel.getInstance().getGestureDetectors().add(replaysDetector);
     }
 
-    public static void setLanguage(LANGUAGE language) {
+    /**
+     * Set the language for the BugBattle Report Flow. Otherwise the default language is used.
+     * Supported Languages "en", "es", "fr", "it", "de"
+     * @param language ISO Country Code eg. "en", "de", "es"
+     */
+    public static void setLanguage(String language) {
         FeedbackModel.getInstance().setLanguage(language);
     }
 

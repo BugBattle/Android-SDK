@@ -62,7 +62,9 @@ public class Feedback extends AppCompatActivity implements OnHttpResponseListene
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        LanguageController.setLocale(this, FeedbackModel.getInstance().getLanguage().toString());
+        if(!FeedbackModel.getInstance().getLanguage().equals("")) {
+            LanguageController.setLocale(this, FeedbackModel.getInstance().getLanguage().toString());
+        }
         super.onCreate(savedInstanceState);
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_feedback);
@@ -275,9 +277,14 @@ public class Feedback extends AppCompatActivity implements OnHttpResponseListene
         policyText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW);
-                browserIntent.setData(Uri.parse(feedbackModel.getPrivacyUrl()));
-                startActivity(browserIntent);
+                try {
+                    Intent browserIntent = new Intent(Intent.ACTION_VIEW);
+                    browserIntent.setData(Uri.parse(feedbackModel.getPrivacyUrl()));
+                    startActivity(browserIntent);
+                }catch (Exception e) {
+                    System.out.println(e);
+                    System.err.println("BB -> Malformed URL.");
+                }
             }
         });
 

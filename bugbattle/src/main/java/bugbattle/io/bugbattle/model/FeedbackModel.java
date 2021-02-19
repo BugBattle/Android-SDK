@@ -24,7 +24,7 @@ public class FeedbackModel {
     private Date startUpDate = new Date();
     private boolean isDisabled = false;
     private static FeedbackModel instance;
-    private LANGUAGE language = LANGUAGE.EN;
+    private String language = "";
 
     private String sdkKey;
     private String userEmail;
@@ -213,11 +213,11 @@ public class FeedbackModel {
         return startUpDate;
     }
 
-    public LANGUAGE getLanguage() {
+    public String getLanguage() {
         return language;
     }
 
-    public void setLanguage(LANGUAGE language) {
+    public void setLanguage(String language) {
         this.language = language;
     }
 }

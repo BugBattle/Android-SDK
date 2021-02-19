@@ -47,7 +47,9 @@ public class ImageEditor extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        LanguageController.setLocale(this, FeedbackModel.getInstance().getLanguage().toString());
+        if(!FeedbackModel.getInstance().getLanguage().equals("")) {
+            LanguageController.setLocale(this, FeedbackModel.getInstance().getLanguage());
+        }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image_editor);
         try {

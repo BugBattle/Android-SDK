@@ -11,7 +11,11 @@ public class MainApplication extends Application {
     public void onCreate() {
         super.onCreate();
         BugBattleActivationMethod[] detectorList = {BugBattleActivationMethod.SHAKE, BugBattleActivationMethod.SCREENSHOT, BugBattleActivationMethod.THREE_FINGER_DOUBLE_TAB};
-        BugBattle.initialise("U1FeTUrxnzbtB8ebJj2unNweR6pzgIWg", detectorList, this);
-        BugBattle.enableReplay();
+
+        BugBattle.initialise("YOUR_APK_KEY", detectorList, this);
+        BugBattle.setLanguage("deee");
+        BugBattle.setPrivacyPolicyUrl("TESTURL.com");
+        BugBattle.enablePrivacyPolicy(true);
+         BugBattle.enableReplay();
     }
 }

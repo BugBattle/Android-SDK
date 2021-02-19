@@ -13,7 +13,7 @@
     <string name="report_priority_low">Leicht</string>
     <string name="report_priority_medium">Mittel</string>
     <string name="report_priority_high">Schwer</string>
-    <string name="report_loading">Bug report wird gesendet &#8230;</string>
+    <string name="report_loading">Bug Report wird gesendet &#8230;</string>
     <string name="report_done">Danke für deinen Bug report.</string>
     <string name="report_error">Ups, da ist etwas schief gelaufen.</string>
     <string name="policy">Ich akzeptiere die  &lt;font color="#019AE8"&gt;Datenschutzerklärung&lt;/font&gt;.</string>
