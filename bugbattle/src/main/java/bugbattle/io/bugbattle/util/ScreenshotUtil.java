@@ -22,7 +22,6 @@ import static android.graphics.Bitmap.Config.ARGB_8888;
 import static android.view.WindowManager.LayoutParams.FLAG_DIM_BEHIND;
 
 public class ScreenshotUtil {
-
     public static Bitmap takeScreenshot() {
         FeedbackModel feedbackModel = FeedbackModel.getInstance();
         Bitmap bitmap;
@@ -52,28 +51,32 @@ public class ScreenshotUtil {
     }
 
     private static Bitmap generateBitmap(Activity activity) {
-        final List<ViewMeta> viewRoots = getAvailableViewsEnriched(activity);
-        int maxWidth = Integer.MIN_VALUE;
-        int maxHeight = Integer.MIN_VALUE;
-        for (ViewMeta viewMeta : viewRoots) {
-            maxWidth = Math.max(viewMeta.getFrame().right, maxWidth);
-            maxHeight = Math.max(viewMeta.getFrame().bottom, maxHeight);
-        }
-        if (maxWidth < 1 && maxHeight < 1) {
+        try {
+            final List<ViewMeta> viewRoots = getAvailableViewsEnriched(activity);
+            int maxWidth = Integer.MIN_VALUE;
+            int maxHeight = Integer.MIN_VALUE;
+            for (ViewMeta viewMeta : viewRoots) {
+                maxWidth = Math.max(viewMeta.getFrame().right, maxWidth);
+                maxHeight = Math.max(viewMeta.getFrame().bottom, maxHeight);
+            }
+            if (maxWidth < 1 && maxHeight < 1) {
+                return null;
+            }
+            final Bitmap bitmap = Bitmap.createBitmap(maxWidth, maxHeight, ARGB_8888);
+            for (ViewMeta rootData : viewRoots) {
+                if ((rootData.getLayoutParams().flags & FLAG_DIM_BEHIND) == FLAG_DIM_BEHIND) {
+                    Canvas dimCanvas = new Canvas(bitmap);
+                    int alpha = (int) (255 * rootData.getLayoutParams().dimAmount);
+                    dimCanvas.drawARGB(alpha, 0, 0, 0);
+                }
+                Canvas canvas = new Canvas(bitmap);
+                canvas.translate(rootData.getFrame().left, rootData.getFrame().top);
+                rootData.getView().draw(canvas);
+            }
+            return bitmap;
+        } catch (Exception e) {
             return null;
         }
-        final Bitmap bitmap = Bitmap.createBitmap(maxWidth, maxHeight, ARGB_8888);
-        for (ViewMeta rootData : viewRoots) {
-            if ((rootData.getLayoutParams().flags & FLAG_DIM_BEHIND) == FLAG_DIM_BEHIND) {
-                Canvas dimCanvas = new Canvas(bitmap);
-                int alpha = (int) (255 * rootData.getLayoutParams().dimAmount);
-                dimCanvas.drawARGB(alpha, 0, 0, 0);
-            }
-            Canvas canvas = new Canvas(bitmap);
-            canvas.translate(rootData.getFrame().left, rootData.getFrame().top);
-            rootData.getView().draw(canvas);
-        }
-        return bitmap;
     }
 
     private static void getOffset(List<ViewMeta> rootViews) {

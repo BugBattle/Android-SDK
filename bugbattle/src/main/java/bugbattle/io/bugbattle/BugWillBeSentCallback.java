@@ -1,5 +1,5 @@
 package bugbattle.io.bugbattle;
 
-public interface FlowInvoked {
+public interface BugWillBeSentCallback {
     void flowInvoced();
 }

@@ -63,7 +63,7 @@ public class Feedback extends AppCompatActivity implements OnHttpResponseListene
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         if(!FeedbackModel.getInstance().getLanguage().equals("")) {
-            LanguageController.setLocale(this, FeedbackModel.getInstance().getLanguage().toString());
+            LanguageController.setLocale(this, FeedbackModel.getInstance().getLanguage());
         }
         super.onCreate(savedInstanceState);
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -147,8 +147,8 @@ public class Feedback extends AppCompatActivity implements OnHttpResponseListene
                             BBDetectorUtil.resumeAllDetectors();
                             FeedbackModel.getInstance().setDisabled(false);
                             finish();
-                            if (feedbackModel.getCloseCallback() != null) {
-                                feedbackModel.getCloseCallback().close();
+                            if (feedbackModel.getBugSentCallback() != null) {
+                                feedbackModel.getBugSentCallback().close();
                             }
 
                         }

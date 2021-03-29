@@ -33,8 +33,8 @@ public abstract class BBDetector {
     public abstract void pause();
 
     public void takeScreenshot() {
-        if (FeedbackModel.getInstance().getFlowInvoked() != null) {
-            FeedbackModel.getInstance().getFlowInvoked().flowInvoced();
+        if (FeedbackModel.getInstance().getBugWillBeSentCallback() != null) {
+            FeedbackModel.getInstance().getBugWillBeSentCallback().flowInvoced();
         }
         screenshotTaker.takeScreenshot();
     }

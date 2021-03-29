@@ -1,5 +1,5 @@
 package bugbattle.io.bugbattle;
 
-public interface CloseCallback {
+public interface BugSentCallback {
     void close();
 }

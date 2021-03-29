@@ -8,10 +8,11 @@ import org.json.JSONObject;
 
 import java.text.ParseException;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 
-import bugbattle.io.bugbattle.CloseCallback;
-import bugbattle.io.bugbattle.FlowInvoked;
+import bugbattle.io.bugbattle.BugSentCallback;
+import bugbattle.io.bugbattle.BugWillBeSentCallback;
 import bugbattle.io.bugbattle.GetBitmapCallback;
 import bugbattle.io.bugbattle.controller.StepsToReproduce;
 import bugbattle.io.bugbattle.service.BBDetector;
@@ -36,6 +37,7 @@ public class FeedbackModel {
     private Bitmap screenshot;
     private Replay replay;
     private JSONObject customData;
+    private JSONObject data;
     private @Nullable
     PhoneMeta phoneMeta;
     private LogReader logReader;
@@ -45,9 +47,11 @@ public class FeedbackModel {
     private boolean privacyEnabled = false;
     private String privacyUrl = "https://www.bugbattle.io/privacy-policy";
 
-    private CloseCallback closeCallback;
-    private FlowInvoked flowInvoked;
+    private BugSentCallback bugSentCallback;
+    private BugWillBeSentCallback bugWillBeSentCallback;
     private GetBitmapCallback getBitmapCallback;
+
+    private List<Networklog> networklogs = new LinkedList<>();
 
     private FeedbackModel() {
         logReader = new LogReader();
@@ -169,20 +173,20 @@ public class FeedbackModel {
         isDisabled = disabled;
     }
 
-    public CloseCallback getCloseCallback() {
-        return closeCallback;
+    public BugSentCallback getBugSentCallback() {
+        return bugSentCallback;
     }
 
-    public void setCloseCallback(CloseCallback closeCallback) {
-        this.closeCallback = closeCallback;
+    public void setBugSentCallback(BugSentCallback bugSentCallback) {
+        this.bugSentCallback = bugSentCallback;
     }
 
-    public FlowInvoked getFlowInvoked() {
-        return flowInvoked;
+    public BugWillBeSentCallback getBugWillBeSentCallback() {
+        return bugWillBeSentCallback;
     }
 
-    public void setFlowInvoked(FlowInvoked flowInvoked) {
-        this.flowInvoked = flowInvoked;
+    public void setBugWillBeSentCallback(BugWillBeSentCallback bugWillBeSentCallback) {
+        this.bugWillBeSentCallback = bugWillBeSentCallback;
     }
 
     public GetBitmapCallback getGetBitmapCallback() {
@@ -219,5 +223,29 @@ public class FeedbackModel {
 
     public void setLanguage(String language) {
         this.language = language;
+    }
+
+    public void addRequest(Networklog networklog) {
+        networklogs.add(networklog);
+    }
+
+    public JSONArray getNetworklogs() {
+        JSONArray requestArry = new JSONArray();
+        try {
+            for (Networklog networklog : networklogs) {
+                requestArry.put(networklog.toJSON());
+            }
+        } catch (Exception err) {
+            System.out.println(err);
+        }
+        return requestArry;
+    }
+
+    public void setData(JSONObject data) {
+        this.data = data;
+    }
+
+    public JSONObject getData() {
+        return this.data;
     }
 }

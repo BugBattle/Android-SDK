@@ -20,6 +20,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.text.ParseException;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -70,6 +71,9 @@ public class HttpHelper extends AsyncTask<FeedbackModel, Void, Integer> {
 
     @Override
     protected void onPostExecute(Integer result) {
+        if (FeedbackModel.getInstance().getBugSentCallback() != null) {
+            FeedbackModel.getInstance().getBugSentCallback().close();
+        }
         listener.onTaskComplete(result);
     }
 
@@ -115,20 +119,28 @@ public class HttpHelper extends AsyncTask<FeedbackModel, Void, Integer> {
         body.put("replay", generateFrames());
         body.put("description", service.getDescription());
         body.put("reportedBy", service.getEmail());
+
+        body.put("networkLogs", service.getNetworklogs());
         PhoneMeta phoneMeta = service.getPhoneMeta();
 
         if (phoneMeta != null) {
             body.put("metaData", phoneMeta.getJSONObj());
         }
+
         body.put("actionLog", service.getStepsToReproduce());
         body.put("customData", service.getCustomData());
         body.put("priority", service.getSeverity());
         body.put("consoleLog", service.getLogs());
 
+        if (service.getData() != null) {
+            body = concatJSONS(body, service.getData());
+        }
+
         try (OutputStream os = conn.getOutputStream()) {
             byte[] input = body.toString().getBytes(StandardCharsets.UTF_8);
             os.write(input, 0, input.length);
         }
+
 
         return conn.getResponseCode();
     }
@@ -208,6 +220,26 @@ public class HttpHelper extends AsyncTask<FeedbackModel, Void, Integer> {
             obj.put("type", interaction.getInteractiontype());
             result.put(obj);
         }
+        return result;
+    }
+
+    private static JSONObject concatJSONS(JSONObject json, JSONObject obj) {
+        JSONObject result = new JSONObject();
+
+        try {
+            Iterator<String> iteratorJson = json.keys();
+            while (iteratorJson.hasNext()) {
+                String key = iteratorJson.next();
+                result.put(key, json.get(key));
+            }
+            Iterator<String> iteratorObj = obj.keys();
+            while (iteratorObj.hasNext()) {
+                String key = iteratorObj.next();
+                result.put(key, obj.get(key));
+            }
+        } catch (Exception err) {
+        }
+
         return result;
     }
 }

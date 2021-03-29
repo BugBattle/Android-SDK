@@ -28,6 +28,9 @@ public class ScreenshotTaker {
      */
     public void takeScreenshot() {
         BBDetectorUtil.stopAllDetectors();
+        if (feedbackModel.getBugWillBeSentCallback() != null) {
+            feedbackModel.getBugWillBeSentCallback().flowInvoced();
+        }
         Bitmap bitmap = ScreenshotUtil.takeScreenshot();
         openScreenshot(bitmap);
     }

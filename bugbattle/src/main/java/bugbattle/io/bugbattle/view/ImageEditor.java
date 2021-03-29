@@ -112,8 +112,8 @@ public class ImageEditor extends AppCompatActivity {
                             editor.apply();
                             finish();
                             dialog.dismiss();
-                            if (service.getCloseCallback() != null) {
-                                service.getCloseCallback().close();
+                            if (service.getBugSentCallback() != null) {
+                                service.getBugSentCallback().close();
                             }
                         }
                     });
@@ -288,8 +288,8 @@ public class ImageEditor extends AppCompatActivity {
                         FeedbackModel.getInstance().setDisabled(false);
                         finish();
                         overridePendingTransition(R.anim.slide_down_revert, R.anim.slide_up_revert);
-                        if (service.getCloseCallback() != null) {
-                            service.getCloseCallback().close();
+                        if (service.getBugSentCallback() != null) {
+                            service.getBugSentCallback().close();
                         }
                     }
             }

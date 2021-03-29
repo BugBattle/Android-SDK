@@ -187,22 +187,23 @@ public class BugBattle {
     }
 
     /**
-     * This method is triggered, when the bugbattle flow is closed
+     * This is called, when the bugbattle flow is started
      *
-     * @param closeCallback this callback is called when the flow is called
+     * @param bugWillBeSentCallback is called when BB is opened
      */
-    public static void setCloseCallback(CloseCallback closeCallback) {
-        FeedbackModel.getInstance().setCloseCallback(closeCallback);
+    public static void setBugWillBeSentCallback(BugWillBeSentCallback bugWillBeSentCallback) {
+        FeedbackModel.getInstance().setBugWillBeSentCallback(bugWillBeSentCallback);
     }
 
     /**
-     * This is called, when the bugbattle flow is started
+     * This method is triggered, when the bugbattle flow is closed
      *
-     * @param flowInvoked is called when BB is opened
+     * @param bugSentCallback this callback is called when the flow is called
      */
-    public static void setFlowInvoked(FlowInvoked flowInvoked) {
-        FeedbackModel.getInstance().setFlowInvoked(flowInvoked);
+    public static void setBugSentCallback(BugSentCallback bugSentCallback) {
+        FeedbackModel.getInstance().setBugSentCallback(bugSentCallback);
     }
+
 
     /**
      * Customize the way, the Bitmap is generated. If this is overritten,
@@ -237,10 +238,15 @@ public class BugBattle {
     /**
      * Set the language for the BugBattle Report Flow. Otherwise the default language is used.
      * Supported Languages "en", "es", "fr", "it", "de"
+     *
      * @param language ISO Country Code eg. "en", "de", "es"
      */
     public static void setLanguage(String language) {
         FeedbackModel.getInstance().setLanguage(language);
+    }
+
+    public static void attachData(JSONObject data) {
+        FeedbackModel.getInstance().setData(data);
     }
 
 }

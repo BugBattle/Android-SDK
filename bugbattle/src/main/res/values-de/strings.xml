@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">bugbattle</string>
+    <string name="app_name_bb">bugbattle</string>
     <string name="image" />
     <string name="imageview_cancel">Schließen</string>
     <string name="imageview_next">Weiter</string>
