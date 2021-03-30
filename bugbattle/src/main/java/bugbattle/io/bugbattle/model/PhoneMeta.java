@@ -15,6 +15,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Date;
+import java.util.Locale;
 
 import bugbattle.io.bugbattle.BuildConfig;
 
@@ -56,6 +57,7 @@ public class PhoneMeta {
         obj.put("releaseVersionNumber", releaseVersionNumber);
         obj.put("sessionDuration", calculateDuration());
         obj.put("networkStatus", getNetworkStatus());
+        obj.put("preferredUserLocale", getLocale());
         String applicationType = "Native";
         if (FeedbackModel.getInstance().getApplicationtype() == APPLICATIONTYPE.FLUTTER) {
             applicationType = "Flutter";
@@ -124,5 +126,9 @@ public class PhoneMeta {
         } else {
             return result;
         }
+    }
+
+    public String getLocale() {
+        return Locale.getDefault().getLanguage();
     }
 }

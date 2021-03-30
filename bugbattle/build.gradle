@@ -13,7 +13,7 @@ ext {
     siteUrl = 'https://github.com/BugBattle/Android-SDK'
     gitUrl = 'https://github.com/BugBattle/Android-SDK.git'
 
-    libraryVersion = '3.1.8'
+    libraryVersion = '3.1.9'
 
     developerId = 'BugBattle GmbH'
     developerName = 'BugBattle'
@@ -28,9 +28,11 @@ buildscript {
     repositories {
         google()
         jcenter()
+        mavenCentral() // NEW
     }
     dependencies {
         classpath 'com.github.dcendents:android-maven-gradle-plugin:2.1'
+
     }
 }
 

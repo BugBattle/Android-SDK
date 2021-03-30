@@ -132,6 +132,7 @@ public class HttpHelper extends AsyncTask<FeedbackModel, Void, Integer> {
         body.put("priority", service.getSeverity());
         body.put("consoleLog", service.getLogs());
 
+
         if (service.getData() != null) {
             body = concatJSONS(body, service.getData());
         }
