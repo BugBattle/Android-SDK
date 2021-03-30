@@ -14,8 +14,11 @@ import bugbattle.io.bugbattle.controller.BugBattleActivationMethod;
 import bugbattle.io.bugbattle.controller.BugBattleNotInitialisedException;
 import bugbattle.io.bugbattle.model.APPLICATIONTYPE;
 import bugbattle.io.bugbattle.model.FeedbackModel;
+import bugbattle.io.bugbattle.model.Networklog;
 import bugbattle.io.bugbattle.model.PhoneMeta;
+import bugbattle.io.bugbattle.model.RequestType;
 import bugbattle.io.bugbattle.service.BBDetector;
+import bugbattle.io.bugbattle.service.BugBattleHttpInterceptor;
 import bugbattle.io.bugbattle.service.ReplaysDetector;
 import bugbattle.io.bugbattle.service.ScreenshotGestureDetector;
 import bugbattle.io.bugbattle.service.ScreenshotTaker;
@@ -245,8 +248,26 @@ public class BugBattle {
         FeedbackModel.getInstance().setLanguage(language);
     }
 
+    /**
+     * Attach Data to the request. The Data will be merged into the body sent with the bugreport.
+     * !!Existing keys can be overriten
+     * @param data Data, which is added
+     */
     public static void attachData(JSONObject data) {
         FeedbackModel.getInstance().setData(data);
+    }
+
+    /**
+     * Log network traffic by logging it manually.
+     * @param urlConnection URL where the request is sent to
+     * @param requestType GET, POST, PUT, DELETE
+     * @param status status of the response (e.g. 200, 404)
+     * @param duration duration of the request
+     * @param request Add the data you want. e.g the body sent in the request
+     * @param response Response of the call. You can add just the information you want and need.
+     */
+    public static void logNetwork(String urlConnection, RequestType requestType, int status, int duration, JSONObject request, JSONObject response) {
+        BugBattleHttpInterceptor.log(urlConnection, requestType, status, duration, request, response);
     }
 
 }
