@@ -14,7 +14,6 @@ import bugbattle.io.bugbattle.controller.BugBattleActivationMethod;
 import bugbattle.io.bugbattle.controller.BugBattleNotInitialisedException;
 import bugbattle.io.bugbattle.model.APPLICATIONTYPE;
 import bugbattle.io.bugbattle.model.FeedbackModel;
-import bugbattle.io.bugbattle.model.Networklog;
 import bugbattle.io.bugbattle.model.PhoneMeta;
 import bugbattle.io.bugbattle.model.RequestType;
 import bugbattle.io.bugbattle.service.BBDetector;
@@ -32,8 +31,8 @@ public class BugBattle {
     private static Application application;
 
     private BugBattle(String sdkKey, BugBattleActivationMethod[] activationMethods, Application application) {
-        BugBattle.application = application;
         FeedbackModel.getInstance().setSdkKey(sdkKey);
+
         FeedbackModel.getInstance().setPhoneMeta(new PhoneMeta(application.getApplicationContext()));
         screenshotTaker = new ScreenshotTaker();
 

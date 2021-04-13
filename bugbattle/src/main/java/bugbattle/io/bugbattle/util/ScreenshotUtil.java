@@ -1,7 +1,6 @@
 package bugbattle.io.bugbattle.util;
 
 import android.app.Activity;
-import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
@@ -95,34 +94,42 @@ public class ScreenshotUtil {
         }
     }
 
+    private static boolean isPortrait(Bitmap bitmap) {
+        if (bitmap == null) {
+            return true;
+        }
+        return bitmap.getHeight() > bitmap.getWidth();
+    }
+
     private static Bitmap getResizedBitmap(Bitmap bm) {
         int width = bm.getWidth();
         int height = bm.getHeight();
         Matrix matrix = new Matrix();
-        int orientation = ActivityUtil.getCurrentActivity().getResources().getConfiguration().orientation;
-        if (orientation == Configuration.ORIENTATION_PORTRAIT) {
+        if (isPortrait(bm)) {
             matrix.postScale(0.7f, 0.7f);
         } else {
             matrix.postScale(0.5f, 0.5f);
         }
+
         return Bitmap.createBitmap(
                 bm, 0, 0, width, height, matrix, false);
     }
+
     private static Bitmap getResizedBitmap(Bitmap bm, float downScale) {
         int width = bm.getWidth();
         int height = bm.getHeight();
         Matrix matrix = new Matrix();
-        int orientation = ActivityUtil.getCurrentActivity().getResources().getConfiguration().orientation;
-        if (orientation == Configuration.ORIENTATION_PORTRAIT) {
+        Activity activity = ActivityUtil.getCurrentActivity();
+        if (isPortrait(bm)) {
             matrix.postScale(downScale, downScale);
         } else {
-            matrix.postScale(downScale-0.2f, downScale-0.2f);
+            matrix.postScale(downScale - 0.2f, downScale - 0.2f);
         }
         return Bitmap.createBitmap(
                 bm, 0, 0, width, height, matrix, false);
     }
 
-    private static  Field getFieldForName(String name, Object obj) throws NullPointerException {
+    private static Field getFieldForName(String name, Object obj) throws NullPointerException {
         Class currentClass = obj.getClass();
         while (currentClass != Object.class) {
             for (Field field : currentClass.getDeclaredFields()) {
@@ -148,7 +155,7 @@ public class ScreenshotUtil {
 
     @SuppressWarnings("unchecked")
     private static List<ViewMeta> getAvailableViewsEnriched(Activity activity) {
-        if(activity != null) {
+        if (activity != null) {
             Object globalWindowManager = getField("mGlobal", activity.getWindowManager());
             Object rootObjects = getField("mRoots", globalWindowManager);
             Object paramsObject = getField("mParams", globalWindowManager);
