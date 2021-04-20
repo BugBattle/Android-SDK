@@ -1,5 +1,5 @@
 # Bugbattle Android SDK
-[ ![Download](https://api.bintray.com/packages/bugbattle/BugBattle-Android/BugBattle-Android-SDK/images/download.svg) ](https://bintray.com/bugbattle/BugBattle-Android/BugBattle-Android-SDK/_latestVersion) [![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://github.com/BugBattle/Android-SDK/graphs/commit-activity) [![Documentation Status](https://readthedocs.org/projects/ansicolortags/badge/?version=latest)](https://docs.bugbattle.io)
+[ ![Download](https://maven-badges.herokuapp.com/maven-central/io.bugbattle/bugbattle-android-sdk/badge.svg) ](https://mvnrepository.com/artifact/io.bugbattle/bugbattle-android-sdk) [![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://github.com/BugBattle/Android-SDK/graphs/commit-activity) [![Documentation Status](https://readthedocs.org/projects/ansicolortags/badge/?version=latest)](https://docs.bugbattle.io)
 
 ![Bugbattle iOS SDK Intro](https://github.com/BugBattle/iOS-SDK/blob/master/imgs/bugbattle-intro.png)
 
