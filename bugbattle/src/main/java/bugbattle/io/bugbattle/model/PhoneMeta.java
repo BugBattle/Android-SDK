@@ -58,6 +58,7 @@ public class PhoneMeta {
         obj.put("sessionDuration", calculateDuration());
         obj.put("networkStatus", getNetworkStatus());
         obj.put("preferredUserLocale", getLocale());
+
         String applicationType = "Native";
         if (FeedbackModel.getInstance().getApplicationtype() == APPLICATIONTYPE.FLUTTER) {
             applicationType = "Flutter";
@@ -102,29 +103,18 @@ public class PhoneMeta {
      *
      * @return status of the network
      */
-    private JSONObject getNetworkStatus() {
-        JSONObject result = new JSONObject();
+    private String getNetworkStatus() {
         if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_NETWORK_STATE)
                 == PackageManager.PERMISSION_GRANTED) {
-            try {
-                ConnectivityManager cm =
-                        (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+            ConnectivityManager cm =
+                    (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
 
-                //Only called when the permission is granted
-                @SuppressLint("MissingPermission") NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+            //Only called when the permission is granted
+            @SuppressLint("MissingPermission") NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+            return activeNetwork.getTypeName();
 
-                boolean isConnected = activeNetwork != null &&
-                        activeNetwork.isConnectedOrConnecting();
-
-                result.put("isConnected", isConnected);
-                result.put("type", activeNetwork.getTypeName());
-                result.put("subType", activeNetwork.getSubtypeName());
-                return result;
-            } catch (JSONException ex) {
-                return result;
-            }
         } else {
-            return result;
+            return "";
         }
     }
 

@@ -17,4 +17,6 @@
     <string name="report_done">¡Gracias por informarnos del error!</string>
     <string name="report_error">Se ha producido un error.</string>
     <string name="policy">He leído y acepto la &lt;font color="#019AE8"&gt;política de privacidad&lt;/font&gt;.</string>
+    <string name="report_privacy_policy_alert">Lea y acepte la política de privacidad.</string>
+
 </resources>

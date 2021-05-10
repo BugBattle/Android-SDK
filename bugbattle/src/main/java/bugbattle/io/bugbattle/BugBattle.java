@@ -23,6 +23,7 @@ import bugbattle.io.bugbattle.service.ScreenshotGestureDetector;
 import bugbattle.io.bugbattle.service.ScreenshotTaker;
 import bugbattle.io.bugbattle.service.ShakeGestureDetector;
 import bugbattle.io.bugbattle.service.TouchGestureDetector;
+import bugbattle.io.bugbattle.util.SilentBugReportUtil;
 
 public class BugBattle {
     private static BugBattle instance;
@@ -31,6 +32,7 @@ public class BugBattle {
     private static Application application;
 
     private BugBattle(String sdkKey, BugBattleActivationMethod[] activationMethods, Application application) {
+        BugBattle.application = application;
         FeedbackModel.getInstance().setSdkKey(sdkKey);
 
         FeedbackModel.getInstance().setPhoneMeta(new PhoneMeta(application.getApplicationContext()));
@@ -92,7 +94,6 @@ public class BugBattle {
      * @param activationMethods Activation method, which triggers a new bug report.
      */
     public static BugBattle initialise(String sdkKey, final BugBattleActivationMethod[] activationMethods, Application application) {
-
         if (instance == null) {
             instance = new BugBattle(sdkKey, activationMethods, application);
         }
@@ -239,9 +240,9 @@ public class BugBattle {
 
     /**
      * Set the language for the BugBattle Report Flow. Otherwise the default language is used.
-     * Supported Languages "en", "es", "fr", "it", "de"
+     * Supported Languages "en", "es", "fr", "it", "de", "nl"
      *
-     * @param language ISO Country Code eg. "en", "de", "es"
+     * @param language ISO Country Code eg. "en", "de", "es", "nl"
      */
     public static void setLanguage(String language) {
         FeedbackModel.getInstance().setLanguage(language);
@@ -267,6 +268,22 @@ public class BugBattle {
      */
     public static void logNetwork(String urlConnection, RequestType requestType, int status, int duration, JSONObject request, JSONObject response) {
         BugBattleHttpInterceptor.log(urlConnection, requestType, status, duration, request, response);
+    }
+
+
+    public enum SEVERITY {
+        LOW, MIDDLE, HIGH
+    }
+
+    /**
+     * Send a silent bugreport in the background. Useful for automated ui tests.
+     *
+     * @param email       who sent the bug report
+     * @param description description of the bug
+     * @param severity    Severity of the bug "LOW", "MIDDLE", "HIGH"
+     */
+    public static void sendSilentBugReport(String email, String description, SEVERITY severity) {
+        SilentBugReportUtil.createSilentBugReport(application, email, description, severity.name());
     }
 
 }
