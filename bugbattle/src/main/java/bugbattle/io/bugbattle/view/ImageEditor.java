@@ -47,7 +47,7 @@ public class ImageEditor extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        if(!FeedbackModel.getInstance().getLanguage().equals("")) {
+        if (!FeedbackModel.getInstance().getLanguage().equals("")) {
             LanguageController.setLocale(this, FeedbackModel.getInstance().getLanguage());
         }
         super.onCreate(savedInstanceState);
@@ -67,14 +67,20 @@ public class ImageEditor extends AppCompatActivity {
         }
 
         imageView = findViewById(R.id.bb_image);
-        if (imageView != null) {
-            imageView.setImageBitmap(service.getScreenshot());
+        if (imageView != null && service.getScreenshot() != null) {
+            if (service.getScreenshot().getWidth() > service.getScreenshot().getHeight()) {
+
+                imageView.setImageBitmap(downscaleBitmap(service.getScreenshot()));
+            } else {
+                imageView.setImageBitmap(service.getScreenshot());
+            }
+        } else {
+
         }
+
         drawerView = findViewById(R.id.bb_drawerview);
         next = findViewById(R.id.bb_next);
         back = findViewById(R.id.bb_close);
-
-
         red = findViewById(R.id.bb_redbutton);
         blue = findViewById(R.id.bb_greenbutton);
         yellow = findViewById(R.id.bb_yellowbutton);
@@ -85,6 +91,18 @@ public class ImageEditor extends AppCompatActivity {
         colorWheelYellow = findViewById(R.id.bb_color_yellow);
         closeColorPicker = findViewById(R.id.bb_close_colorpicker);
         setOnClickListener();
+    }
+
+    /**
+     * Downscale Bitmap to fit landscape format
+     *
+     * @param bitmap image in
+     * @return downscaled image out
+     */
+    private Bitmap downscaleBitmap(Bitmap bitmap) {
+        double width = ((double) bitmap.getWidth() / 1.1);
+        double height = ((double) bitmap.getHeight() / 1.1);
+        return Bitmap.createScaledBitmap(bitmap, (int) width, (int) height, false);
     }
 
     @Override
@@ -144,7 +162,7 @@ public class ImageEditor extends AppCompatActivity {
             colorWheelBlue.setBackground(getResources().getDrawable(R.drawable.roundbutton_blue));
             colorWheelYellow.setBackground(getResources().getDrawable(R.drawable.roundbutton_yellow));
         }
-        if(selectedColor == SELECTED_COLOR.BLUR) {
+        if (selectedColor == SELECTED_COLOR.BLUR) {
             colorWheelRed.setBackground(getResources().getDrawable(R.drawable.roundbutton_red));
             colorWheelBlue.setBackground(getResources().getDrawable(R.drawable.roundbutton_blue));
             colorWheelYellow.setBackground(getResources().getDrawable(R.drawable.roundbutton_yellow));
@@ -197,7 +215,7 @@ public class ImageEditor extends AppCompatActivity {
         overviewView.setVisibility(View.GONE);
     }
 
-    private void closeColorPickerMenu(){
+    private void closeColorPickerMenu() {
         View colorPickerView = findViewById(R.id.bb_colorpicker);
         colorPickerView.setVisibility(View.GONE);
         View overviewView = findViewById(R.id.bb_overview);
@@ -276,22 +294,22 @@ public class ImageEditor extends AppCompatActivity {
             @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
             @Override
             public void onClick(View view) {
-                    if (!backClicked) {
-                        backClicked = true;
-                        service.setScreenshot(null);
-                        SharedPreferences pref = getApplicationContext().getSharedPreferences("prefs", 0);
-                        SharedPreferences.Editor editor = pref.edit();
-                        editor.putString("description", ""); // Storing string
-                        editor.apply();
-                        BBDetectorUtil.resumeAllDetectors();
+                if (!backClicked) {
+                    backClicked = true;
+                    service.setScreenshot(null);
+                    SharedPreferences pref = getApplicationContext().getSharedPreferences("prefs", 0);
+                    SharedPreferences.Editor editor = pref.edit();
+                    editor.putString("description", ""); // Storing string
+                    editor.apply();
+                    BBDetectorUtil.resumeAllDetectors();
 
-                        FeedbackModel.getInstance().setDisabled(false);
-                        finish();
-                        overridePendingTransition(R.anim.slide_down_revert, R.anim.slide_up_revert);
-                        if (service.getBugSentCallback() != null) {
-                            service.getBugSentCallback().close();
-                        }
+                    FeedbackModel.getInstance().setDisabled(false);
+                    finish();
+                    overridePendingTransition(R.anim.slide_down_revert, R.anim.slide_up_revert);
+                    if (service.getBugSentCallback() != null) {
+                        service.getBugSentCallback().close();
                     }
+                }
             }
         });
     }

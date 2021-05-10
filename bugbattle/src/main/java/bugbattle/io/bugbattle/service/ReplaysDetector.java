@@ -54,10 +54,10 @@ public class ReplaysDetector extends BBDetector {
         @Override
         public void run() {
             Activity activity = ActivityUtil.getCurrentActivity();
-            Bitmap bitmap = ScreenshotUtil.takeScreenshot(0.4f);
-            if (bitmap != null) {
-                String screenName = "MainActivity";
-                if (activity != null) {
+            if (activity != null) {
+                Bitmap bitmap = ScreenshotUtil.takeScreenshot(0.4f);
+                if (bitmap != null) {
+                    String screenName = "MainActivity";
                     ViewGroup viewGroup = (ViewGroup) ((ViewGroup) activity
                             .findViewById(android.R.id.content)).getChildAt(0);
                     viewGroup.setOnTouchListener(new View.OnTouchListener() {
@@ -66,10 +66,6 @@ public class ReplaysDetector extends BBDetector {
                             if (event.getAction() == MotionEvent.ACTION_DOWN) {
                                 replay.addInteractionToCurrentReplay(new Interaction(event.getX(), event.getY(), new Date(), INTERACTIONTYPE.TD));
                             }
-                            // if(event.getAction() == MotionEvent.ACTION_MOVE) {
-                            //    replay.addInteractionToCurrentReplay(new Interaction(event.getX(), event.getY(), new Date(), INTERACTIONTYPE.TM));
-                            //}
-                            System.out.println(event.getAction());
                             if (event.getAction() == MotionEvent.ACTION_UP) {
                                 replay.addInteractionToCurrentReplay(new Interaction(event.getX(), event.getY(), new Date(), INTERACTIONTYPE.TU));
                             }
@@ -77,10 +73,10 @@ public class ReplaysDetector extends BBDetector {
                         }
                     });
                     screenName = activity.getClass().getSimpleName();
+                    replay.addScreenshot(bitmap, screenName);
                 }
-                replay.addScreenshot(bitmap, screenName);
+                handler.postDelayed(this, replay.getInterval());
             }
-            handler.postDelayed(this, replay.getInterval());
         }
     };
 }

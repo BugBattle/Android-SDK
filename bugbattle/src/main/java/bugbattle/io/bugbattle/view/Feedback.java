@@ -79,7 +79,7 @@ public class Feedback extends AppCompatActivity implements OnHttpResponseListene
         setOnClickListener();
         priorityToggle();
         pref = getApplicationContext().getSharedPreferences("prefs", 0);
-        if (FeedbackModel.getInstance().getEmail() == "") {
+        if (FeedbackModel.getInstance().getEmail() != null && !FeedbackModel.getInstance().getEmail().equals("")) {
             storeEmail(FeedbackModel.getInstance().getEmail());
         }
         loadEmail();
@@ -241,8 +241,9 @@ public class Feedback extends AppCompatActivity implements OnHttpResponseListene
                         e.printStackTrace();
                     }
                 } else {
+                    System.out.println(R.string.report_privacy_policy_alert);
                     Toast.makeText(getApplicationContext(),
-                            "You must confirm the privacy policy",
+                            getString(R.string.report_privacy_policy_alert),
                             Toast.LENGTH_SHORT).show();
                 }
             }

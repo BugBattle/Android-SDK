@@ -17,4 +17,5 @@
     <string name="report_done">Merci de votre rapport de bug!</string>
     <string name="report_error">Oups, il y a eu un problème.</string>
     <string name="policy">J\'ai lu et j\'accepte la &lt;font color="#019AE8"&gt;politique de privacité&lt;/font&gt;.</string>
+    <string name="report_privacy_policy_alert">Veuillez lire et accepter la politique de confidentialité.</string>
 </resources>

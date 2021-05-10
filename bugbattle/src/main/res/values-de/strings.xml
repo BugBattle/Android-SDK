@@ -17,6 +17,7 @@
     <string name="report_done">Danke für deinen Bug Report.</string>
     <string name="report_error">Ups, da ist etwas schief gelaufen.</string>
     <string name="policy">Ich akzeptiere die  &lt;font color="#019AE8"&gt;Datenschutzerklärung&lt;/font&gt;.</string>
+    <string name="report_privacy_policy_alert">Du musst die Datenschutzrichtlinien akzeptieren.</string>
 </resources>
 
 
