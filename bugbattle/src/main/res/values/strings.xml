@@ -7,6 +7,8 @@
     <string name="imageview_title">Report a bug</string>
     <string name="report_cancel">Back</string>
     <string name="report_next">Send</string>
+    <string name="back_to_app">Back to the app</string>
+    <string name="back_to_app_msg">Do you want to go back to the app?</string>
     <string name="report_title">Report a bug</string>
     <string name="report_email_placeholder">Enter your email</string>
     <string name="report_description_placeholder">Describe your problem</string>
@@ -16,6 +18,7 @@
     <string name="report_loading">Sending your bug report &#8230;</string>
     <string name="report_done">Thank you for your bug report!</string>
     <string name="report_error">Oops, something went wrong.</string>
+    <string name="error_email">You have to enter an email.</string>
     <string name="policy">I have read and agree to the  &lt;font color="#019AE8"&gt;privacy policy&lt;/font&gt;.</string>
     <string name="report_privacy_policy_alert">Please read and accept the privacy policy.</string>
 </resources>

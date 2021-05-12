@@ -13,11 +13,14 @@
     <string name="report_priority_low">Laag</string>
     <string name="report_priority_medium">Middel</string>
     <string name="report_priority_high">Hoog</string>
-    <string name="report_loading">Feedback wird gesendet &#8230;</string>
+    <string name="report_loading">Feedback wordt verzonden &#8230;</string>
     <string name="report_done">Dank je wel!</string>
-    <string name="report_error">Ups, da ist etwas schief gelaufen.</string>
+    <string name="report_error">Oeps! Er is iets misgegaan.</string>
+    <string name="error_email">U moet een e-mailadres invoeren.</string>
     <string name="policy">Ik ga akkoord met  &lt;font color="#019AE8"&gt;privacy voorwaarden&lt;/font&gt;.</string>
     <string name="report_privacy_policy_alert">Graag de privacy voorwaarden lezen en accorderen</string>
+    <string name="back_to_app">Terug naar de app.</string>
+    <string name="back_to_app_msg">Wil je terug naar de app?</string>
 </resources>
 
 

@@ -224,7 +224,7 @@ public class Feedback extends AppCompatActivity implements OnHttpResponseListene
             @Override
             public void onClick(View view) {
                 if (emailEditText.length() <= 0) {
-                    Toast.makeText(getApplicationContext(), "You have to enter an email.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), getString(R.string.error_email), Toast.LENGTH_SHORT).show();
                     return;
                 }
                 if (privacyIsToggled || !feedbackModel.isPrivacyEnabled()) {

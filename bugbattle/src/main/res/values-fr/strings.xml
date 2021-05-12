@@ -16,6 +16,9 @@
     <string name="report_loading">Envoyer votre rapport de bug &#8230;</string>
     <string name="report_done">Merci de votre rapport de bug!</string>
     <string name="report_error">Oups, il y a eu un problème.</string>
+    <string name="error_email">Vous devez entrer un e-mail.</string>
     <string name="policy">J\'ai lu et j\'accepte la &lt;font color="#019AE8"&gt;politique de privacité&lt;/font&gt;.</string>
     <string name="report_privacy_policy_alert">Veuillez lire et accepter la politique de confidentialité.</string>
+    <string name="back_to_app">Revenez à l\'appli.</string>
+    <string name="back_to_app_msg">Voulez-vous revenir à l\'application?</string>
 </resources>
