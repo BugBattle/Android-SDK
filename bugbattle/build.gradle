@@ -14,14 +14,14 @@ ext {
     siteUrl = 'https://github.com/BugBattle/Android-SDK'
     gitUrl = 'https://github.com/BugBattle/Android-SDK.git'
 
-    libraryVersion = '3.3.3'
+    libraryVersion = '3.3.6'
 
     developerId = 'BugBattle GmbH'
     developerName = 'BugBattle'
     developerEmail = 'hello@bugbattle.io'
 
     licenseName = 'MIT'
-    licenseUrl = 'https://opensource.org/licenses/MIT'
+    licenseUrl = 'https://github.com/BugBattle/Android-SDK/blob/master/LICENSE.md'
     allLicenses = ["MIT"]
 }
 
@@ -42,11 +42,11 @@ android {
     lintOptions {
         abortOnError false
     }
-    compileSdkVersion 28
+    compileSdkVersion 30
 
     defaultConfig {
         minSdkVersion 18
-        targetSdkVersion 28
+        targetSdkVersion 30
         versionCode 1
         versionName "1.0"
 
@@ -71,6 +71,7 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'com.android.support:appcompat-v7:28.0.0'
+    implementation "androidx.annotation:annotation:1.2.0"
     implementation 'com.android.support:support-annotations:28.0.0'
     implementation 'com.android.support.constraint:constraint-layout:2.0.4'
     implementation 'com.android.support:design:28.0.0'

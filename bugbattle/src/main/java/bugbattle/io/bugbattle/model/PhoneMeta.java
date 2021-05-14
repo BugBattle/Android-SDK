@@ -17,7 +17,6 @@ import org.json.JSONObject;
 import java.util.Date;
 import java.util.Locale;
 
-import bugbattle.io.bugbattle.BuildConfig;
 
 /**
  * Collected information, gathered from the phone
@@ -80,8 +79,8 @@ public class PhoneMeta {
                 bundleID = packageInfo.packageName;
             } catch (PackageManager.NameNotFoundException e) {
                 e.printStackTrace();
-                buildVersionNumber = Integer.toString(BuildConfig.VERSION_CODE);
-                releaseVersionNumber = BuildConfig.VERSION_NAME;
+                //    buildVersionNumber = Integer.toString(BuildConfig.VERSION_CODE);
+                //   releaseVersionNumber = BuildConfig.VERSION_NAME;
                 bundleID = context.getPackageName();
 
             }

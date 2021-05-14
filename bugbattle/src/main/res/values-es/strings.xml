@@ -1,24 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name_bb">bugbattle</string>
-    <string name="image" />
-    <string name="imageview_cancel">Cerrar</string>
-    <string name="imageview_next">Siguiente</string>
-    <string name="imageview_title">Informar de un error</string>
-    <string name="report_cancel">Atrás</string>
-    <string name="report_next">Enviar</string>
-    <string name="report_title">Informar de un error</string>
-    <string name="report_email_placeholder">Introduzca su dirección de correo electrónico</string>
-    <string name="report_description_placeholder">Describa el error</string>
-    <string name="report_priority_low">Baja</string>
-    <string name="report_priority_medium">Media</string>
-    <string name="report_priority_high">Alta</string>
-    <string name="report_loading">Enviar un informe de error&#8230;</string>
-    <string name="report_done">¡Gracias por informarnos del error!</string>
-    <string name="report_error">Se ha producido un error.</string>
-    <string name="error_email">Tienes que ingresar un correo electrónico.</string>
-    <string name="policy">He leído y acepto la &lt;font color="#019AE8"&gt;política de privacidad&lt;/font&gt;.</string>
-    <string name="report_privacy_policy_alert">Lea y acepte la política de privacidad.</string>
-    <string name="back_to_app">Volver a la aplicación.</string>
-    <string name="back_to_app_msg">¿Quieres volver a la aplicación?</string>
+    <string name="bb_imageview_cancel">Cerrar</string>
+    <string name="bb_imageview_next">Siguiente</string>
+    <string name="bb_imageview_title">Informar de un error</string>
+    <string name="bb_report_cancel">Atrás</string>
+    <string name="bb_report_next">Enviar</string>
+    <string name="bb_report_title">Informar de un error</string>
+    <string name="bb_report_email_placeholder">Introduzca su dirección de correo electrónico</string>
+    <string name="bb_report_description_placeholder">Describa el error</string>
+    <string name="bb_report_priority_low">Baja</string>
+    <string name="bb_report_priority_medium">Media</string>
+    <string name="bb_report_priority_high">Alta</string>
+    <string name="bb_report_loading">Enviar un informe de error&#8230;</string>
+    <string name="bb_report_done">¡Gracias por informarnos del error!</string>
+    <string name="bb_report_error">Se ha producido un error.</string>
+    <string name="bb_error_email">Tienes que ingresar un correo electrónico.</string>
+    <string name="bb_policy">He leído y acepto la &lt;font color="#019AE8"&gt;política de privacidad&lt;/font&gt;.</string>
+    <string name="bb_report_privacy_policy_alert">Lea y acepte la política de privacidad.</string>
+    <string name="bb_back_to_app">Volver a la aplicación.</string>
+    <string name="bb_back_to_app_msg">¿Quieres volver a la aplicación?</string>
 </resources>

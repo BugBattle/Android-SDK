@@ -180,7 +180,7 @@ public class Feedback extends AppCompatActivity implements OnHttpResponseListene
         descriptionEditText = findViewById(R.id.description);
         emailEditText = findViewById(R.id.bb_email);
         policyText = findViewById(R.id.policyText);
-        policyText.setText(Html.fromHtml(getString(R.string.policy)));
+        policyText.setText(Html.fromHtml(getString(R.string.bb_policy)));
         privacySwitch = findViewById(R.id.bb_privacyswitch);
 
 
@@ -224,7 +224,7 @@ public class Feedback extends AppCompatActivity implements OnHttpResponseListene
             @Override
             public void onClick(View view) {
                 if (emailEditText.length() <= 0) {
-                    Toast.makeText(getApplicationContext(), getString(R.string.error_email), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), getString(R.string.bb_error_email), Toast.LENGTH_SHORT).show();
                     return;
                 }
                 if (privacyIsToggled || !feedbackModel.isPrivacyEnabled()) {
@@ -241,9 +241,9 @@ public class Feedback extends AppCompatActivity implements OnHttpResponseListene
                         e.printStackTrace();
                     }
                 } else {
-                    System.out.println(R.string.report_privacy_policy_alert);
+                    System.out.println(R.string.bb_report_privacy_policy_alert);
                     Toast.makeText(getApplicationContext(),
-                            getString(R.string.report_privacy_policy_alert),
+                            getString(R.string.bb_report_privacy_policy_alert),
                             Toast.LENGTH_SHORT).show();
                 }
             }

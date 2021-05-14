@@ -1,26 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name_bb">bugbattle</string>
-    <string name="image" />
-    <string name="imageview_cancel">Annuleer</string>
-    <string name="imageview_next">Volgende</string>
-    <string name="imageview_title">Meld een bug</string>
-    <string name="report_cancel">Terug</string>
-    <string name="report_next">Volgende</string>
-    <string name="report_title">Meld een bug</string>
-    <string name="report_email_placeholder">Voer je e-mailadres in</string>
-    <string name="report_description_placeholder">Omschrijf het probleem</string>
-    <string name="report_priority_low">Laag</string>
-    <string name="report_priority_medium">Middel</string>
-    <string name="report_priority_high">Hoog</string>
-    <string name="report_loading">Feedback wordt verzonden &#8230;</string>
-    <string name="report_done">Dank je wel!</string>
-    <string name="report_error">Oeps! Er is iets misgegaan.</string>
-    <string name="error_email">U moet een e-mailadres invoeren.</string>
-    <string name="policy">Ik ga akkoord met  &lt;font color="#019AE8"&gt;privacy voorwaarden&lt;/font&gt;.</string>
-    <string name="report_privacy_policy_alert">Graag de privacy voorwaarden lezen en accorderen</string>
-    <string name="back_to_app">Terug naar de app.</string>
-    <string name="back_to_app_msg">Wil je terug naar de app?</string>
+    <string name="bb_imageview_cancel">Annuleer</string>
+    <string name="bb_imageview_next">Volgende</string>
+    <string name="bb_imageview_title">Meld een bug</string>
+    <string name="bb_report_cancel">Terug</string>
+    <string name="bb_report_next">Volgende</string>
+    <string name="bb_report_title">Meld een bug</string>
+    <string name="bb_report_email_placeholder">Voer je e-mailadres in</string>
+    <string name="bb_report_description_placeholder">Omschrijf het probleem</string>
+    <string name="bb_report_priority_low">Laag</string>
+    <string name="bb_report_priority_medium">Middel</string>
+    <string name="bb_report_priority_high">Hoog</string>
+    <string name="bb_report_loading">Feedback wordt verzonden &#8230;</string>
+    <string name="bb_report_done">Dank je wel!</string>
+    <string name="bb_report_error">Oeps! Er is iets misgegaan.</string>
+    <string name="bb_error_email">U moet een e-mailadres invoeren.</string>
+    <string name="bb_policy">Ik ga akkoord met  &lt;font color="#019AE8"&gt;privacy voorwaarden&lt;/font&gt;.</string>
+    <string name="bb_report_privacy_policy_alert">Graag de privacy voorwaarden lezen en accorderen</string>
+    <string name="bb_back_to_app">Terug naar de app.</string>
+    <string name="bb_back_to_app_msg">Wil je terug naar de app?</string>
 </resources>
 
 

@@ -1,24 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name_bb">bugbattle</string>
-    <string name="image" />
-    <string name="imageview_cancel">Chiudi</string>
-    <string name="imageview_next">Avanti</string>
-    <string name="imageview_title">Segnalare un bug</string>
-    <string name="report_cancel">Indietro</string>
-    <string name="report_next">Invia</string>
-    <string name="report_title">Segnalare un bug</string>
-    <string name="report_email_placeholder">Inserisci la tua mail</string>
-    <string name="report_description_placeholder">Descrivete il vostro problema</string>
-    <string name="report_priority_low">Bassa</string>
-    <string name="report_priority_medium">Media</string>
-    <string name="report_priority_high">Alta</string>
-    <string name="report_loading">Inviare il tuo bug report &#8230;</string>
-    <string name="report_done">Grazie per il tuo bug report!</string>
-    <string name="report_error">Qualcosa è andato storto.</string>
-    <string name="error_email">Devi inserire un\'e-mail.</string>
-    <string name="policy">Ho letto e accettato la &lt;font color="#019AE8"&gt;informativa sulla privacy&lt;/font&gt;.</string>
-    <string name="report_privacy_policy_alert">Graag de privacy voorwaarden lezen en accorderen</string>
-    <string name="back_to_app">Torna all\'app.</string>
-    <string name="back_to_app_msg">Vuoi tornare all\'app?</string>
+    <string name="bb_imageview_cancel">Chiudi</string>
+    <string name="bb_imageview_next">Avanti</string>
+    <string name="bb_imageview_title">Segnalare un bug</string>
+    <string name="bb_report_cancel">Indietro</string>
+    <string name="bb_report_next">Invia</string>
+    <string name="bb_report_title">Segnalare un bug</string>
+    <string name="bb_report_email_placeholder">Inserisci la tua mail</string>
+    <string name="bb_report_description_placeholder">Descrivete il vostro problema</string>
+    <string name="bb_report_priority_low">Bassa</string>
+    <string name="bb_report_priority_medium">Media</string>
+    <string name="bb_report_priority_high">Alta</string>
+    <string name="bb_report_loading">Inviare il tuo bug report &#8230;</string>
+    <string name="bb_report_done">Grazie per il tuo bug report!</string>
+    <string name="bb_report_error">Qualcosa è andato storto.</string>
+    <string name="bb_error_email">Devi inserire un\'e-mail.</string>
+    <string name="bb_policy">Ho letto e accettato la &lt;font color="#019AE8"&gt;informativa sulla privacy&lt;/font&gt;.</string>
+    <string name="bb_report_privacy_policy_alert">Graag de privacy voorwaarden lezen en accorderen</string>
+    <string name="bb_back_to_app">Torna all\'app.</string>
+    <string name="bb_back_to_app_msg">Vuoi tornare all\'app?</string>
 </resources>

@@ -110,8 +110,8 @@ public class ImageEditor extends AppCompatActivity {
         if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
             // do something on back.
             AlertDialog alertDialog = new AlertDialog.Builder(ImageEditor.this).create();
-            alertDialog.setTitle(getString(R.string.back_to_app));
-            alertDialog.setMessage(getString(R.string.back_to_app_msg));
+            alertDialog.setTitle(getString(R.string.bb_back_to_app));
+            alertDialog.setMessage(getString(R.string.bb_back_to_app_msg));
             alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "No",
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {

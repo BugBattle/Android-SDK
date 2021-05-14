@@ -47,7 +47,7 @@
                     android:id="@+id/bb_error_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/report_error"
+                    android:text="@string/bb_report_error"
                     android:textColor="@android:color/black"
                     android:textSize="24sp"
                     app:layout_constraintBottom_toBottomOf="@+id/view"
@@ -104,7 +104,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="8dp"
                     android:layout_marginRight="8dp"
-                    android:text="@string/report_done"
+                    android:text="@string/bb_report_done"
                     android:textAppearance="@style/TextAppearance.AppCompat"
                     android:textColor="@android:color/black"
                     android:textSize="24sp"
@@ -148,7 +148,7 @@
                     android:layout_marginLeft="34dp"
                     android:layout_marginEnd="34dp"
                     android:layout_marginRight="34dp"
-                    android:text="@string/report_loading"
+                    android:text="@string/bb_report_loading"
                     android:textAppearance="@style/TextAppearance.AppCompat"
                     android:textColor="@android:color/black"
                     android:textSize="24sp"
@@ -196,7 +196,7 @@
                     android:layout_marginTop="1dp"
                     android:gravity="left"
                     android:lines="2"
-                    android:text="@string/policy"
+                    android:text="@string/bb_policy"
                     android:textSize="16dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/bb_privacyswitch"
@@ -253,7 +253,7 @@
                     android:enabled="false"
                     android:gravity="center"
                     android:inputType="none"
-                    android:text="@string/report_title"
+                    android:text="@string/bb_report_title"
                     android:textColor="@color/black"
                     android:textSize="16dp"
                     android:textStyle="bold"
@@ -270,7 +270,7 @@
                     android:layout_marginEnd="20dp"
                     android:background="@null"
                     android:ems="10"
-                    android:hint="@string/report_email_placeholder"
+                    android:hint="@string/bb_report_email_placeholder"
                     android:inputType="textEmailAddress"
                     android:textColor="#000000"
                     android:textColorHighlight="@android:color/black"
@@ -302,7 +302,7 @@
                     android:layout_marginRight="20dp"
                     android:background="@null"
                     android:ems="10"
-                    android:hint="@string/report_description_placeholder"
+                    android:hint="@string/bb_report_description_placeholder"
                     android:inputType="textMultiLine"
                     android:minHeight="50dp"
                     android:singleLine="false"
@@ -330,7 +330,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="50dp"
                     android:background="#00000000"
-                    android:text="@string/report_next"
+                    android:text="@string/bb_report_next"
                     android:textAllCaps="false"
                     android:textColor="@color/bb_blue"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -341,7 +341,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="50dp"
                     android:background="#00000000"
-                    android:text="@string/report_cancel"
+                    android:text="@string/bb_report_cancel"
                     android:textAllCaps="false"
                     android:textColor="@color/bb_blue"
                     app:layout_constraintStart_toStartOf="parent"
@@ -371,7 +371,7 @@
                         android:background="@drawable/radio_btn_left"
                         android:button="@android:color/transparent"
                         android:gravity="center"
-                        android:text="@string/report_priority_low"
+                        android:text="@string/bb_report_priority_low"
                         android:textColor="@color/black" />
 
                     <RadioButton
@@ -383,7 +383,7 @@
                         android:button="@android:color/transparent"
                         android:checked="true"
                         android:gravity="center"
-                        android:text="@string/report_priority_medium"
+                        android:text="@string/bb_report_priority_medium"
                         android:textColor="@color/black" />
 
                     <RadioButton
@@ -394,7 +394,7 @@
                         android:background="@drawable/radio_btn_right"
                         android:button="@android:color/transparent"
                         android:gravity="center"
-                        android:text="@string/report_priority_high"
+                        android:text="@string/bb_report_priority_high"
                         android:textColor="@color/black" />
                 </RadioGroup>
 

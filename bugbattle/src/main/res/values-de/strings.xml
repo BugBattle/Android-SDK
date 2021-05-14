@@ -1,27 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name_bb">bugbattle</string>
-    <string name="image" />
-    <string name="imageview_cancel">Schließen</string>
-    <string name="imageview_next">Weiter</string>
-    <string name="imageview_title">Bug melden</string>
-    <string name="report_cancel">Zurück</string>
-    <string name="report_next">Senden</string>
-    <string name="report_title">Bug melden</string>
-    <string name="report_email_placeholder">Gib deine Email ein.</string>
-    <string name="report_description_placeholder">Beischreibe das Problem</string>
-    <string name="report_priority_low">Leicht</string>
-    <string name="report_priority_medium">Mittel</string>
-    <string name="report_priority_high">Schwer</string>
-    <string name="report_loading">Feedback wird gesendet &#8230;</string>
-    <string name="report_done">Danke für deinen Bug Report.</string>
-    <string name="error_email">Bitte hinterlege deine E-Mail Adresse.</string>
-
-    <string name="report_error">Ups, da ist etwas schief gelaufen.</string>
-    <string name="policy">Ich akzeptiere die  &lt;font color="#019AE8"&gt;Datenschutzerklärung&lt;/font&gt;.</string>
-    <string name="report_privacy_policy_alert">Du musst die Datenschutzrichtlinien akzeptieren.</string>
-    <string name="back_to_app">Zurück zur App</string>
-    <string name="back_to_app_msg">Willst du wirklich zurück in die App?</string>
+    <string name="bb_imageview_cancel">Schließen</string>
+    <string name="bb_imageview_next">Weiter</string>
+    <string name="bb_imageview_title">Bug melden</string>
+    <string name="bb_report_cancel">Zurück</string>
+    <string name="bb_report_next">Senden</string>
+    <string name="bb_report_title">Bug melden</string>
+    <string name="bb_report_email_placeholder">Gib deine Email ein.</string>
+    <string name="bb_report_description_placeholder">Beischreibe das Problem</string>
+    <string name="bb_report_priority_low">Leicht</string>
+    <string name="bb_report_priority_medium">Mittel</string>
+    <string name="bb_report_priority_high">Schwer</string>
+    <string name="bb_report_loading">Feedback wird gesendet &#8230;</string>
+    <string name="bb_report_done">Danke für deinen Bug Report.</string>
+    <string name="bb_error_email">Bitte hinterlege deine E-Mail Adresse.</string>
+    <string name="bb_report_error">Ups, da ist etwas schief gelaufen.</string>
+    <string name="bb_policy">Ich akzeptiere die  &lt;font color="#019AE8"&gt;Datenschutzerklärung&lt;/font&gt;.</string>
+    <string name="bb_report_privacy_policy_alert">Du musst die Datenschutzrichtlinien akzeptieren.</string>
+    <string name="bb_back_to_app">Zurück zur App</string>
+    <string name="bb_back_to_app_msg">Willst du wirklich zurück in die App?</string>
 </resources>
 
 

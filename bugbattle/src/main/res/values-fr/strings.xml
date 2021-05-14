@@ -1,24 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name_bb">bugbattle</string>
-    <string name="image" />
-    <string name="imageview_cancel">Fermer</string>
-    <string name="imageview_next">Suivant</string>
-    <string name="imageview_title">Signaler un bug</string>
-    <string name="report_cancel">Retour</string>
-    <string name="report_next">Envoyer</string>
-    <string name="report_title">Signaler un bug</string>
-    <string name="report_email_placeholder">Entrez votre adresse mail</string>
-    <string name="report_description_placeholder">Décrivez votre problème</string>
-    <string name="report_priority_low">Faible</string>
-    <string name="report_priority_medium">Moyenne</string>
-    <string name="report_priority_high">Haute</string>
-    <string name="report_loading">Envoyer votre rapport de bug &#8230;</string>
-    <string name="report_done">Merci de votre rapport de bug!</string>
-    <string name="report_error">Oups, il y a eu un problème.</string>
-    <string name="error_email">Vous devez entrer un e-mail.</string>
-    <string name="policy">J\'ai lu et j\'accepte la &lt;font color="#019AE8"&gt;politique de privacité&lt;/font&gt;.</string>
-    <string name="report_privacy_policy_alert">Veuillez lire et accepter la politique de confidentialité.</string>
-    <string name="back_to_app">Revenez à l\'appli.</string>
-    <string name="back_to_app_msg">Voulez-vous revenir à l\'application?</string>
+    <string name="bb_imageview_cancel">Fermer</string>
+    <string name="bb_imageview_next">Suivant</string>
+    <string name="bb_imageview_title">Signaler un bug</string>
+    <string name="bb_report_cancel">Retour</string>
+    <string name="bb_report_next">Envoyer</string>
+    <string name="bb_report_title">Signaler un bug</string>
+    <string name="bb_report_email_placeholder">Entrez votre adresse mail</string>
+    <string name="bb_report_description_placeholder">Décrivez votre problème</string>
+    <string name="bb_report_priority_low">Faible</string>
+    <string name="bb_report_priority_medium">Moyenne</string>
+    <string name="bb_report_priority_high">Haute</string>
+    <string name="bb_report_loading">Envoyer votre rapport de bug &#8230;</string>
+    <string name="bb_report_done">Merci de votre rapport de bug!</string>
+    <string name="bb_report_error">Oups, il y a eu un problème.</string>
+    <string name="bb_error_email">Vous devez entrer un e-mail.</string>
+    <string name="bb_policy">J\'ai lu et j\'accepte la &lt;font color="#019AE8"&gt;politique de privacité&lt;/font&gt;.</string>
+    <string name="bb_report_privacy_policy_alert">Veuillez lire et accepter la politique de confidentialité.</string>
+    <string name="bb_back_to_app">Revenez à l\'appli.</string>
+    <string name="bb_back_to_app_msg">Voulez-vous revenir à l\'application?</string>
 </resources>
