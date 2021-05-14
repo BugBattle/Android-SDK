@@ -10,13 +10,14 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.RequiresApi;
-import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatActivity;
 
 import bugbattle.io.bugbattle.R;
 import bugbattle.io.bugbattle.controller.LanguageController;
@@ -59,8 +60,12 @@ public class ImageEditor extends AppCompatActivity {
         }
         service = FeedbackModel.getInstance();
         if (android.os.Build.VERSION.SDK_INT > Build.VERSION_CODES.O) {
-            if (service.getScreenshot().getWidth() > service.getScreenshot().getHeight()) {
-                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
+            if (service.getScreenshot() != null) {
+                if (service.getScreenshot().getWidth() > service.getScreenshot().getHeight()) {
+                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
+                } else {
+                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT);
+                }
             } else {
                 setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT);
             }

@@ -32,7 +32,9 @@ public class Replay {
         if (ringBufferCounter == 0) {
             currentIndex = ringBufferCounter + 1;
         }
-        screenshots[currentIndex - 1].addInteraction(interaction);
+        if (screenshots[currentIndex - 1] != null) {
+            screenshots[currentIndex - 1].addInteraction(interaction);
+        }
     }
 
     public void reset() {
