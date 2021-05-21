@@ -29,7 +29,6 @@ public class TouchGestureDetector extends BBDetector {
             relativeLayout.setClickable(true);
             relativeLayout.setOnTouchListener(new View.OnTouchListener() {
                 public boolean onTouch(View v, MotionEvent event) {
-                    System.out.println("CLICKED?");
                     if (!isDisabled) {
                         int action = event.getAction();
                         switch (action & MotionEvent.ACTION_MASK) {
@@ -38,7 +37,6 @@ public class TouchGestureDetector extends BBDetector {
                                 if (count >= NUMBER_OF_FINGERS) {
                                     long clickTime = System.currentTimeMillis();
                                     if (clickTime - lastClickTime < DOUBLE_CLICK_TIME_DELTA) {
-                                        System.out.println("CLICKED?");
                                         pause();
                                         takeScreenshot();
                                         lastClickTime = 0;
@@ -65,7 +63,6 @@ public class TouchGestureDetector extends BBDetector {
                 relativeLayout.setClickable(true);
                 relativeLayout.setOnTouchListener(new View.OnTouchListener() {
                     public boolean onTouch(View v, MotionEvent event) {
-                        System.out.println(event.getX() + "," + event.getY());
                         if (!isDisabled) {
                             int action = event.getAction();
                             switch (action & MotionEvent.ACTION_MASK) {

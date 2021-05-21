@@ -16,7 +16,8 @@
     <string name="bb_report_done">Danke für deinen Bug Report.</string>
     <string name="bb_error_email">Bitte hinterlege deine E-Mail Adresse.</string>
     <string name="bb_report_error">Ups, da ist etwas schief gelaufen.</string>
-    <string name="bb_policy">Ich akzeptiere die  &lt;font color="#019AE8"&gt;Datenschutzerklärung&lt;/font&gt;.</string>
+    <string name="bb_policy">Ich akzeptiere die</string>
+    <string name="bb_policy_end">Datenschutzerklärung.</string>
     <string name="bb_report_privacy_policy_alert">Du musst die Datenschutzrichtlinien akzeptieren.</string>
     <string name="bb_back_to_app">Zurück zur App</string>
     <string name="bb_back_to_app_msg">Willst du wirklich zurück in die App?</string>

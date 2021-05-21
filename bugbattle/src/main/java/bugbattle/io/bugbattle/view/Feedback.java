@@ -5,12 +5,18 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
-import android.text.Html;
+import android.text.SpannableString;
+import android.text.Spanned;
 import android.text.TextWatcher;
+import android.text.style.ClickableSpan;
+import android.text.style.ForegroundColorSpan;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
@@ -24,8 +30,6 @@ import android.widget.RadioButton;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import androidx.appcompat.app.AppCompatActivity;
 
 import bugbattle.io.bugbattle.R;
 import bugbattle.io.bugbattle.controller.LanguageController;
@@ -180,10 +184,28 @@ public class Feedback extends AppCompatActivity implements OnHttpResponseListene
         cancleButton = findViewById(R.id.bb_btncancle);
         descriptionEditText = findViewById(R.id.description);
         emailEditText = findViewById(R.id.bb_email);
-        policyText = findViewById(R.id.policyText);
-        policyText.setText(Html.fromHtml(getString(R.string.bb_policy)));
+
         privacySwitch = findViewById(R.id.bb_privacyswitch);
 
+        String policyStart = getString(R.string.bb_policy);
+        String policyEnd = getString(R.string.bb_policy_end);
+        String wholePolicyText = policyStart + " " + policyEnd;
+
+        SpannableString spannableString = new SpannableString(wholePolicyText);
+        ClickableSpan clickableSpan = new ClickableSpan() {
+            @Override
+            public void onClick(@NonNull View view) {
+                Intent i = new Intent(Intent.ACTION_VIEW);
+                i.setData(Uri.parse(FeedbackModel.getInstance().getPrivacyUrl()));
+                startActivity(i);
+            }
+        };
+
+        ForegroundColorSpan foregroundColorSpan = new ForegroundColorSpan(Color.rgb(57, 140, 254));
+        spannableString.setSpan(clickableSpan, policyStart.length() + 1, wholePolicyText.length() - 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        spannableString.setSpan(foregroundColorSpan, policyStart.length(), wholePolicyText.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        policyText = findViewById(R.id.policyText);
+        policyText.setText(spannableString);
 
         backToEditImageButton = findViewById(R.id.bb_edit_btn);
 
@@ -242,7 +264,6 @@ public class Feedback extends AppCompatActivity implements OnHttpResponseListene
                         e.printStackTrace();
                     }
                 } else {
-                    System.out.println(R.string.bb_report_privacy_policy_alert);
                     Toast.makeText(getApplicationContext(),
                             getString(R.string.bb_report_privacy_policy_alert),
                             Toast.LENGTH_SHORT).show();

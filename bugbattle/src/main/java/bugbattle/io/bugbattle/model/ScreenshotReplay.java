@@ -20,7 +20,6 @@ public class ScreenshotReplay {
 
     public void addInteraction(Interaction interaction) {
         this.interactions.add(interaction);
-        System.out.println(this.interactions.size());
     }
 
     public LinkedList<Interaction> getInteractions() {

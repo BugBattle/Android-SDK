@@ -1,8 +1,7 @@
 package bugbattle.io.bugbattle.service;
 
 import android.os.Build;
-
-import androidx.annotation.RequiresApi;
+import android.support.annotation.RequiresApi;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -67,27 +66,26 @@ public class FormDataHttpsHelper {
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void addFilePart(File uploadFile)
             throws IOException {
-        if (uploadFile != null) {
-            String fileName = uploadFile.getName();
-            request.writeBytes(this.twoHyphens + this.boundary + this.crlf);
-            request.writeBytes("Content-Disposition: form-data; name=\"file\";filename=\"" +
-                    fileName + "\"" + this.crlf);
-            request.writeBytes("Content-Type: " +
-                    "" + URLConnection.guessContentTypeFromName(fileName) + this.crlf + this.crlf);
-            int size = (int) uploadFile.length();
-            byte[] bytes = new byte[size];
-            try {
-                BufferedInputStream buf = new BufferedInputStream(new FileInputStream(uploadFile));
-                buf.read(bytes, 0, bytes.length);
-                buf.close();
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            request.write(bytes);
-            request.writeBytes(this.crlf);
+        String fileName = uploadFile.getName();
+        request.writeBytes(this.twoHyphens + this.boundary + this.crlf);
+        request.writeBytes("Content-Disposition: form-data; name=\"file\";filename=\"" +
+                fileName + "\"" + this.crlf);
+        request.writeBytes("Content-Type: " +
+                "" + URLConnection.guessContentTypeFromName(fileName) + this.crlf + this.crlf);
+        int size = (int) uploadFile.length();
+        byte[] bytes = new byte[size];
+        try {
+            BufferedInputStream buf = new BufferedInputStream(new FileInputStream(uploadFile));
+            buf.read(bytes, 0, bytes.length);
+            buf.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+        request.write(bytes);
+        request.writeBytes(this.crlf);
+
     }
 
 

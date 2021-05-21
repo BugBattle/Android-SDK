@@ -116,6 +116,7 @@ public class ScreenshotUtil {
     }
 
     private static Bitmap getResizedBitmap(Bitmap bm, float downScale) {
+
         int width = bm.getWidth();
         int height = bm.getHeight();
         Matrix matrix = new Matrix();

@@ -16,7 +16,8 @@
     <string name="bb_report_done">Thank you for your bug report!</string>
     <string name="bb_report_error">Oops, something went wrong.</string>
     <string name="bb_error_email">You have to enter an email.</string>
-    <string name="bb_policy">I have read and agree to the  &lt;font color="#019AE8"&gt;privacy policy&lt;/font&gt;.</string>
+    <string name="bb_policy">I have read and agree to the  </string>
+    <string name="bb_policy_end">privacy policy.</string>
     <string name="bb_report_privacy_policy_alert">Please read and accept the privacy policy.</string>
     <string name="bb_back_to_app">Back to the app</string>
     <string name="bb_back_to_app_msg">Do you want to go back to the app?</string>

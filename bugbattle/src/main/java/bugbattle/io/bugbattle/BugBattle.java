@@ -242,7 +242,7 @@ public class BugBattle {
      * Set the language for the BugBattle Report Flow. Otherwise the default language is used.
      * Supported Languages "en", "es", "fr", "it", "de", "nl"
      *
-     * @param language ISO Country Code eg. "en", "de", "es", "nl"
+     * @param language ISO Country Code eg. "cz," "en", "de", "es", "nl"
      */
     public static void setLanguage(String language) {
         FeedbackModel.getInstance().setLanguage(language);

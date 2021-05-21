@@ -16,7 +16,9 @@
     <string name="bb_report_done">¡Gracias por informarnos del error!</string>
     <string name="bb_report_error">Se ha producido un error.</string>
     <string name="bb_error_email">Tienes que ingresar un correo electrónico.</string>
-    <string name="bb_policy">He leído y acepto la &lt;font color="#019AE8"&gt;política de privacidad&lt;/font&gt;.</string>
+    <string name="bb_policy">He leído y acepto la </string>
+    <string name="bb_policy_end">política de privacidad.</string>
+
     <string name="bb_report_privacy_policy_alert">Lea y acepte la política de privacidad.</string>
     <string name="bb_back_to_app">Volver a la aplicación.</string>
     <string name="bb_back_to_app_msg">¿Quieres volver a la aplicación?</string>

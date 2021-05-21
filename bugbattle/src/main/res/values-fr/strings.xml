@@ -16,7 +16,9 @@
     <string name="bb_report_done">Merci de votre rapport de bug!</string>
     <string name="bb_report_error">Oups, il y a eu un problème.</string>
     <string name="bb_error_email">Vous devez entrer un e-mail.</string>
-    <string name="bb_policy">J\'ai lu et j\'accepte la &lt;font color="#019AE8"&gt;politique de privacité&lt;/font&gt;.</string>
+    <string name="bb_policy">J\'ai lu et j\'accepte la </string>
+    <string name="bb_policy_end">politique de privacité.</string>
+
     <string name="bb_report_privacy_policy_alert">Veuillez lire et accepter la politique de confidentialité.</string>
     <string name="bb_back_to_app">Revenez à l\'appli.</string>
     <string name="bb_back_to_app_msg">Voulez-vous revenir à l\'application?</string>

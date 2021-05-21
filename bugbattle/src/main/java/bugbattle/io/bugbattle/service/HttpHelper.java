@@ -4,8 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Build;
-
-import androidx.annotation.RequiresApi;
+import android.support.annotation.RequiresApi;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -153,7 +152,7 @@ public class HttpHelper extends AsyncTask<FeedbackModel, Void, Integer> {
      * @param bitmap image which is uploaded
      * @return return the file
      */
-    private File bitmapToFile(Bitmap bitmap) {
+    private File bitmapToFile(Bitmap bitmap) throws IOException {
         try {
             File outputDir = context.getCacheDir();
             File outputFile = File.createTempFile("file", ".png", outputDir);
@@ -191,13 +190,14 @@ public class HttpHelper extends AsyncTask<FeedbackModel, Void, Integer> {
         ScreenshotReplay[] replays = FeedbackModel.getInstance().getReplay().getScreenshots();
         List<Bitmap> bitmapList = new LinkedList<>();
 
-        for (ScreenshotReplay replay : replays) {
+        for (int i = 0; i < replays.length; i++) {
+            ScreenshotReplay replay = replays[i];
             if (replay != null) {
                 bitmapList.add(replay.getScreenshot());
             }
         }
 
-        JSONObject obj = uploadImages(bitmapList.toArray(new Bitmap[0]));
+        JSONObject obj = uploadImages(bitmapList.toArray(new Bitmap[bitmapList.size()]));
         JSONArray fileUrls = (JSONArray) obj.get("fileUrls");
         for (int i = 0; i < fileUrls.length(); i++) {
             JSONObject entry = new JSONObject();

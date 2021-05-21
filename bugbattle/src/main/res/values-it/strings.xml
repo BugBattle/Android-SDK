@@ -16,7 +16,8 @@
     <string name="bb_report_done">Grazie per il tuo bug report!</string>
     <string name="bb_report_error">Qualcosa è andato storto.</string>
     <string name="bb_error_email">Devi inserire un\'e-mail.</string>
-    <string name="bb_policy">Ho letto e accettato la &lt;font color="#019AE8"&gt;informativa sulla privacy&lt;/font&gt;.</string>
+    <string name="bb_policy">Ho letto e accettato la</string>
+    <string name="bb_policy_end">informativa sulla privacy.</string>
     <string name="bb_report_privacy_policy_alert">Graag de privacy voorwaarden lezen en accorderen</string>
     <string name="bb_back_to_app">Torna all\'app.</string>
     <string name="bb_back_to_app_msg">Vuoi tornare all\'app?</string>
