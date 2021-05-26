@@ -84,7 +84,8 @@
                 android:id="@+id/bb_done_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:visibility="invisible">
+                android:visibility="invisible"
+                tools:visibility="visible">
 
                 <View
                     android:id="@+id/bb_view"
@@ -100,10 +101,10 @@
 
                 <TextView
                     android:id="@+id/bb_done"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="8dp"
-                    android:layout_marginRight="8dp"
+                    android:gravity="center"
                     android:text="@string/bb_report_done"
                     android:textAppearance="@style/TextAppearance.AppCompat"
                     android:textColor="@android:color/black"
@@ -142,13 +143,13 @@
 
                 <TextView
                     android:id="@+id/bb_loading"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="34dp"
-                    android:layout_marginLeft="34dp"
                     android:layout_marginEnd="34dp"
-                    android:layout_marginRight="34dp"
+                    android:gravity="center"
                     android:text="@string/bb_report_loading"
+                    android:textAlignment="center"
                     android:textAppearance="@style/TextAppearance.AppCompat"
                     android:textColor="@android:color/black"
                     android:textSize="24sp"
@@ -181,7 +182,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:isScrollContainer="true"
-                android:visibility="visible"
+                android:visibility="invisible"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="1.0"
@@ -204,13 +205,13 @@
 
                 <Switch
                     android:id="@+id/bb_privacyswitch"
-                    android:theme="@style/SwitchCompatTheme"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
                     android:layout_marginTop="20dp"
                     android:textColor="@color/bb_blue"
                     android:textColorHighlight="@color/bb_blue"
+                    android:theme="@style/SwitchCompatTheme"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/bb_view2" />
 
@@ -268,13 +269,13 @@
                     android:layout_marginStart="20dp"
                     android:layout_marginTop="20dp"
                     android:layout_marginEnd="20dp"
+                    android:autoLink="web"
                     android:background="@null"
                     android:ems="10"
                     android:hint="@string/bb_report_email_placeholder"
                     android:inputType="textEmailAddress"
                     android:textColor="#000000"
                     android:textColorHighlight="@android:color/black"
-                    android:autoLink="web"
                     android:textColorHint="#dddddd"
                     android:visibility="visible"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -349,7 +350,7 @@
 
                 <RadioGroup
                     android:id="@+id/radioGroup"
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="40dp"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="25dp"
@@ -363,22 +364,24 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/bb_header">
 
+
                     <RadioButton
                         android:id="@+id/priorityLow"
-                        android:layout_width="123dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="0"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_weight="1"
                         android:background="@drawable/radio_btn_left"
                         android:button="@android:color/transparent"
                         android:gravity="center"
                         android:text="@string/bb_report_priority_low"
                         android:textColor="@color/black" />
 
+
                     <RadioButton
                         android:id="@+id/priorityMedium"
-                        android:layout_width="123dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="0"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_weight="1"
                         android:background="@drawable/radio_btn_center"
                         android:button="@android:color/transparent"
                         android:checked="true"
@@ -386,11 +389,12 @@
                         android:text="@string/bb_report_priority_medium"
                         android:textColor="@color/black" />
 
+
                     <RadioButton
                         android:id="@+id/priorityHigh"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="0"
+                        android:layout_height="40dp"
+                        android:layout_weight="1"
                         android:background="@drawable/radio_btn_right"
                         android:button="@android:color/transparent"
                         android:gravity="center"

@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -58,24 +57,15 @@ public class ImageEditor extends AppCompatActivity {
             System.out.println(ex);
         }
         service = FeedbackModel.getInstance();
-        if (android.os.Build.VERSION.SDK_INT > Build.VERSION_CODES.O) {
-            if (service.getScreenshot().getWidth() > service.getScreenshot().getHeight()) {
-                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
-            } else {
-                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT);
-            }
-        }
 
         imageView = findViewById(R.id.bb_image);
-        if (imageView != null && service.getScreenshot() != null) {
-            if (service.getScreenshot().getWidth() > service.getScreenshot().getHeight()) {
-
-                imageView.setImageBitmap(downscaleBitmap(service.getScreenshot()));
+        Bitmap screenshot = service.getScreenshot();
+        if (imageView != null && screenshot != null) {
+            if (screenshot.getWidth() > screenshot.getHeight()) {
+                imageView.setImageBitmap(downscaleBitmap(screenshot));
             } else {
-                imageView.setImageBitmap(service.getScreenshot());
+                imageView.setImageBitmap(screenshot);
             }
-        } else {
-
         }
 
         drawerView = findViewById(R.id.bb_drawerview);

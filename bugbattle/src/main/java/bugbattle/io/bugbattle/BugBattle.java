@@ -240,7 +240,7 @@ public class BugBattle {
 
     /**
      * Set the language for the BugBattle Report Flow. Otherwise the default language is used.
-     * Supported Languages "en", "es", "fr", "it", "de", "nl"
+     * Supported Languages "en", "es", "fr", "it", "de", "nl", "cz"
      *
      * @param language ISO Country Code eg. "cz," "en", "de", "es", "nl"
      */
