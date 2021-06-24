@@ -177,15 +177,26 @@ public class BBMainActivity extends AppCompatActivity implements OnHttpResponseL
     @Override
     public void onTaskComplete(int httpResponse) {
         if (httpResponse == 201) {
+
             new android.os.Handler().postDelayed(
-                    () -> {
-                        BBDetectorUtil.resumeAllDetectors();
-                        BugBattleBug.getInstance().setDisabled(false);
-                        findViewById(R.id.bb_loadingBar).setVisibility(View.INVISIBLE);
-                        findViewById(R.id.bb_success).setVisibility(View.VISIBLE);
-                        Handler handler = new Handler();
-                        handler.postDelayed(() -> finish(), 1500);
+                    new Runnable() {
+                        public void run() {
+                            BBDetectorUtil.resumeAllDetectors();
+                            BugBattleBug.getInstance().setDisabled(false);
+                            findViewById(R.id.bb_loadingBar).setVisibility(View.INVISIBLE);
+                            findViewById(R.id.bb_success).setVisibility(View.VISIBLE);
+                            Handler handler = new Handler();
+                            handler.postDelayed(new Runnable() {
+                                public void run() {
+                                    finish();
+                                }
+                            }, 1500);
+
+
+                        }
                     }, 10);
+        } else {
+            //display error
         }
     }
 
@@ -251,33 +262,40 @@ public class BBMainActivity extends AppCompatActivity implements OnHttpResponseL
 
         @JavascriptInterface
         public void selectedMenuOption(String option) {
-            this.mContext.runOnUiThread(() -> {
-                mContext.findViewById(R.id.bb_btncancle).setVisibility(View.GONE);
-                mContext.findViewById(R.id.bb_btnback).setVisibility(View.VISIBLE);
+            this.mContext.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    mContext.findViewById(R.id.bb_btncancle).setVisibility(View.GONE);
+                    mContext.findViewById(R.id.bb_btnback).setVisibility(View.VISIBLE);
+                }
             });
         }
 
         @JavascriptInterface
         public void openScreenshotEditor(String metadata) {
-            this.mContext.runOnUiThread(() -> {
-                try {
-                    JSONObject jsonObject = new JSONObject(metadata);
-                    editorIsFirstScreen = jsonObject.getBoolean("screenshotEditorIsFirstStep");
-                } catch (Exception e) {
-                    e.printStackTrace();
+            this.mContext.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        JSONObject jsonObject = new JSONObject(metadata);
+                        editorIsFirstScreen = jsonObject.getBoolean("screenshotEditorIsFirstStep");
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    if (imageEditor == null) {
+                        imageEditor = new ImageEditor(mContext);
+                        imageEditor.init();
+                    }
+                    findViewById(R.id.bb_next).setVisibility(View.VISIBLE);
+                    findViewById(R.id.bb_feedback).setVisibility(View.VISIBLE);
                 }
-                if (imageEditor == null) {
-                    imageEditor = new ImageEditor(mContext);
-                    imageEditor.init();
-                }
-                findViewById(R.id.bb_next).setVisibility(View.VISIBLE);
-                findViewById(R.id.bb_feedback).setVisibility(View.VISIBLE);
             });
 
         }
 
         @JavascriptInterface
         public void customActionCalled(String object) {
+            System.out.println(object);
             try {
                 JSONObject jsonObject = new JSONObject(object);
                 String method = jsonObject.getString("name");
@@ -295,20 +313,23 @@ public class BBMainActivity extends AppCompatActivity implements OnHttpResponseL
 
         @JavascriptInterface
         public void sendFeedback(String object) {
-            this.mContext.runOnUiThread(() -> {
-                findViewById(R.id.bb_loadingBar).setVisibility(View.VISIBLE);
-                findViewById(R.id.bb_webview).setVisibility(View.INVISIBLE);
-                findViewById(R.id.bb_btncancle).setVisibility(View.INVISIBLE);
-                findViewById(R.id.bb_btnback).setVisibility(View.INVISIBLE);
-                findViewById(R.id.bb_next).setVisibility(View.INVISIBLE);
-                BugBattleBug bugBattleBug = BugBattleBug.getInstance();
-                new HttpHelper(BBMainActivity.this, getApplicationContext()).execute(bugBattleBug);
-                try {
-                    JSONObject jsonObject = new JSONObject(object);
-                    bugBattleBug.setData(jsonObject);
+            this.mContext.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    findViewById(R.id.bb_loadingBar).setVisibility(View.VISIBLE);
+                    findViewById(R.id.bb_webview).setVisibility(View.INVISIBLE);
+                    findViewById(R.id.bb_btncancle).setVisibility(View.INVISIBLE);
+                    findViewById(R.id.bb_btnback).setVisibility(View.INVISIBLE);
+                    findViewById(R.id.bb_next).setVisibility(View.INVISIBLE);
+                    BugBattleBug bugBattleBug = BugBattleBug.getInstance();
+                    new HttpHelper(BBMainActivity.this, getApplicationContext()).execute(bugBattleBug);
+                    try {
+                        JSONObject jsonObject = new JSONObject(object);
+                        bugBattleBug.setData(jsonObject);
 
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 }
             });
         }
