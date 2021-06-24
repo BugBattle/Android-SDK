@@ -159,63 +159,22 @@ public class ImageEditor {
     }
 
     private void setOnClickListener() {
-        red.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                setBackgroundColor(SELECTED_COLOR.RED);
-            }
-        });
-        blue.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                setBackgroundColor(SELECTED_COLOR.BLUE);
-            }
-        });
-        yellow.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                setBackgroundColor(SELECTED_COLOR.YELLOW);
-            }
-        });
+        red.setOnClickListener(view -> setBackgroundColor(SELECTED_COLOR.RED));
+        blue.setOnClickListener(view -> setBackgroundColor(SELECTED_COLOR.BLUE));
+        yellow.setOnClickListener(view -> setBackgroundColor(SELECTED_COLOR.YELLOW));
 
-        blur.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                setBackgroundColor(SELECTED_COLOR.BLUR);
-                generateColorPickerWheel(SELECTED_COLOR.BLUR);
+        blur.setOnClickListener(view -> {
+            setBackgroundColor(SELECTED_COLOR.BLUR);
+            generateColorPickerWheel(SELECTED_COLOR.BLUR);
 
-            }
         });
-        colorWheelRed.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                openColorPickerMenu();
-            }
-        });
-        colorWheelBlue.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                openColorPickerMenu();
-            }
-        });
-        colorWheelYellow.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                openColorPickerMenu();
-            }
-        });
-        closeColorPicker.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                closeColorPickerMenu();
-            }
-        });
-        undo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (drawerView != null) {
-                    drawerView.undoLastStep();
-                }
+        colorWheelRed.setOnClickListener(view -> openColorPickerMenu());
+        colorWheelBlue.setOnClickListener(view -> openColorPickerMenu());
+        colorWheelYellow.setOnClickListener(view -> openColorPickerMenu());
+        closeColorPicker.setOnClickListener(view -> closeColorPickerMenu());
+        undo.setOnClickListener(view -> {
+            if (drawerView != null) {
+                drawerView.undoLastStep();
             }
         });
 
@@ -223,8 +182,7 @@ public class ImageEditor {
     }
 
     public Bitmap getEditedImage() {
-        Bitmap mergedImage = ImageMerger.mergeImages(loadBitmapFromView(imageView), loadBitmapFromView(drawerView));
-        return mergedImage;
+        return ImageMerger.mergeImages(loadBitmapFromView(imageView), loadBitmapFromView(drawerView));
     }
 
     private Bitmap loadBitmapFromView(View v) {

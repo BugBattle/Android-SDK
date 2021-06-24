@@ -36,7 +36,7 @@ public class StepsToReproduce {
             step.put("date", new Date().toString());
             steps.put(step);
         } catch (Exception e) {
-            System.out.println(e);
+            e.printStackTrace();
         }
     }
 

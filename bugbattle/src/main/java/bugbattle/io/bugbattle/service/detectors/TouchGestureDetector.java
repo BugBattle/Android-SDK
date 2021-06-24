@@ -29,64 +29,53 @@ public class TouchGestureDetector extends BBDetector {
         if (this.activity != null) {
             View relativeLayout = this.activity.getWindow().getDecorView().getRootView();
             relativeLayout.setClickable(true);
-            relativeLayout.setOnTouchListener(new View.OnTouchListener() {
-                public boolean onTouch(View v, MotionEvent event) {
-                    if (!isDisabled) {
-                        int action = event.getAction();
-                        switch (action & MotionEvent.ACTION_MASK) {
-                            case MotionEvent.ACTION_POINTER_UP:
-                                int count = event.getPointerCount();
-                                if (count >= NUMBER_OF_FINGERS) {
-                                    long clickTime = System.currentTimeMillis();
-                                    if (clickTime - lastClickTime < DOUBLE_CLICK_TIME_DELTA) {
-                                        pause();
-                                        takeScreenshot();
-                                        lastClickTime = 0;
-                                        return true;
-                                    }
-                                    lastClickTime = clickTime;
-                                }
-                                break;
+            relativeLayout.setOnTouchListener((v, event) -> {
+                if (!isDisabled) {
+                    int action = event.getAction();
+                    if ((action & MotionEvent.ACTION_MASK) == MotionEvent.ACTION_POINTER_UP) {
+                        int count = event.getPointerCount();
+                        if (count >= NUMBER_OF_FINGERS) {
+                            long clickTime = System.currentTimeMillis();
+                            if (clickTime - lastClickTime < DOUBLE_CLICK_TIME_DELTA) {
+                                pause();
+                                takeScreenshot();
+                                lastClickTime = 0;
+                                return true;
+                            }
+                            lastClickTime = clickTime;
                         }
                     }
-                    return true;
                 }
+                return true;
             });
         }
         /**
          * Attach listener to each new activity
          */
        application.registerActivityLifecycleCallbacks(new Application.ActivityLifecycleCallbacks() {
-            private View.OnClickListener onClickListener = null;
-
             @Override
             public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
                 View relativeLayout = activity.getWindow().getDecorView().getRootView();
                 relativeLayout.setClickable(true);
-                relativeLayout.setOnTouchListener(new View.OnTouchListener() {
-                    public boolean onTouch(View v, MotionEvent event) {
-                        if (!isDisabled) {
-                            int action = event.getAction();
-                            switch (action & MotionEvent.ACTION_MASK) {
-                                case MotionEvent.ACTION_POINTER_UP:
-                                    int count = event.getPointerCount();
-                                    if (count >= NUMBER_OF_FINGERS) {
-                                        long clickTime = System.currentTimeMillis();
-                                        if (clickTime - lastClickTime < DOUBLE_CLICK_TIME_DELTA) {
-                                            pause();
-                                            takeScreenshot();
-                                            lastClickTime = 0;
-                                            return true;
-                                        }
-                                        lastClickTime = clickTime;
-                                    }
-                                    break;
+                relativeLayout.setOnTouchListener((v, event) -> {
+                    if (!isDisabled) {
+                        int action = event.getAction();
+                        if ((action & MotionEvent.ACTION_MASK) == MotionEvent.ACTION_POINTER_UP) {
+                            int count = event.getPointerCount();
+                            if (count >= NUMBER_OF_FINGERS) {
+                                long clickTime = System.currentTimeMillis();
+                                if (clickTime - lastClickTime < DOUBLE_CLICK_TIME_DELTA) {
+                                    pause();
+                                    takeScreenshot();
+                                    lastClickTime = 0;
+                                    return true;
+                                }
+                                lastClickTime = clickTime;
                             }
-
                         }
-                        return true;
-                        //do some stuff here
                     }
+                    return true;
+                    //do some stuff here
                 });
             }
 

@@ -62,7 +62,7 @@ interface iBugBattle {
     /**
      * Change the color of the appearance of the UI.
      *
-     * @param color
+     * @param color primary color
      */
     void setNavigationTint(String color);
 

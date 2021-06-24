@@ -87,7 +87,10 @@ public class HttpHelper extends AsyncTask<BugBattleBug, Void, Integer> {
     @RequiresApi(api = Build.VERSION_CODES.O)
     private JSONObject uploadImage (Bitmap image) throws IOException, JSONException {
         FormDataHttpsHelper multipart = new FormDataHttpsHelper(bbConfig.getApiUrl() + UPLOAD_IMAGE_BACKEND_URL_POSTFIX, bbConfig.getSdkKey());
-        multipart.addFilePart(bitmapToFile(image));
+        File file = bitmapToFile(image);
+        if (file != null) {
+            multipart.addFilePart(file);
+        }
         String response = multipart.finishAndUpload();
         return new JSONObject(response);
     }
@@ -96,7 +99,10 @@ public class HttpHelper extends AsyncTask<BugBattleBug, Void, Integer> {
     private JSONObject uploadImages (Bitmap[] images) throws IOException, JSONException {
         FormDataHttpsHelper multipart = new FormDataHttpsHelper(bbConfig.getApiUrl() + UPLOAD_IMAGE_MULTI_BACKEND_URL_POSTFIX, bbConfig.getSdkKey());
         for(Bitmap bitmap : images) {
-            multipart.addFilePart(bitmapToFile(bitmap));
+            File file = bitmapToFile(bitmap);
+            if (file != null) {
+                multipart.addFilePart(file);
+            }
         }
         String response = multipart.finishAndUpload();
         return new JSONObject(response);
@@ -150,7 +156,6 @@ public class HttpHelper extends AsyncTask<BugBattleBug, Void, Integer> {
             os.write(input, 0, input.length);
         }
 
-
         return conn.getResponseCode();
     }
 
@@ -160,7 +165,7 @@ public class HttpHelper extends AsyncTask<BugBattleBug, Void, Integer> {
      * @param bitmap image which is uploaded
      * @return return the file
      */
-    private File bitmapToFile(Bitmap bitmap) throws IOException {
+    private File bitmapToFile(Bitmap bitmap) {
         try {
             File outputDir = context.getCacheDir();
             File outputFile = File.createTempFile("file", ".png", outputDir);
@@ -172,7 +177,7 @@ public class HttpHelper extends AsyncTask<BugBattleBug, Void, Integer> {
             os.close();
             return outputFile;
         } catch (Exception e) {
-            System.out.println(e);
+            e.printStackTrace();
         }
         return null;
     }
@@ -198,8 +203,7 @@ public class HttpHelper extends AsyncTask<BugBattleBug, Void, Integer> {
         ScreenshotReplay[] replays = BugBattleBug.getInstance().getReplay().getScreenshots();
         List<Bitmap> bitmapList = new LinkedList<>();
 
-        for (int i = 0; i < replays.length; i++) {
-            ScreenshotReplay replay = replays[i];
+        for (ScreenshotReplay replay : replays) {
             if (replay != null) {
                 bitmapList.add(replay.getScreenshot());
             }
@@ -247,6 +251,7 @@ public class HttpHelper extends AsyncTask<BugBattleBug, Void, Integer> {
                 result.put(key, obj.get(key));
             }
         } catch (Exception err) {
+            err.printStackTrace();
         }
 
         return result;

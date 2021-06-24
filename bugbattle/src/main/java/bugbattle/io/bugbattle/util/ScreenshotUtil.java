@@ -150,7 +150,7 @@ public class ScreenshotUtil {
             field.setAccessible(true);
             return field.get(target);
         } catch (Exception e) {
-            System.out.println(e);
+            e.printStackTrace();
         }
         return null;
     }

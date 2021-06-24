@@ -23,6 +23,7 @@
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_marginBottom="8dp"
+        android:contentDescription="success icon"
         app:layout_constraintBottom_toTopOf="@+id/bb_done"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

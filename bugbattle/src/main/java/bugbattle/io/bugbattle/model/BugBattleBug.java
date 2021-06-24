@@ -171,7 +171,7 @@ public class BugBattleBug {
                 requestArry.put(networklog.toJSON());
             }
         } catch (Exception err) {
-            System.out.println(err);
+           err.printStackTrace();
         }
         networklogs = new LinkedList<>();
         return requestArry;

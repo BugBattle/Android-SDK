@@ -61,7 +61,6 @@ class FormDataHttpsHelper {
      * Adds a upload file section to the request
      * default name is file
      * @param uploadFile a File to be uploaded
-     * @throws IOException
      */
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void addFilePart(File uploadFile)
@@ -97,7 +96,7 @@ class FormDataHttpsHelper {
      * Completes the request and receives response from the server.
      *
      * @return the response of the server
-     * @throws IOException
+     * @throws IOException error when the file cant be uploaded
      */
     public String finishAndUpload() throws IOException {
         String response;

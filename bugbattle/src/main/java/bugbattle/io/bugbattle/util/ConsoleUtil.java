@@ -6,7 +6,7 @@ public class ConsoleUtil {
         try {
             Runtime.getRuntime().exec("logcat - c");
         } catch (Exception e) {
-            System.out.println(e);
+           e.printStackTrace();
         }
     }
 }
