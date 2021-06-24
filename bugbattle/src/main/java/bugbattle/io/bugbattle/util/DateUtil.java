@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.TimeZone;
 
 public class DateUtil {
+
     public static String formatDate(String time, String date) {
         String result = "";
         date += "-" + Calendar.getInstance().get(Calendar.YEAR);

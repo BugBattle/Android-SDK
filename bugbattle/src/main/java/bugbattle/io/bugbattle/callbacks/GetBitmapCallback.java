@@ -1,4 +1,4 @@
-package bugbattle.io.bugbattle;
+package bugbattle.io.bugbattle.callbacks;
 
 import android.graphics.Bitmap;
 

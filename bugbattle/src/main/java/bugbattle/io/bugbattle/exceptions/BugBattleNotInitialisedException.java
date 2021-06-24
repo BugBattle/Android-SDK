@@ -1,4 +1,4 @@
-package bugbattle.io.bugbattle.controller;
+package bugbattle.io.bugbattle.exceptions;
 
 
 /**

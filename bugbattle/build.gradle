@@ -23,9 +23,8 @@ android {
     defaultConfig {
         minSdkVersion 18
         targetSdkVersion 29
-        versionCode 1
-        versionName "1.0"
-
+        versionCode 3394
+        versionName "3.3.94"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
     }
@@ -38,6 +37,10 @@ android {
         debug {
             manifestPlaceholders.cleartextTrafficPermitted ="true"
         }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 
 }

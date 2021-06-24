@@ -14,7 +14,8 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
-import bugbattle.io.bugbattle.model.FeedbackModel;
+import bugbattle.io.bugbattle.model.BugBattleBug;
+import bugbattle.io.bugbattle.model.BugBattleConfig;
 import bugbattle.io.bugbattle.model.ViewMeta;
 
 import static android.graphics.Bitmap.Config.ARGB_8888;
@@ -22,10 +23,10 @@ import static android.view.WindowManager.LayoutParams.FLAG_DIM_BEHIND;
 
 public class ScreenshotUtil {
     public static Bitmap takeScreenshot() {
-        FeedbackModel feedbackModel = FeedbackModel.getInstance();
+        BugBattleBug bugBattleBug = BugBattleBug.getInstance();
         Bitmap bitmap;
-        if (feedbackModel.getGetBitmapCallback() != null) {
-            bitmap = feedbackModel.getGetBitmapCallback().getBitmap();
+        if (BugBattleConfig.getInstance().getGetBitmapCallback() != null) {
+            bitmap = BugBattleConfig.getInstance().getGetBitmapCallback().getBitmap();
         } else {
             bitmap = generateBitmap(ActivityUtil.getCurrentActivity());
         }
@@ -36,10 +37,10 @@ public class ScreenshotUtil {
     }
 
     public static Bitmap takeScreenshot(float downScale) {
-        FeedbackModel feedbackModel = FeedbackModel.getInstance();
+        BugBattleBug bugBattleBug = BugBattleBug.getInstance();
         Bitmap bitmap;
-        if (feedbackModel.getGetBitmapCallback() != null) {
-            bitmap = feedbackModel.getGetBitmapCallback().getBitmap();
+        if (BugBattleConfig.getInstance().getGetBitmapCallback() != null) {
+            bitmap = BugBattleConfig.getInstance().getGetBitmapCallback().getBitmap();
         } else {
             bitmap = generateBitmap(ActivityUtil.getCurrentActivity());
         }

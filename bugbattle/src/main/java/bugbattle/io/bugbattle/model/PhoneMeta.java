@@ -17,6 +17,10 @@ import org.json.JSONObject;
 import java.util.Date;
 import java.util.Locale;
 
+import bugbattle.io.bugbattle.BuildConfig;
+
+import static bugbattle.io.bugbattle.util.ActivityUtil.getCurrentActivity;
+
 
 /**
  * Collected information, gathered from the phone
@@ -26,11 +30,13 @@ public class PhoneMeta {
     private static double startTime;
     private static String deviceModel;
     private static String deviceName;
+    private static String lastScreenName;
     private static String bundleID;
     private static String systemName;
     private static String systemVersion;
     private static String buildVersionNumber;
     private static String releaseVersionNumber;
+    private static String sdkVersion = BuildConfig.VERSION_NAME;
 
     public PhoneMeta(@NonNull Context context) {
         startTime = new Date().getTime();
@@ -46,6 +52,8 @@ public class PhoneMeta {
      */
     public JSONObject getJSONObj() throws JSONException {
         JSONObject obj = new JSONObject();
+        obj.put("sessionDuration", calculateDuration());
+        obj.put("releaseVersionNumber", releaseVersionNumber);
         obj.put("deviceModel", deviceModel);
         obj.put("deviceName", deviceName);
         obj.put("deviceIdentifier", deviceModel);
@@ -53,16 +61,16 @@ public class PhoneMeta {
         obj.put("systemName", systemName);
         obj.put("systemVersion", systemVersion);
         obj.put("buildVersionNumber", buildVersionNumber);
-        obj.put("releaseVersionNumber", releaseVersionNumber);
-        obj.put("sessionDuration", calculateDuration());
+        obj.put("lastScreenName", lastScreenName);
         obj.put("networkStatus", getNetworkStatus());
         obj.put("preferredUserLocale", getLocale());
+        obj.put("sdkVersion", sdkVersion);
 
         String applicationType = "Native";
-        if (FeedbackModel.getInstance().getApplicationtype() == APPLICATIONTYPE.FLUTTER) {
+        if (BugBattleBug.getInstance().getApplicationtype() == APPLICATIONTYPE.FLUTTER) {
             applicationType = "Flutter";
         }
-        if (FeedbackModel.getInstance().getApplicationtype() == APPLICATIONTYPE.REACTNATIVE) {
+        if (BugBattleBug.getInstance().getApplicationtype() == APPLICATIONTYPE.REACTNATIVE) {
             applicationType = "ReactNative";
         }
         obj.put("applicationType", applicationType);
@@ -85,7 +93,9 @@ public class PhoneMeta {
 
             }
         }
-
+        if (getCurrentActivity() != null) {
+            lastScreenName = getCurrentActivity().getClass().getSimpleName();
+        }
         deviceModel = Build.MODEL;
         deviceName = Build.DEVICE;
         systemName = "Android";
@@ -119,5 +129,9 @@ public class PhoneMeta {
 
     public String getLocale() {
         return Locale.getDefault().getLanguage();
+    }
+
+    public void setLastScreen(String lastScreenName) {
+        PhoneMeta.lastScreenName = lastScreenName;
     }
 }

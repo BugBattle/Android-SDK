@@ -10,64 +10,95 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import bugbattle.io.bugbattle.callbacks.BugSentCallback;
+import bugbattle.io.bugbattle.callbacks.BugWillBeSentCallback;
+import bugbattle.io.bugbattle.callbacks.GetBitmapCallback;
 import bugbattle.io.bugbattle.controller.BugBattleActivationMethod;
-import bugbattle.io.bugbattle.controller.BugBattleNotInitialisedException;
+import bugbattle.io.bugbattle.controller.OnHttpResponseListener;
+import bugbattle.io.bugbattle.exceptions.BugBattleNotInitialisedException;
 import bugbattle.io.bugbattle.model.APPLICATIONTYPE;
-import bugbattle.io.bugbattle.model.FeedbackModel;
+import bugbattle.io.bugbattle.model.BugBattleBug;
+import bugbattle.io.bugbattle.model.BugBattleConfig;
+import bugbattle.io.bugbattle.model.CustomAction;
 import bugbattle.io.bugbattle.model.PhoneMeta;
 import bugbattle.io.bugbattle.model.RequestType;
 import bugbattle.io.bugbattle.service.BBDetector;
-import bugbattle.io.bugbattle.service.BugBattleHttpInterceptor;
-import bugbattle.io.bugbattle.service.ReplaysDetector;
-import bugbattle.io.bugbattle.service.ScreenshotGestureDetector;
+import bugbattle.io.bugbattle.service.ConfigLoader;
 import bugbattle.io.bugbattle.service.ScreenshotTaker;
-import bugbattle.io.bugbattle.service.ShakeGestureDetector;
-import bugbattle.io.bugbattle.service.TouchGestureDetector;
+import bugbattle.io.bugbattle.service.detectors.ReplaysDetector;
+import bugbattle.io.bugbattle.service.http.BugBattleHttpInterceptor;
+import bugbattle.io.bugbattle.util.BBDetectorUtil;
+import bugbattle.io.bugbattle.util.ConsoleUtil;
 import bugbattle.io.bugbattle.util.SilentBugReportUtil;
 
-public class BugBattle {
+public class BugBattle implements iBugBattle {
     private static BugBattle instance;
     private static ScreenshotTaker screenshotTaker;
     private static Activity activity;
     private static Application application;
+    private static boolean useAutoconfig = false;
 
-    private BugBattle(String sdkKey, BugBattleActivationMethod[] activationMethods, Application application) {
-        BugBattle.application = application;
-        FeedbackModel.getInstance().setSdkKey(sdkKey);
+    private BugBattle() {
+    }
 
-        FeedbackModel.getInstance().setPhoneMeta(new PhoneMeta(application.getApplicationContext()));
-        screenshotTaker = new ScreenshotTaker();
-
+    /**
+     * Init bugbattle with the given properties
+     */
+    private static void initBugBattle(String sdkKey, BugBattleActivationMethod[] activationMethods, Application application) {
         try {
-            Runtime.getRuntime().exec("logcat - c");
-        } catch (Exception e) {
-            System.out.println(e);
+            //prepare bugbattle
+            BugBattle.application = application;
+            screenshotTaker = new ScreenshotTaker();
+            ConsoleUtil.clearConsole();
+            //init config and load from the server
+            BugBattleConfig.getInstance().setSdkKey(sdkKey);
+
+            if (!useAutoconfig) {
+                new BugBattleListener();
+            }
+
+            //init bugbattle bug
+            BugBattleBug.getInstance().setPhoneMeta(new PhoneMeta(application.getApplicationContext()));
+
+            BugBattle.getInstance().enableReplays(BugBattleConfig.getInstance().isEnableReplays());
+
+            //start activation methods
+            List<BBDetector> detectorList = BBDetectorUtil.initDetectors(application, activity, activationMethods);
+
+            if (BugBattleConfig.getInstance().isEnableReplays()) {
+                ReplaysDetector replaysDetector = new ReplaysDetector(application);
+                replaysDetector.initialize();
+                detectorList.add(replaysDetector);
+            }
+            BugBattleConfig.getInstance().setGestureDetectors(detectorList);
+            BBDetectorUtil.resumeAllDetectors();
+        } catch (Exception err) {
         }
-        List<BBDetector> detectorList = new LinkedList<>();
-        for (BugBattleActivationMethod activationMethod : activationMethods) {
-            if (activationMethod == BugBattleActivationMethod.SHAKE) {
-                BBDetector detector = new ShakeGestureDetector(application);
-                detector.initialize();
-                detectorList.add(detector);
-            }
-            if (activationMethod == BugBattleActivationMethod.THREE_FINGER_DOUBLE_TAB) {
-                TouchGestureDetector touchGestureDetector;
-                if (activity != null) {
-                    touchGestureDetector = new TouchGestureDetector(application, activity);
-                } else {
-                    touchGestureDetector = new TouchGestureDetector(application);
-                }
-                touchGestureDetector.initialize();
-                detectorList.add(touchGestureDetector);
-            }
-            if (activationMethod == BugBattleActivationMethod.SCREENSHOT) {
-                ScreenshotGestureDetector screenshotGestureDetector;
-                screenshotGestureDetector = new ScreenshotGestureDetector(application);
-                screenshotGestureDetector.initialize();
-                detectorList.add(screenshotGestureDetector);
-            }
+    }
+
+    /**
+     * Get an instance of bugbattle
+     *
+     * @return instance of bugbattle
+     */
+    public static BugBattle getInstance() {
+        if (instance == null) {
+            instance = new BugBattle();
         }
-        FeedbackModel.getInstance().setGestureDetectors(detectorList);
+        return instance;
+    }
+
+    /**
+     * Auto-configures the BugBattle SDK from the remote config.
+     *
+     * @param sdkKey      The SDK key, which can be found on dashboard.bugbattle.io
+     * @param application used to have context and access to take screenshot
+     */
+    public static void autoConfigure(String sdkKey, Application application) {
+        useAutoconfig = true;
+        BugBattle.application = application;
+        BugBattleConfig.getInstance().setSdkKey(sdkKey);
+        new BugBattleListener();
     }
 
     /**
@@ -78,24 +109,15 @@ public class BugBattle {
      * @param activationMethods Activation method, which triggers a new bug report.
      * @param activity          main activity
      */
-    public static BugBattle initialise(String sdkKey, final BugBattleActivationMethod[] activationMethods, Application application, Activity activity) {
-        BugBattle.activity = activity;
-        if (instance == null) {
-            instance = new BugBattle(sdkKey, activationMethods, application);
-        }
-        return instance;
-    }
-
-    /**
-     * Initialises the Bugbattle SDK.
-     *
-     * @param application       The application (this)
-     * @param sdkKey            The SDK key, which can be found on dashboard.bugbattle.io
-     * @param activationMethods Activation method, which triggers a new bug report.
-     */
-    public static BugBattle initialise(String sdkKey, final BugBattleActivationMethod[] activationMethods, Application application) {
-        if (instance == null) {
-            instance = new BugBattle(sdkKey, activationMethods, application);
+    public static BugBattle initWithToken(String sdkKey, BugBattleActivationMethod[] activationMethods, Application application, Activity activity) {
+        try {
+            BugBattle.activity = activity;
+            if (instance == null) {
+                instance = new BugBattle();
+            }
+            initBugBattle(sdkKey, activationMethods, application);
+        } catch (Exception exception) {
+            exception.printStackTrace();
         }
         return instance;
     }
@@ -107,13 +129,42 @@ public class BugBattle {
      * @param sdkKey           The SDK key, which can be found on dashboard.bugbattle.io
      * @param activationMethod Activation method, which triggers a new bug report.
      */
-    public static BugBattle initialise(String sdkKey, final BugBattleActivationMethod activationMethod, Application application) {
-        List<BugBattleActivationMethod> activationMethods = new ArrayList<>();
-        activationMethods.add(activationMethod);
-        if (instance == null) {
-            instance = new BugBattle(sdkKey, activationMethods.toArray(new BugBattleActivationMethod[0]), application);
+    public static BugBattle initWithToken(String sdkKey, BugBattleActivationMethod activationMethod, Application application) {
+        try {
+            List<BugBattleActivationMethod> activationMethods = new ArrayList<>();
+            activationMethods.add(activationMethod);
+            if (instance == null) {
+                instance = new BugBattle();
+            }
+            initBugBattle(sdkKey, activationMethods.toArray(new BugBattleActivationMethod[0]), application);
+        } catch (Exception exception) {
+            exception.printStackTrace();
         }
         return instance;
+    }
+
+    /**
+     * Initialises the Bugbattle SDK.
+     *
+     * @param application       The application (this)
+     * @param sdkKey            The SDK key, which can be found on dashboard.bugbattle.io
+     * @param activationMethods Activation method, which triggers a new bug report.
+     */
+    @Deprecated
+    public static BugBattle initialise(String sdkKey, BugBattleActivationMethod[] activationMethods, Application application) {
+        return initWithToken(sdkKey, activationMethods, application, activity);
+    }
+
+    /**
+     * Initialises the Bugbattle SDK.
+     *
+     * @param application      The application (this)
+     * @param sdkKey           The SDK key, which can be found on dashboard.bugbattle.io
+     * @param activationMethod Activation method, which triggers a new bug report.
+     */
+    @Deprecated
+    public static BugBattle initialise(String sdkKey, BugBattleActivationMethod activationMethod, Application application) {
+        return initWithToken(sdkKey, activationMethod, application);
     }
 
     /**
@@ -121,7 +172,8 @@ public class BugBattle {
      *
      * @throws BugBattleNotInitialisedException thrown when BugBattle is not initialised
      */
-    public static void startBugReporting() throws BugBattleNotInitialisedException {
+    @Override
+    public void startBugReporting() throws BugBattleNotInitialisedException {
         if (instance != null) {
             try {
                 screenshotTaker.takeScreenshot();
@@ -136,143 +188,16 @@ public class BugBattle {
     /**
      * Starts the bug reporting with a custom screenshot attached.
      *
-     * @param bitmap the image will be used instead of the current
+     * @param screenshot the image will be used instead of the current
      */
-    public static void startBugReporting(Bitmap bitmap) {
-        FeedbackModel.getInstance().setScreenshot(bitmap);
-        screenshotTaker.openScreenshot(bitmap);
-    }
-
-    /**
-     * Attach cusom data, which can be view in the BugBattle dashboard.
-     *
-     * @param customData The data to attach to a bug report
-     */
-    public static void attachCustomData(JSONObject customData) {
-        FeedbackModel.getInstance().setCustomData(customData);
-    }
-
-    /**
-     * Set/Prefill the email address for the user.
-     *
-     * @param email address, which is fileld in.
-     */
-    public static void setCustomerEmail(String email) {
-        FeedbackModel.getInstance().setEmail(email);
-    }
-
-    /**
-     * Enables the privacy policy check.
-     *
-     * @param enable Enable the privacy policy.
-     */
-    public static void enablePrivacyPolicy(boolean enable) {
-        FeedbackModel.getInstance().enablePrivacyPolicy(enable);
-    }
-
-    /**
-     * Sets a custom privacy policy url.
-     *
-     * @param privacyUrl The URL pointing to your privacy policy.
-     */
-    public static void setPrivacyPolicyUrl(String privacyUrl) {
-        FeedbackModel.getInstance().setPrivacyPolicyUrl(privacyUrl);
-    }
-
-    /**
-     * Sets the API url to your internal Bugbattle server. Please make sure that the server is reachable within the network
-     * If you use a http url pls add android:usesCleartextTraffic="true" to your main activity to allow cleartext traffic
-     *
-     * @param apiUrl url of the internal Bugbattle server
-     */
-    public static void setApiURL(String apiUrl) {
-        FeedbackModel.getInstance().setApiUrl(apiUrl);
-    }
-
-    /**
-     * This is called, when the bugbattle flow is started
-     *
-     * @param bugWillBeSentCallback is called when BB is opened
-     */
-    public static void setBugWillBeSentCallback(BugWillBeSentCallback bugWillBeSentCallback) {
-        FeedbackModel.getInstance().setBugWillBeSentCallback(bugWillBeSentCallback);
-    }
-
-    /**
-     * This method is triggered, when the bugbattle flow is closed
-     *
-     * @param bugSentCallback this callback is called when the flow is called
-     */
-    public static void setBugSentCallback(BugSentCallback bugSentCallback) {
-        FeedbackModel.getInstance().setBugSentCallback(bugSentCallback);
-    }
-
-
-    /**
-     * Customize the way, the Bitmap is generated. If this is overritten,
-     * only the custom way is used
-     *
-     * @param getBitmapCallback get the Bitmap
-     */
-    public static void setBitmapCallback(GetBitmapCallback getBitmapCallback) {
-        FeedbackModel.getInstance().setGetBitmapCallback(getBitmapCallback);
-    }
-
-
-    /**
-     * Set Application Type
-     *
-     * @param applicationType "Android", "RN", "Flutter"
-     */
-    public static void setApplicationType(APPLICATIONTYPE applicationType) {
-        FeedbackModel.getInstance().setApplicationtype(applicationType);
-    }
-
-    /**
-     * Enable Replay function for BB
-     * Use with care, check performance on phone
-     */
-    public static void enableReplay() {
-        ReplaysDetector replaysDetector = new ReplaysDetector(application);
-        replaysDetector.initialize();
-        FeedbackModel.getInstance().getGestureDetectors().add(replaysDetector);
-    }
-
-    /**
-     * Set the language for the BugBattle Report Flow. Otherwise the default language is used.
-     * Supported Languages "en", "es", "fr", "it", "de", "nl", "cz"
-     *
-     * @param language ISO Country Code eg. "cz," "en", "de", "es", "nl"
-     */
-    public static void setLanguage(String language) {
-        FeedbackModel.getInstance().setLanguage(language);
-    }
-
-    /**
-     * Attach Data to the request. The Data will be merged into the body sent with the bugreport.
-     * !!Existing keys can be overriten
-     * @param data Data, which is added
-     */
-    public static void attachData(JSONObject data) {
-        FeedbackModel.getInstance().setData(data);
-    }
-
-    /**
-     * Log network traffic by logging it manually.
-     * @param urlConnection URL where the request is sent to
-     * @param requestType GET, POST, PUT, DELETE
-     * @param status status of the response (e.g. 200, 404)
-     * @param duration duration of the request
-     * @param request Add the data you want. e.g the body sent in the request
-     * @param response Response of the call. You can add just the information you want and need.
-     */
-    public static void logNetwork(String urlConnection, RequestType requestType, int status, int duration, JSONObject request, JSONObject response) {
-        BugBattleHttpInterceptor.log(urlConnection, requestType, status, duration, request, response);
-    }
-
-
-    public enum SEVERITY {
-        LOW, MIDDLE, HIGH
+    @Override
+    public void startBugReporting(Bitmap screenshot) throws BugBattleNotInitialisedException {
+        if (instance != null) {
+            BugBattleBug.getInstance().setScreenshot(screenshot);
+            screenshotTaker.openScreenshot(screenshot);
+        } else {
+            throw new BugBattleNotInitialisedException("BugBattle is not initialised");
+        }
     }
 
     /**
@@ -282,8 +207,212 @@ public class BugBattle {
      * @param description description of the bug
      * @param severity    Severity of the bug "LOW", "MIDDLE", "HIGH"
      */
-    public static void sendSilentBugReport(String email, String description, SEVERITY severity) {
+    @Override
+    public void sendSilentBugReport(String email, String description, SEVERITY severity) {
         SilentBugReportUtil.createSilentBugReport(application, email, description, severity.name());
     }
 
+    /**
+     * Sets the API url to your internal Bugbattle server. Please make sure that the server is reachable within the network
+     * If you use a http url pls add android:usesCleartextTraffic="true" to your main activity to allow cleartext traffic
+     *
+     * @param apiUrl url of the internal Bugbattle server
+     */
+    @Override
+    public void setApiUrl(String apiUrl) {
+        BugBattleConfig.getInstance().setApiUrl(apiUrl);
+    }
+
+    /**
+     * Set/Prefill the email address for the user.
+     *
+     * @param email address, which is fileld in.
+     */
+    @Override
+    public void setCustomerEmail(String email) {
+        BugBattleBug.getInstance().setEmail(email);
+    }
+
+    /**
+     * Change the color of the appearance of the UI.
+     *
+     * @param color hexcode for color
+     */
+    @Override
+    public void setNavigationTint(String color) {
+        BugBattleConfig.getInstance().setColor(color);
+    }
+
+    /**
+     * Set the language for the BugBattle Report Flow. Otherwise the default language is used.
+     * Supported Languages "en", "es", "fr", "it", "de", "nl", "cz"
+     *
+     * @param language ISO Country Code eg. "cz," "en", "de", "es", "nl"
+     */
+    @Override
+    public void setLanguage(String language) {
+        BugBattleConfig.getInstance().setLanguage(language);
+    }
+
+    /**
+     * Enable Replay function for BB
+     * Use with care, check performance on phone
+     */
+    @Override
+    public void enableReplays(boolean enable) {
+        BugBattleConfig.getInstance().setEnableReplays(enable);
+    }
+
+    /**
+     * Attaches custom data, which can be viewed in the BugBattle dashboard. New data will be merged with existing custom data.
+     *
+     * @param customData The data to attach to a bug report.
+     * @author BugBattle
+     */
+    @Override
+    public void attachCustomData(JSONObject customData) {
+        BugBattleBug.getInstance().attachData(customData);
+    }
+
+    /**
+     * Attach one key value pair to existing custom data.
+     *
+     * @param value The value you want to add
+     * @param key   The key of the attribute
+     * @author BugBattle
+     */
+    @Override
+    public void setUserAttribute(String key, String value) {
+        BugBattleBug.getInstance().setUserAttribute(key, value);
+    }
+
+    /**
+     * Attach Data to the request. The Data will be merged into the body sent with the bugreport.
+     * !!Existing keys can be overriten
+     *
+     * @param data Data, which is added
+     */
+    @Deprecated
+    @Override
+    public void attachData(JSONObject data) {
+        BugBattleBug.getInstance().setCustomData(data);
+    }
+
+    /**
+     * Removes one key from existing custom data.
+     *
+     * @param key The key of the attribute
+     * @author BugBattle
+     */
+    @Override
+    public void removeCustomDataForKey(String key) {
+        BugBattleBug.getInstance().removeUserAttribute(key);
+    }
+
+    /**
+     * Clears all custom data.
+     */
+    @Override
+    public void clearCustomData() {
+        BugBattleBug.getInstance().clearCustomData();
+    }
+
+    /**
+     * This is called, when the bugbattle flow is started
+     *
+     * @param bugWillBeSentCallback is called when BB is opened
+     */
+    @Override
+    public void setBugWillBeSentCallback(BugWillBeSentCallback bugWillBeSentCallback) {
+        BugBattleConfig.getInstance().setBugWillBeSentCallback(bugWillBeSentCallback);
+    }
+
+    /**
+     * This method is triggered, when the bugbattle flow is closed
+     *
+     * @param bugSentCallback this callback is called when the flow is called
+     */
+    @Override
+    public void setBugSentCallback(BugSentCallback bugSentCallback) {
+        BugBattleConfig.getInstance().setBugSentCallback(bugSentCallback);
+    }
+
+    /**
+     * Customize the way, the Bitmap is generated. If this is overritten,
+     * only the custom way is used
+     *
+     * @param getBitmapCallback get the Bitmap
+     */
+    @Override
+    public void setBitmapCallback(GetBitmapCallback getBitmapCallback) {
+        BugBattleConfig.getInstance().setGetBitmapCallback(getBitmapCallback);
+    }
+
+    /**
+     * Log network traffic by logging it manually.
+     *
+     * @param urlConnection URL where the request is sent to
+     * @param requestType   GET, POST, PUT, DELETE
+     * @param status        status of the response (e.g. 200, 404)
+     * @param duration      duration of the request
+     * @param request       Add the data you want. e.g the body sent in the request
+     * @param response      Response of the call. You can add just the information you want and need.
+     */
+    public void logNetwork(String urlConnection, RequestType requestType, int status, int duration, JSONObject request, JSONObject response) {
+        BugBattleHttpInterceptor.log(urlConnection, requestType, status, duration, request, response);
+    }
+
+    /**
+     * Register custom functions. This custom function can be configured in the widget, Form, Details of one step tab on app.bugbattle.io
+     *
+     * @param customAction what is executed when the custom step is pressed
+     */
+    @Override
+    public void registerCustomAction(CustomAction customAction) {
+        BugBattleConfig.getInstance().registerCustomAction(customAction);
+    }
+
+    /**
+     * Set Application Type
+     *
+     * @param applicationType "Android", "RN", "Flutter"
+     */
+    @Override
+    public void setApplicationType(APPLICATIONTYPE applicationType) {
+        BugBattleBug.getInstance().setApplicationtype(applicationType);
+    }
+
+    /**
+     * Severity of the bug. Can be used in the silent bug report.
+     */
+    public enum SEVERITY {
+        LOW, MIDDLE, HIGH
+    }
+
+    public static class BugBattleListener implements OnHttpResponseListener {
+
+        public BugBattleListener() {
+            new ConfigLoader(this).execute(BugBattleBug.getInstance());
+        }
+
+        @Override
+        public void onTaskComplete(int httpResponse) {
+            if (useAutoconfig) {
+                BugBattleConfig config = BugBattleConfig.getInstance();
+
+                List<BugBattleActivationMethod> activationMethods = new LinkedList<>();
+                if (config.isActivationMethodShake()) {
+                    activationMethods.add(BugBattleActivationMethod.SHAKE);
+                }
+
+                if (config.isActivationMethodScreenshotGesture()) {
+                    activationMethods.add(BugBattleActivationMethod.SCREENSHOT);
+                }
+                if (instance == null) {
+                    instance = new BugBattle();
+                }
+                initBugBattle(BugBattleConfig.getInstance().getSdkKey(), activationMethods.toArray(new BugBattleActivationMethod[0]), application);
+            }
+        }
+    }
 }

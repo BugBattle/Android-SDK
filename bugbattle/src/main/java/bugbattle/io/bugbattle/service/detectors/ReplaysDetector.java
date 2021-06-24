@@ -1,4 +1,4 @@
-package bugbattle.io.bugbattle.service;
+package bugbattle.io.bugbattle.service.detectors;
 
 import android.app.Activity;
 import android.app.Application;
@@ -10,10 +10,11 @@ import android.view.ViewGroup;
 
 import java.util.Date;
 
-import bugbattle.io.bugbattle.model.FeedbackModel;
+import bugbattle.io.bugbattle.model.BugBattleBug;
 import bugbattle.io.bugbattle.model.INTERACTIONTYPE;
 import bugbattle.io.bugbattle.model.Interaction;
 import bugbattle.io.bugbattle.model.Replay;
+import bugbattle.io.bugbattle.service.BBDetector;
 import bugbattle.io.bugbattle.util.ActivityUtil;
 import bugbattle.io.bugbattle.util.ScreenshotUtil;
 
@@ -34,7 +35,7 @@ public class ReplaysDetector extends BBDetector {
 
     @Override
     public void initialize() {
-        replay = FeedbackModel.getInstance().getReplay();
+        replay = BugBattleBug.getInstance().getReplay();
         handler = new Handler();
         //start
         handler.post(runnableCode);
@@ -63,11 +64,13 @@ public class ReplaysDetector extends BBDetector {
                     viewGroup.setOnTouchListener(new View.OnTouchListener() {
                         @Override
                         public boolean onTouch(View v, MotionEvent event) {
-                            if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                                replay.addInteractionToCurrentReplay(new Interaction(event.getX(), event.getY(), new Date(), INTERACTIONTYPE.TD));
-                            }
-                            if (event.getAction() == MotionEvent.ACTION_UP) {
-                                replay.addInteractionToCurrentReplay(new Interaction(event.getX(), event.getY(), new Date(), INTERACTIONTYPE.TU));
+                            if (replay != null) {
+                                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                                    replay.addInteractionToCurrentReplay(new Interaction(event.getX(), event.getY(), new Date(), INTERACTIONTYPE.TD));
+                                }
+                                if (event.getAction() == MotionEvent.ACTION_UP) {
+                                    replay.addInteractionToCurrentReplay(new Interaction(event.getX(), event.getY(), new Date(), INTERACTIONTYPE.TU));
+                                }
                             }
                             return true;
                         }

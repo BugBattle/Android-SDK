@@ -1,10 +1,12 @@
-package bugbattle.io.bugbattle.service;
+package bugbattle.io.bugbattle.service.detectors;
 
 import android.app.Activity;
 import android.app.Application;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
+
+import bugbattle.io.bugbattle.service.BBDetector;
 
 public class TouchGestureDetector extends BBDetector {
     private static final int NUMBER_OF_FINGERS = 3;

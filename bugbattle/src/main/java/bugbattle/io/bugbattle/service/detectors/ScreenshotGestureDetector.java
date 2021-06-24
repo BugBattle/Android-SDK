@@ -1,10 +1,12 @@
-package bugbattle.io.bugbattle.service;
+package bugbattle.io.bugbattle.service.detectors;
 
 import android.app.Application;
 import android.database.ContentObserver;
 import android.net.Uri;
 import android.os.Handler;
 import android.provider.MediaStore;
+
+import bugbattle.io.bugbattle.service.BBDetector;
 
 public class ScreenshotGestureDetector extends BBDetector {
 

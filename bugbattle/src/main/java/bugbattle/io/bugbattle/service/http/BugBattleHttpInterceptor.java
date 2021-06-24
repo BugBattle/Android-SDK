@@ -1,8 +1,8 @@
-package bugbattle.io.bugbattle.service;
+package bugbattle.io.bugbattle.service.http;
 
 import org.json.JSONObject;
 
-import bugbattle.io.bugbattle.model.FeedbackModel;
+import bugbattle.io.bugbattle.model.BugBattleBug;
 import bugbattle.io.bugbattle.model.Networklog;
 import bugbattle.io.bugbattle.model.RequestType;
 
@@ -22,8 +22,7 @@ public class BugBattleHttpInterceptor {
      *                      headers, payload, body
      */
     public static void log(String urlConnection, RequestType requestType, int status, int duration, JSONObject request, JSONObject response) {
-
         Networklog networklog = new Networklog(urlConnection, requestType, status, duration, request, response);
-        FeedbackModel.getInstance().addRequest(networklog);
+        BugBattleBug.getInstance().addRequest(networklog);
     }
 }

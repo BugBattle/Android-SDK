@@ -12,7 +12,7 @@ import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import bugbattle.io.bugbattle.model.FeedbackModel;
+import bugbattle.io.bugbattle.model.BugBattleBug;
 import bugbattle.io.bugbattle.util.DateUtil;
 
 import static bugbattle.io.bugbattle.util.DateUtil.formatDate;
@@ -21,11 +21,6 @@ import static bugbattle.io.bugbattle.util.DateUtil.formatDate;
  * Read the log of the application.
  */
 public class LogReader {
-    private enum CONSOLELOGTYPE {
-        INFO, WARNING, ERROR
-    }
-
-
     /**
      * Reads the stacktrace, formats the string
      *
@@ -47,7 +42,7 @@ public class LogReader {
                 if (mt.lookingAt()) {
                     String[] splittedLine = line.split(" ");
                     String formattedDate = formatDate(splittedLine[1], splittedLine[0]);
-                    if (FeedbackModel.getInstance().getStartUpDate().before(DateUtil.stringToDate(formattedDate))) {
+                    if (BugBattleBug.getInstance().getStartUpDate().before(DateUtil.stringToDate(formattedDate))) {
                         JSONObject object = new JSONObject();
                         object.put("date", formattedDate);
                         object.put("priority", getConsoleLineType(splittedLine[4]));

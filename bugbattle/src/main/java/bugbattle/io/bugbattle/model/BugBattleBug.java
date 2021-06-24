@@ -11,29 +11,24 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
-import bugbattle.io.bugbattle.BugSentCallback;
-import bugbattle.io.bugbattle.BugWillBeSentCallback;
-import bugbattle.io.bugbattle.GetBitmapCallback;
 import bugbattle.io.bugbattle.controller.StepsToReproduce;
-import bugbattle.io.bugbattle.service.BBDetector;
 import bugbattle.io.bugbattle.service.LogReader;
+import bugbattle.io.bugbattle.util.JsonUtil;
 
 /**
  * Contains all relevant information gathered in the background.
  */
-public class FeedbackModel {
+public class BugBattleBug {
+    private static BugBattleBug instance;
+
+    //bug specific data
+    private APPLICATIONTYPE applicationtype = APPLICATIONTYPE.NATIVE;
     private Date startUpDate = new Date();
     private boolean isDisabled = false;
-    private static FeedbackModel instance;
     private String language = "";
-
-    private String sdkKey;
+    private String severity;
     private String userEmail;
     private String description;
-    private String severity;
-    private APPLICATIONTYPE applicationtype = APPLICATIONTYPE.NATIVE;
-
-    private String apiUrl = "https://api.bugbattle.io";
     private Bitmap screenshot;
     private Replay replay;
     private JSONObject customData;
@@ -42,27 +37,19 @@ public class FeedbackModel {
     PhoneMeta phoneMeta;
     private LogReader logReader;
     private StepsToReproduce stepsToReproduce;
-    private List<BBDetector> gestureDetectors;
-
-    private boolean privacyEnabled = false;
-    private String privacyUrl = "https://www.bugbattle.io/privacy-policy";
-
-    private BugSentCallback bugSentCallback;
-    private BugWillBeSentCallback bugWillBeSentCallback;
-    private GetBitmapCallback getBitmapCallback;
 
     private List<Networklog> networklogs = new LinkedList<>();
 
-    private FeedbackModel() {
+    private BugBattleBug() {
         logReader = new LogReader();
         stepsToReproduce = StepsToReproduce.getInstance();
         customData = new JSONObject();
         replay = new Replay(30, 1000);
     }
 
-    public static FeedbackModel getInstance() {
+    public static BugBattleBug getInstance() {
         if (instance == null) {
-            instance = new FeedbackModel();
+            instance = new BugBattleBug();
         }
         return instance;
     }
@@ -74,14 +61,6 @@ public class FeedbackModel {
     public @Nullable
     PhoneMeta getPhoneMeta() {
         return phoneMeta;
-    }
-
-    public String getSdkKey() {
-        return sdkKey;
-    }
-
-    public void setSdkKey(String key) {
-        sdkKey = key;
     }
 
     public void setScreenshot(Bitmap screenshot) {
@@ -104,16 +83,8 @@ public class FeedbackModel {
         return userEmail;
     }
 
-    public String getDescription() {
-        return description;
-    }
-
     public void setEmail(String userEmail) {
         this.userEmail = userEmail;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     public JSONObject getCustomData() {
@@ -124,12 +95,25 @@ public class FeedbackModel {
         this.customData = customData;
     }
 
-    public List<BBDetector> getGestureDetectors() {
-        return gestureDetectors;
+
+    public void setUserAttribute(String key, String value) {
+        try {
+            this.customData.put(key, value);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
-    public void setGestureDetectors(List<BBDetector> gestureDetectors) {
-        this.gestureDetectors = gestureDetectors;
+    public void attachData(JSONObject data) {
+        this.customData = JsonUtil.mergeJSONObjects(this.customData, data);
+    }
+
+    public void removeUserAttribute(String key) {
+        this.customData.remove(key);
+    }
+
+    public void clearCustomData() {
+        this.customData = new JSONObject();
     }
 
     public String getSeverity() {
@@ -140,61 +124,12 @@ public class FeedbackModel {
         this.severity = severity;
     }
 
-
-    public String getApiUrl() {
-        return apiUrl;
-    }
-
-    public void setApiUrl(String apiUrl) {
-        this.apiUrl = apiUrl;
-    }
-
-    public void enablePrivacyPolicy(boolean enable) {
-        privacyEnabled = enable;
-    }
-
-    public boolean isPrivacyEnabled() {
-        return privacyEnabled;
-    }
-
-    public void setPrivacyPolicyUrl(String privacyUrl) {
-        this.privacyUrl = privacyUrl;
-    }
-
-    public String getPrivacyUrl() {
-        return privacyUrl;
-    }
-
     public boolean isDisabled() {
         return isDisabled;
     }
 
     public void setDisabled(boolean disabled) {
         isDisabled = disabled;
-    }
-
-    public BugSentCallback getBugSentCallback() {
-        return bugSentCallback;
-    }
-
-    public void setBugSentCallback(BugSentCallback bugSentCallback) {
-        this.bugSentCallback = bugSentCallback;
-    }
-
-    public BugWillBeSentCallback getBugWillBeSentCallback() {
-        return bugWillBeSentCallback;
-    }
-
-    public void setBugWillBeSentCallback(BugWillBeSentCallback bugWillBeSentCallback) {
-        this.bugWillBeSentCallback = bugWillBeSentCallback;
-    }
-
-    public GetBitmapCallback getGetBitmapCallback() {
-        return getBitmapCallback;
-    }
-
-    public void setGetBitmapCallback(GetBitmapCallback getBitmapCallback) {
-        this.getBitmapCallback = getBitmapCallback;
     }
 
     public APPLICATIONTYPE getApplicationtype() {
@@ -238,6 +173,7 @@ public class FeedbackModel {
         } catch (Exception err) {
             System.out.println(err);
         }
+        networklogs = new LinkedList<>();
         return requestArry;
     }
 
@@ -249,4 +185,12 @@ public class FeedbackModel {
         return this.data;
     }
 
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
 }

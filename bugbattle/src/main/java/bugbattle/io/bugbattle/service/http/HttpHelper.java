@@ -1,4 +1,4 @@
-package bugbattle.io.bugbattle.service;
+package bugbattle.io.bugbattle.service.http;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -27,7 +27,9 @@ import java.util.List;
 import javax.net.ssl.HttpsURLConnection;
 
 import bugbattle.io.bugbattle.controller.OnHttpResponseListener;
-import bugbattle.io.bugbattle.model.FeedbackModel;
+import bugbattle.io.bugbattle.exceptions.BugBattleAlreadyInitialisedException;
+import bugbattle.io.bugbattle.model.BugBattleBug;
+import bugbattle.io.bugbattle.model.BugBattleConfig;
 import bugbattle.io.bugbattle.model.Interaction;
 import bugbattle.io.bugbattle.model.PhoneMeta;
 import bugbattle.io.bugbattle.model.ScreenshotReplay;
@@ -36,11 +38,12 @@ import bugbattle.io.bugbattle.util.DateUtil;
 /**
  * Sends the report to the bugbattle dashboard.
  */
-public class HttpHelper extends AsyncTask<FeedbackModel, Void, Integer> {
+public class HttpHelper extends AsyncTask<BugBattleBug, Void, Integer> {
     private static final String UPLOAD_IMAGE_BACKEND_URL_POSTFIX = "/uploads/sdk";
     private static final String UPLOAD_IMAGE_MULTI_BACKEND_URL_POSTFIX = "/uploads/sdksteps";
     private static final String REPORT_BUG_URL_POSTFIX = "/bugs";
     private Context context;
+    BugBattleConfig bbConfig = BugBattleConfig.getInstance();
 
     private OnHttpResponseListener listener;
 
@@ -51,11 +54,11 @@ public class HttpHelper extends AsyncTask<FeedbackModel, Void, Integer> {
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
-    protected Integer doInBackground(FeedbackModel... feedbackModels) {
-        FeedbackModel feedbackModel = feedbackModels[0];
+    protected Integer doInBackground(BugBattleBug... bugBattleBugs) {
+        BugBattleBug bugBattleBug = bugBattleBugs[0];
         int httpResult = 0;
         try {
-            httpResult = postFeedback(feedbackModel);
+            httpResult = postFeedback(bugBattleBug);
         } catch (JSONException e) {
             e.printStackTrace();
         } catch (MalformedURLException e) {
@@ -71,16 +74,19 @@ public class HttpHelper extends AsyncTask<FeedbackModel, Void, Integer> {
 
     @Override
     protected void onPostExecute(Integer result) {
-        if (FeedbackModel.getInstance().getBugSentCallback() != null) {
-            FeedbackModel.getInstance().getBugSentCallback().close();
+        if (BugBattleConfig.getInstance().getBugSentCallback() != null) {
+            BugBattleConfig.getInstance().getBugSentCallback().close();
         }
-        listener.onTaskComplete(result);
+        try {
+            listener.onTaskComplete(result);
+        } catch (BugBattleAlreadyInitialisedException e) {
+            e.printStackTrace();
+        }
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     private JSONObject uploadImage (Bitmap image) throws IOException, JSONException {
-        FeedbackModel service = FeedbackModel.getInstance();
-        FormDataHttpsHelper multipart = new FormDataHttpsHelper(service.getApiUrl() + UPLOAD_IMAGE_BACKEND_URL_POSTFIX, service.getSdkKey());
+        FormDataHttpsHelper multipart = new FormDataHttpsHelper(bbConfig.getApiUrl() + UPLOAD_IMAGE_BACKEND_URL_POSTFIX, bbConfig.getSdkKey());
         multipart.addFilePart(bitmapToFile(image));
         String response = multipart.finishAndUpload();
         return new JSONObject(response);
@@ -88,8 +94,7 @@ public class HttpHelper extends AsyncTask<FeedbackModel, Void, Integer> {
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     private JSONObject uploadImages (Bitmap[] images) throws IOException, JSONException {
-        FeedbackModel service = FeedbackModel.getInstance();
-        FormDataHttpsHelper multipart = new FormDataHttpsHelper(service.getApiUrl() + UPLOAD_IMAGE_MULTI_BACKEND_URL_POSTFIX, service.getSdkKey());
+        FormDataHttpsHelper multipart = new FormDataHttpsHelper(bbConfig.getApiUrl() + UPLOAD_IMAGE_MULTI_BACKEND_URL_POSTFIX, bbConfig.getSdkKey());
         for(Bitmap bitmap : images) {
             multipart.addFilePart(bitmapToFile(bitmap));
         }
@@ -99,16 +104,16 @@ public class HttpHelper extends AsyncTask<FeedbackModel, Void, Integer> {
 
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    private Integer postFeedback(FeedbackModel service) throws JSONException, IOException, ParseException {
-        JSONObject responseUploadImage = uploadImage(service.getScreenshot());
-        URL url = new URL(service.getApiUrl() + REPORT_BUG_URL_POSTFIX);
+    private Integer postFeedback(BugBattleBug bbBug) throws JSONException, IOException, ParseException {
+        JSONObject responseUploadImage = uploadImage(bbBug.getScreenshot());
+        URL url = new URL(bbConfig.getApiUrl() + REPORT_BUG_URL_POSTFIX);
         HttpURLConnection conn;
-        if (service.getApiUrl().contains("https")) {
+        if (bbConfig.getApiUrl().contains("https")) {
             conn = (HttpsURLConnection) url.openConnection();
         } else {
             conn = (HttpURLConnection) url.openConnection();
         }
-        conn.setRequestProperty("api-token", service.getSdkKey());
+        conn.setRequestProperty("api-token", bbConfig.getSdkKey());
         conn.setDoOutput(true);
         conn.setRequestProperty("Accept", "application/json");
         conn.setRequestProperty("Content-Type", "application/json");
@@ -117,24 +122,27 @@ public class HttpHelper extends AsyncTask<FeedbackModel, Void, Integer> {
         JSONObject body = new JSONObject();
         body.put("screenshotUrl", responseUploadImage.get("fileUrl"));
         body.put("replay", generateFrames());
-        body.put("description", service.getDescription());
-        body.put("reportedBy", service.getEmail());
+        body.put("description", bbBug.getDescription());
+        body.put("reportedBy", bbBug.getEmail());
 
-        body.put("networkLogs", service.getNetworklogs());
-        PhoneMeta phoneMeta = service.getPhoneMeta();
+        body.put("networkLogs", bbBug.getNetworklogs());
+        PhoneMeta phoneMeta = bbBug.getPhoneMeta();
 
         if (phoneMeta != null) {
             body.put("metaData", phoneMeta.getJSONObj());
         }
 
-        body.put("actionLog", service.getStepsToReproduce());
-        body.put("customData", service.getCustomData());
-        body.put("priority", service.getSeverity());
-        body.put("consoleLog", service.getLogs());
+        body.put("actionLog", bbBug.getStepsToReproduce());
+        body.put("customData", bbBug.getCustomData());
+        body.put("priority", bbBug.getSeverity());
+
+        if (BugBattleConfig.getInstance().isEnableConsoleLogs()) {
+            body.put("consoleLog", bbBug.getLogs());
+        }
 
 
-        if (service.getData() != null) {
-            body = concatJSONS(body, service.getData());
+        if (bbBug.getData() != null) {
+            body = concatJSONS(body, bbBug.getData());
         }
 
         try (OutputStream os = conn.getOutputStream()) {
@@ -178,7 +186,7 @@ public class HttpHelper extends AsyncTask<FeedbackModel, Void, Integer> {
     @RequiresApi(api = Build.VERSION_CODES.O)
     private JSONObject generateFrames() throws IOException, JSONException {
         JSONObject replay = new JSONObject();
-        replay.put("interval", FeedbackModel.getInstance().getReplay().getInterval());
+        replay.put("interval", BugBattleBug.getInstance().getReplay().getInterval());
         JSONArray frames = generateReplayImageUrls();
         replay.put("frames", frames);
         return replay;
@@ -187,7 +195,7 @@ public class HttpHelper extends AsyncTask<FeedbackModel, Void, Integer> {
     @RequiresApi(api = Build.VERSION_CODES.O)
     private JSONArray generateReplayImageUrls() throws IOException, JSONException {
         JSONArray result = new JSONArray();
-        ScreenshotReplay[] replays = FeedbackModel.getInstance().getReplay().getScreenshots();
+        ScreenshotReplay[] replays = BugBattleBug.getInstance().getReplay().getScreenshots();
         List<Bitmap> bitmapList = new LinkedList<>();
 
         for (int i = 0; i < replays.length; i++) {
@@ -207,7 +215,7 @@ public class HttpHelper extends AsyncTask<FeedbackModel, Void, Integer> {
             entry.put("interactions", generateInteractions(replays[i]));
             result.put(entry);
         }
-        FeedbackModel.getInstance().getReplay().reset();
+        BugBattleBug.getInstance().getReplay().reset();
         return result;
     }
 

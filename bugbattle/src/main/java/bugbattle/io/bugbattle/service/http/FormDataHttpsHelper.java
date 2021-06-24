@@ -1,4 +1,4 @@
-package bugbattle.io.bugbattle.service;
+package bugbattle.io.bugbattle.service.http;
 
 import android.os.Build;
 import android.support.annotation.RequiresApi;
@@ -21,10 +21,10 @@ import javax.net.ssl.HttpsURLConnection;
 /**
  * Upload the image as form-data
  */
-public class FormDataHttpsHelper {
+class FormDataHttpsHelper {
     private HttpURLConnection httpConn;
     private DataOutputStream request;
-    private final String boundary =  "BBBOUNDARY";
+    private final String boundary = "BBBOUNDARY";
     private final String crlf = "\r\n";
     private final String twoHyphens = "--";
 

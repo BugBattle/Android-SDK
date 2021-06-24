@@ -3,7 +3,7 @@ package bugbattle.io.bugbattle.service;
 import android.app.Application;
 import android.content.Context;
 
-import bugbattle.io.bugbattle.model.FeedbackModel;
+import bugbattle.io.bugbattle.model.BugBattleConfig;
 
 /**
  * All methods to activate BB must include this abstract class
@@ -33,8 +33,8 @@ public abstract class BBDetector {
     public abstract void pause();
 
     public void takeScreenshot() {
-        if (FeedbackModel.getInstance().getBugWillBeSentCallback() != null) {
-            FeedbackModel.getInstance().getBugWillBeSentCallback().flowInvoced();
+        if (BugBattleConfig.getInstance().getBugWillBeSentCallback() != null) {
+            BugBattleConfig.getInstance().getBugWillBeSentCallback().flowInvoced();
         }
         screenshotTaker.takeScreenshot();
     }

@@ -1,4 +1,4 @@
-package bugbattle.io.bugbattle.service;
+package bugbattle.io.bugbattle.service.detectors;
 
 import android.app.Application;
 import android.content.Context;
@@ -7,7 +7,8 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 
-import bugbattle.io.bugbattle.model.FeedbackModel;
+import bugbattle.io.bugbattle.model.BugBattleBug;
+import bugbattle.io.bugbattle.service.BBDetector;
 
 /**
  * Detects the shake gesture of the phone
@@ -60,7 +61,7 @@ public class ShakeGestureDetector extends BBDetector implements SensorEventListe
 
             mShakeTimestamp = now;
             try {
-                if (!FeedbackModel.getInstance().isDisabled()) {
+                if (!BugBattleBug.getInstance().isDisabled()) {
                     this.takeScreenshot();
                     pause();
                 }

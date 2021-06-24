@@ -33,7 +33,6 @@ public class StepsToReproduce {
             JSONObject step = new JSONObject();
             step.put("type", type);
             step.put("data", data);
-
             step.put("date", new Date().toString());
             steps.put(step);
         } catch (Exception e) {

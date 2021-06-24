@@ -7,48 +7,19 @@
     android:background="@color/background"
     tools:context=".view.ImageEditor">
 
-    <android.support.constraint.ConstraintLayout
-        android:id="@+id/constraintLayout"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        app:layout_constraintTop_toTopOf="parent">
 
-        <Button
-            android:id="@+id/bb_close"
-            android:layout_width="wrap_content"
-            android:layout_height="50dp"
-            android:background="#00FFFFFF"
-            android:text="@string/bb_imageview_cancel"
-            android:textAllCaps="false"
-            android:textColor="@color/bb_blue"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/bb_header2"
-            android:layout_width="wrap_content"
-            android:layout_height="50dp"
-            android:gravity="center"
-            android:text="@string/bb_imageview_title"
-            android:textColor="@color/black"
-            android:textSize="16dp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toStartOf="@+id/bb_next"
-            app:layout_constraintStart_toEndOf="@+id/bb_close"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <Button
-            android:id="@+id/bb_next"
-            android:layout_width="wrap_content"
-            android:layout_height="50dp"
-            android:background="#00FFFFFF"
-            android:textAllCaps="false"
-            android:text="@string/bb_imageview_next"
-            android:textColor="@color/bb_blue"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-    </android.support.constraint.ConstraintLayout>
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:text="@string/bb_imageview_title"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:textColor="@color/black"
+        android:textSize="16dp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <View
         android:id="@+id/bb_view3"

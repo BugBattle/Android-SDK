@@ -3,12 +3,12 @@ package bugbattle.io.bugbattle.util;
 import android.content.Context;
 import android.graphics.Bitmap;
 
-import bugbattle.io.bugbattle.model.FeedbackModel;
-import bugbattle.io.bugbattle.service.HttpHelper;
+import bugbattle.io.bugbattle.model.BugBattleBug;
+import bugbattle.io.bugbattle.service.http.HttpHelper;
 
 public class SilentBugReportUtil {
     public static void createSilentBugReport(Context context, String email, String description, String severity) {
-        FeedbackModel model = FeedbackModel.getInstance();
+        BugBattleBug model = BugBattleBug.getInstance();
         Bitmap bitmap = ScreenshotUtil.takeScreenshot();
         model.setEmail(email);
         model.setDescription(description);
