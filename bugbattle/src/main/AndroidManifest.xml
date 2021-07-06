@@ -5,7 +5,9 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application>
-        <activity android:name=".view.BBMainActivity" />
+        <activity
+            android:name=".BBMainActivity"
+            android:theme="@style/Theme.AppCompat" />
     </application>
 
 </manifest>

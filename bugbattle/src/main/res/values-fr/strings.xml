@@ -22,4 +22,8 @@
     <string name="bb_report_privacy_policy_alert">Veuillez lire et accepter la politique de confidentialité.</string>
     <string name="bb_back_to_app">Revenez à l\'appli.</string>
     <string name="bb_back_to_app_msg">Voulez-vous revenir à l\'application?</string>
+
+    <string name="bb_alert_no_internet_title">Internt non disponible</string>
+    <string name="bb_alert_no_internet_subtitle">Veuillez vérifier votre connexion Internet.</string>
+    <string name="bb_alert_no_internet_accept">Ok</string>
 </resources>

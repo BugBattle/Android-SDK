@@ -10,27 +10,6 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import bugbattle.io.bugbattle.callbacks.BugSentCallback;
-import bugbattle.io.bugbattle.callbacks.BugWillBeSentCallback;
-import bugbattle.io.bugbattle.callbacks.GetBitmapCallback;
-import bugbattle.io.bugbattle.controller.BugBattleActivationMethod;
-import bugbattle.io.bugbattle.controller.OnHttpResponseListener;
-import bugbattle.io.bugbattle.exceptions.BugBattleNotInitialisedException;
-import bugbattle.io.bugbattle.model.APPLICATIONTYPE;
-import bugbattle.io.bugbattle.model.BugBattleBug;
-import bugbattle.io.bugbattle.model.BugBattleConfig;
-import bugbattle.io.bugbattle.model.CustomAction;
-import bugbattle.io.bugbattle.model.PhoneMeta;
-import bugbattle.io.bugbattle.model.RequestType;
-import bugbattle.io.bugbattle.service.BBDetector;
-import bugbattle.io.bugbattle.service.ConfigLoader;
-import bugbattle.io.bugbattle.service.ScreenshotTaker;
-import bugbattle.io.bugbattle.service.detectors.ReplaysDetector;
-import bugbattle.io.bugbattle.service.http.BugBattleHttpInterceptor;
-import bugbattle.io.bugbattle.util.BBDetectorUtil;
-import bugbattle.io.bugbattle.util.ConsoleUtil;
-import bugbattle.io.bugbattle.util.SilentBugReportUtil;
-
 public class BugBattle implements iBugBattle {
     private static BugBattle instance;
     private static ScreenshotTaker screenshotTaker;
@@ -240,7 +219,7 @@ public class BugBattle implements iBugBattle {
      */
     @Override
     public void setNavigationTint(String color) {
-        BugBattleConfig.getInstance().setColor(color);
+        BugBattleConfig.getInstance().setColor(color.replace("#", ""));
     }
 
     /**
@@ -270,7 +249,7 @@ public class BugBattle implements iBugBattle {
      * @author BugBattle
      */
     @Override
-    public void attachCustomData(JSONObject customData) {
+    public void appendCustomData(JSONObject customData) {
         BugBattleBug.getInstance().attachData(customData);
     }
 
@@ -282,8 +261,8 @@ public class BugBattle implements iBugBattle {
      * @author BugBattle
      */
     @Override
-    public void setUserAttribute(String key, String value) {
-        BugBattleBug.getInstance().setUserAttribute(key, value);
+    public void setCustomData(String key, String value) {
+        BugBattleBug.getInstance().setCustomData(key, value);
     }
 
     /**
@@ -292,7 +271,6 @@ public class BugBattle implements iBugBattle {
      *
      * @param data Data, which is added
      */
-    @Deprecated
     @Override
     public void attachData(JSONObject data) {
         BugBattleBug.getInstance().setCustomData(data);
@@ -368,7 +346,7 @@ public class BugBattle implements iBugBattle {
      * @param customAction what is executed when the custom step is pressed
      */
     @Override
-    public void registerCustomAction(CustomAction customAction) {
+    public void registerCustomAction(CustomActionCallback customAction) {
         BugBattleConfig.getInstance().registerCustomAction(customAction);
     }
 
@@ -380,6 +358,24 @@ public class BugBattle implements iBugBattle {
     @Override
     public void setApplicationType(APPLICATIONTYPE applicationType) {
         BugBattleBug.getInstance().setApplicationtype(applicationType);
+    }
+
+    /**
+     * Enables the privacy policy check.
+     *
+     * @param enable Enable the privacy policy.
+     */
+    public void enablePrivacyPolicy(boolean enable) {
+        BugBattleConfig.getInstance().setPrivacyPolicyEnabled(enable);
+    }
+
+    /**
+     * Sets a custom privacy policy url.
+     *
+     * @param privacyUrl The URL pointing to your privacy policy.
+     */
+    public void setPrivacyPolicyUrl(String privacyUrl) {
+        BugBattleConfig.getInstance().setPrivacyPolicyUrl(privacyUrl);
     }
 
     /**
@@ -414,5 +410,27 @@ public class BugBattle implements iBugBattle {
                 initBugBattle(BugBattleConfig.getInstance().getSdkKey(), activationMethods.toArray(new BugBattleActivationMethod[0]), application);
             }
         }
+    }
+
+    /**
+     * Enables or disables the powered by Bugbattle logo.
+     *
+     * @param enable Enablesor disable the powered by Bugbattle logo.
+     * @author BugBattle
+     */
+    @Override
+    public void enablePoweredByBugbattle(boolean enable) {
+        BugBattleConfig.getInstance().setShowPoweredBy(enable);
+    }
+
+    /**
+     * Sets the main logo url.
+     *
+     * @param logoUrl The main logo url.
+     * @author BugBattle
+     */
+    @Override
+    public void setLogoUrl(String logoUrl) {
+        BugBattleConfig.getInstance().setLogoUrl(logoUrl);
     }
 }

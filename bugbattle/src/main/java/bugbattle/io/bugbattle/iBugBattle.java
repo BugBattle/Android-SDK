@@ -4,14 +4,6 @@ import android.graphics.Bitmap;
 
 import org.json.JSONObject;
 
-import bugbattle.io.bugbattle.callbacks.BugSentCallback;
-import bugbattle.io.bugbattle.callbacks.BugWillBeSentCallback;
-import bugbattle.io.bugbattle.callbacks.GetBitmapCallback;
-import bugbattle.io.bugbattle.exceptions.BugBattleNotInitialisedException;
-import bugbattle.io.bugbattle.model.APPLICATIONTYPE;
-import bugbattle.io.bugbattle.model.CustomAction;
-import bugbattle.io.bugbattle.model.RequestType;
-
 interface iBugBattle {
 
     /**
@@ -91,9 +83,9 @@ interface iBugBattle {
      * Custom Data
      */
     @Deprecated
-    void attachCustomData(JSONObject customData);
+    void appendCustomData(JSONObject customData);
 
-    void setUserAttribute(String key, String value);
+    void setCustomData(String key, String value);
 
     void attachData(JSONObject data);
 
@@ -128,6 +120,20 @@ interface iBugBattle {
     void setBitmapCallback(GetBitmapCallback getBitmapCallback);
 
     /**
+     * Enables the privacy policy check.
+     *
+     * @param enable Enable the privacy policy.
+     */
+    void enablePrivacyPolicy(boolean enable);
+
+    /**
+     * Sets a custom privacy policy url.
+     *
+     * @param privacyUrl The URL pointing to your privacy policy.
+     */
+    void setPrivacyPolicyUrl(String privacyUrl);
+
+    /**
      * Network
      */
     /**
@@ -142,10 +148,26 @@ interface iBugBattle {
      */
     void logNetwork(String urlConnection, RequestType requestType, int status, int duration, JSONObject request, JSONObject response);
 
-    //not implemented yet
-    //void shakeInvocation();
-    //void attachScreenshot(Bitmap screenshot);
-    //Bitmap getAttachedScreenshot();
+    /**
+     * Register a custom function, which can be called from the bug report flow
+     *
+     * @param customAction implement the callback
+     */
+    void registerCustomAction(CustomActionCallback customAction);
 
-    void registerCustomAction(CustomAction customAction);
+    /**
+     * Enables or disables the powered by Bugbattle logo.
+     *
+     * @param enable Enablesor disable the powered by Bugbattle logo.
+     * @author BugBattle
+     */
+    void enablePoweredByBugbattle(boolean enable);
+
+    /**
+     * Sets the main logo url.
+     *
+     * @param logoUrl The main logo url.
+     * @author BugBattle
+     */
+    void setLogoUrl(String logoUrl);
 }

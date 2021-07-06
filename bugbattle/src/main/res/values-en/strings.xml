@@ -21,4 +21,7 @@
     <string name="bb_report_privacy_policy_alert">Please read and accept the privacy policy.</string>
     <string name="bb_back_to_app">Back to the app</string>
     <string name="bb_back_to_app_msg">Do you want to go back to the app?</string>
+    <string name="bb_alert_no_internet_title">Internt not available</string>
+    <string name="bb_alert_no_internet_subtitle">Please check your internet connection.</string>
+    <string name="bb_alert_no_internet_accept">Ok</string>
 </resources>

@@ -21,4 +21,8 @@
     <string name="bb_report_privacy_policy_alert">Graag de privacy voorwaarden lezen en accorderen</string>
     <string name="bb_back_to_app">Torna all\'app.</string>
     <string name="bb_back_to_app_msg">Vuoi tornare all\'app?</string>
+
+    <string name="bb_alert_no_internet_title">Internet non disponibile</string>
+    <string name="bb_alert_no_internet_subtitle">Controlla la tua connessione Internet.</string>
+    <string name="bb_alert_no_internet_accept">Ok</string>
 </resources>
