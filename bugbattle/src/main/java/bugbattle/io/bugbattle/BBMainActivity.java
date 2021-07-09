@@ -3,8 +3,11 @@ package bugbattle.io.bugbattle;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BlendMode;
+import android.graphics.BlendModeColorFilter;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.net.http.SslError;
 import android.os.Build;
@@ -26,6 +29,7 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 
 import org.json.JSONException;
@@ -134,7 +138,22 @@ public class BBMainActivity extends AppCompatActivity implements OnHttpResponseL
         findViewById(R.id.bb_next).setVisibility(View.GONE);
         initBrowser();
         initButtons(color);
-        //   setContentView(webView);
+        try {
+            ImageView img = findViewById(R.id.bb_success_img);
+            img.setColorFilter(color);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private Drawable setDrawableColor(Drawable drawable, int color) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            drawable.setColorFilter(new BlendModeColorFilter(color, BlendMode.SRC_ATOP));
+            return drawable;
+        } else {
+            drawable.setColorFilter(color, PorterDuff.Mode.SRC_ATOP);
+            return drawable;
+        }
     }
 
     private void initButtons(int color) {

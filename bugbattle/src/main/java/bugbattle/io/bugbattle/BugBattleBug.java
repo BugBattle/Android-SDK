@@ -1,5 +1,6 @@
 package bugbattle.io.bugbattle;
 
+import android.app.Application;
 import android.graphics.Bitmap;
 import android.support.annotation.Nullable;
 
@@ -11,12 +12,14 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
+import static bugbattle.io.bugbattle.DateUtil.dateToString;
+
 /**
  * Contains all relevant information gathered in the background.
  */
 class BugBattleBug {
     private static BugBattleBug instance;
-
+    private Application application;
     //bug specific data
     private APPLICATIONTYPE applicationtype = APPLICATIONTYPE.NATIVE;
     private final Date startUpDate = new Date();
@@ -34,6 +37,8 @@ class BugBattleBug {
     PhoneMeta phoneMeta;
     private final LogReader logReader;
     private final StepsToReproduce stepsToReproduce;
+
+    private final JSONArray customEventLog = new JSONArray();
 
     private List<Networklog> networklogs = new LinkedList<>();
 
@@ -198,5 +203,40 @@ class BugBattleBug {
 
     public void setSilentBugreportEmail(String silentBugreportEmail) {
         this.silentBugreportEmail = silentBugreportEmail;
+    }
+
+    public Application getApplication() {
+        return application;
+    }
+
+    public void setApplication(Application application) {
+        this.application = application;
+    }
+
+    public void logEvent(String name, JSONObject data) {
+        JSONObject event = new JSONObject();
+        try {
+            event.put("date", dateToString(new Date()));
+            event.put("name", name);
+            event.put("data", data);
+            customEventLog.put(event);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void logEvent(String name) {
+        JSONObject event = new JSONObject();
+        try {
+            event.put("date", dateToString(new Date()));
+            event.put("name", name);
+            customEventLog.put(event);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public JSONArray getCustomEventLog() {
+        return customEventLog;
     }
 }

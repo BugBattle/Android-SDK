@@ -1,5 +1,6 @@
 package bugbattle.io.bugbattle;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -33,19 +34,29 @@ class ScreenshotTaker {
     }
 
     public void openScreenshot(Bitmap imageFile) {
-        if (getCurrentActivity() != null) {
-            Context applicationContext = getCurrentActivity().getApplicationContext();
-            if (applicationContext != null) {
-                BugBattleBug.getInstance().getPhoneMeta().setLastScreen(applicationContext.getClass().getSimpleName());
-                SharedPreferences pref = applicationContext.getSharedPreferences("prefs", 0);
-                SharedPreferences.Editor editor = pref.edit();
-                editor.putString("descriptionEditText", ""); // Storing the description
-                editor.apply();
-                Intent intent = new Intent(getCurrentActivity(), BBMainActivity.class);
-                bugBattleBug.setScreenshot(imageFile);
-                getCurrentActivity().startActivity(intent);
-                getCurrentActivity().overridePendingTransition(R.anim.slide_down, R.anim.slide_up);
+        try {
+            Activity activity = getCurrentActivity();
+            if (activity != null) {
+                Context applicationContext = activity.getApplicationContext();
+                if (applicationContext != null) {
+                    if (BugBattleBug.getInstance().getPhoneMeta() != null) {
+                        BugBattleBug.getInstance().getPhoneMeta().setLastScreen(applicationContext.getClass().getSimpleName());
+                    }
+                    SharedPreferences pref = applicationContext.getSharedPreferences("prefs", 0);
+                    SharedPreferences.Editor editor = pref.edit();
+                    editor.putString("descriptionEditText", ""); // Storing the description
+                    editor.apply();
+                    Intent intent = new Intent(getCurrentActivity(), BBMainActivity.class);
+                    bugBattleBug.setScreenshot(imageFile);
+                    activity.startActivity(intent);
+                    try {
+                        activity.overridePendingTransition(R.anim.slide_down, R.anim.slide_up);
+                    } catch (Exception ex) {
+                    }
+                }
             }
+        } catch (Exception ex) {
+
         }
     }
 }

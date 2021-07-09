@@ -170,4 +170,21 @@ interface iBugBattle {
      * @author BugBattle
      */
     void setLogoUrl(String logoUrl);
+
+    /**
+     * Logs a custom event
+     *
+     * @param name Name of the event
+     * @author BugBattle
+     */
+    void logEvent(String name);
+
+    /**
+     * Logs a custom event with data
+     *
+     * @param name Name of the event
+     * @param data Data passed with the event.
+     * @author BugBattle
+     */
+    void logEvent(String name, JSONObject data);
 }

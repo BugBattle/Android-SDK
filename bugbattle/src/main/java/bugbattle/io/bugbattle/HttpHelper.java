@@ -133,6 +133,7 @@ class HttpHelper extends AsyncTask<BugBattleBug, Void, Integer> {
         body.put("reportedBy", email);
 
         body.put("networkLogs", bbBug.getNetworklogs());
+        body.put("customEventLog", bbBug.getCustomEventLog());
         PhoneMeta phoneMeta = bbBug.getPhoneMeta();
 
         if (phoneMeta != null) {

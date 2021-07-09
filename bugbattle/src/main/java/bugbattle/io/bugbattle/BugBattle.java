@@ -433,4 +433,28 @@ public class BugBattle implements iBugBattle {
     public void setLogoUrl(String logoUrl) {
         BugBattleConfig.getInstance().setLogoUrl(logoUrl);
     }
+
+
+    /**
+     * Logs a custom event
+     *
+     * @param name Name of the event
+     * @author BugBattle
+     */
+    @Override
+    public void logEvent(String name) {
+        BugBattleBug.getInstance().logEvent(name);
+    }
+
+    /**
+     * Logs a custom event with data
+     *
+     * @param name Name of the event
+     * @param data Data passed with the event.
+     * @author BugBattle
+     */
+    @Override
+    public void logEvent(String name, JSONObject data) {
+        BugBattleBug.getInstance().logEvent(name, data);
+    }
 }
