@@ -1,7 +1,8 @@
 package bugbattle.io.bugbattle;
 
 import android.os.Build;
-import android.support.annotation.RequiresApi;
+
+import androidx.annotation.RequiresApi;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;

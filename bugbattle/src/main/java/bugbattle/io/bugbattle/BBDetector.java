@@ -31,9 +31,6 @@ abstract class BBDetector {
     public abstract void pause();
 
     public void takeScreenshot() {
-        if (BugBattleConfig.getInstance().getBugWillBeSentCallback() != null) {
-            BugBattleConfig.getInstance().getBugWillBeSentCallback().flowInvoced();
-        }
         screenshotTaker.takeScreenshot();
     }
 }

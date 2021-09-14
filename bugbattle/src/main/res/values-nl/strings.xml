@@ -1,27 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name_bb">bugbattle</string>
-    <string name="bb_imageview_cancel">Annuleer</string>
-    <string name="bb_imageview_next">Volgende</string>
-    <string name="bb_imageview_title">Meld een bug</string>
-    <string name="bb_report_cancel">Terug</string>
-    <string name="bb_report_next">Volgende</string>
-    <string name="bb_report_title">Meld een bug</string>
-    <string name="bb_report_email_placeholder">Voer je e-mailadres in</string>
-    <string name="bb_report_description_placeholder">Omschrijf het probleem</string>
-    <string name="bb_report_priority_low">Laag</string>
-    <string name="bb_report_priority_medium">Middel</string>
-    <string name="bb_report_priority_high">Hoog</string>
-    <string name="bb_report_loading">Feedback wordt verzonden &#8230;</string>
-    <string name="bb_report_done">Dank je wel!</string>
-    <string name="bb_report_error">Oeps! Er is iets misgegaan.</string>
-    <string name="bb_error_email">U moet een e-mailadres invoeren.</string>
-    <string name="bb_policy">Ik ga akkoord met  </string>
-    <string name="bb_policy_end">privacy voorwaarden.</string>
-    <string name="bb_report_privacy_policy_alert">Graag de privacy voorwaarden lezen en accorderen</string>
-    <string name="bb_back_to_app">Terug naar de app.</string>
-    <string name="bb_back_to_app_msg">Wil je terug naar de app?</string>
-
     <string name="bb_alert_no_internet_title">Internt niet beschikbaar</string>
     <string name="bb_alert_no_internet_subtitle">Controleer je internetverbinding.</string>
     <string name="bb_alert_no_internet_accept">Ok</string>

@@ -1,27 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name_bb">bugbattle</string>
-    <string name="bb_imageview_cancel">Schließen</string>
-    <string name="bb_imageview_next">Weiter</string>
-    <string name="bb_imageview_title">Bug melden</string>
-    <string name="bb_report_cancel">Zurück</string>
-    <string name="bb_report_next">Senden</string>
-    <string name="bb_report_title">Bug melden</string>
-    <string name="bb_report_email_placeholder">Gib deine Email ein.</string>
-    <string name="bb_report_description_placeholder">Beischreibe das Problem</string>
-    <string name="bb_report_priority_low">Leicht</string>
-    <string name="bb_report_priority_medium">Mittel</string>
-    <string name="bb_report_priority_high">Schwer</string>
-    <string name="bb_report_loading">Feedback wird gesendet &#8230;</string>
-    <string name="bb_report_done">Danke für deinen Bug Report.</string>
-    <string name="bb_error_email">Bitte hinterlege deine E-Mail Adresse.</string>
-    <string name="bb_report_error">Ups, da ist etwas schief gelaufen.</string>
-    <string name="bb_policy">Ich akzeptiere die</string>
-    <string name="bb_policy_end">Datenschutzerklärung.</string>
-    <string name="bb_report_privacy_policy_alert">Du musst die Datenschutzrichtlinien akzeptieren.</string>
-    <string name="bb_back_to_app">Zurück zur App</string>
-    <string name="bb_back_to_app_msg">Willst du wirklich zurück in die App?</string>
-    <string name="bb_alert_no_internet_title">Keine Internetverbindung</string>
     <string name="bb_alert_no_internet_subtitle">Bitte überprüfe deine Internetverbindung.</string>
     <string name="bb_alert_no_internet_accept">Ok</string>
 </resources>

@@ -1,6 +1,7 @@
 package bugbattle.io.bugbattle;
 
 import android.graphics.Bitmap;
+import android.graphics.Color;
 
 import org.json.JSONObject;
 
@@ -51,12 +52,12 @@ interface iBugBattle {
      */
     void setCustomerEmail(String email);
 
+
     /**
-     * Change the color of the appearance of the UI.
-     *
-     * @param color primary color
+     * Set the main color of the bugbattle flow.
+     * @param color this color is used to adapt ui. Use Hex format
      */
-    void setNavigationTint(String color);
+    void setColor(String color);
 
     /**
      * Set the language for the BugBattle Report Flow. Otherwise the default language is used.
@@ -187,4 +188,13 @@ interface iBugBattle {
      * @author BugBattle
      */
     void logEvent(String name, JSONObject data);
+
+    /**
+     * In order to pre-fill the customer's name,
+     * we recommend using the following method.
+     * This welcomes the user with his name and simplifies the feedback reporting,
+     * *
+     * @param name name of the customer
+     */
+    void setCustomerName(String name);
 }

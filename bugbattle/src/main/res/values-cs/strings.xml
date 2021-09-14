@@ -1,26 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name_bb"> bugbattle </string>
-    <string name="bb_imageview_cancel"> Zavřít </string>
-    <string name="bb_imageview_next"> Další </string>
-    <string name="bb_imageview_title">" Hlásit chybu "</string>
-    <string name="bb_report_cancel"> Zadní </string>
-    <string name="bb_report_next"> Poslat </string>
-    <string name="bb_back_to_app"> Zpět do aplikace </string>
-    <string name="bb_back_to_app_msg"> Chcete se vrátit do aplikace? </string>
-    <string name="bb_report_title"> Nahlásit chybu </string>
-    <string name="bb_report_email_placeholder"> Zadejte svůj e-mail </string>
-    <string name="bb_report_description_placeholder"> Popište svůj problém </string>
-    <string name="bb_report_priority_low"> Nízká </string>
-    <string name="bb_report_priority_medium"> Střední </string>
-    <string name="bb_report_priority_high"> Vysoká </string>
-    <string name="bb_report_loading">" Odesílání hlášení o chybě &#8230; "</string>
-    <string name="bb_report_done"> Děkujeme za hlášení chyby! </string>
-    <string name="bb_report_error"> Jejda, něco se pokazilo. </string>
-    <string name="bb_error_email"> Musíte zadat e-mail. </string>
-    <string name="bb_policy">četl jsem a souhlasím s</string>
-    <string name="bb_report_privacy_policy_alert">Přečtěte si a přijměte </string>
-    <string name="bb_policy_end">zásady ochrany osobních údajů.</string>
     <string name="bb_alert_no_internet_title"> Internt není k dispozici </string>
     <string name="bb_alert_no_internet_subtitle"> Zkontrolujte prosím své připojení k internetu. </string>
     <string name="bb_alert_no_internet_accept">Ok</string>

@@ -49,10 +49,6 @@ class ScreenshotTaker {
                     Intent intent = new Intent(getCurrentActivity(), BBMainActivity.class);
                     bugBattleBug.setScreenshot(imageFile);
                     activity.startActivity(intent);
-                    try {
-                        activity.overridePendingTransition(R.anim.slide_down, R.anim.slide_up);
-                    } catch (Exception ex) {
-                    }
                 }
             }
         } catch (Exception ex) {

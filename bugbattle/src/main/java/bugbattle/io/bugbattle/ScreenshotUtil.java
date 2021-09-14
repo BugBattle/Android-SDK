@@ -5,9 +5,11 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Rect;
+import android.util.Base64;
 import android.view.View;
 import android.view.WindowManager;
 
+import java.io.ByteArrayOutputStream;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -216,5 +218,13 @@ class ScreenshotUtil {
             currIndex++;
         }
         return metaViews;
+    }
+
+    public static String bitmapToBase64(Bitmap bitmap){
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+            byte[] b = baos.toByteArray();
+            String imageEncoded = Base64.encodeToString(b,Base64.NO_WRAP);
+            return imageEncoded;
     }
 }

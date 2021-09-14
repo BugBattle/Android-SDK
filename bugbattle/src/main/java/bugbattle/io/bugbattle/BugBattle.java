@@ -3,6 +3,7 @@ package bugbattle.io.bugbattle;
 import android.app.Activity;
 import android.app.Application;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 
 import org.json.JSONObject;
 
@@ -32,7 +33,7 @@ public class BugBattle implements iBugBattle {
             //init config and load from the server
             BugBattleConfig.getInstance().setSdkKey(sdkKey);
 
-            if (!useAutoconfig) {
+            if (useAutoconfig) {
                 new BugBattleListener();
             }
 
@@ -213,13 +214,12 @@ public class BugBattle implements iBugBattle {
     }
 
     /**
-     * Change the color of the appearance of the UI.
-     *
-     * @param color hexcode for color
+     * Set the main color of the bugbattle flow.
+     * @param color this color is used to adapt ui. Use Hex format
      */
     @Override
-    public void setNavigationTint(String color) {
-        BugBattleConfig.getInstance().setColor(color.replace("#", ""));
+    public void setColor(String color) {
+        BugBattleConfig.getInstance().setColor(color);
     }
 
     /**
@@ -456,5 +456,17 @@ public class BugBattle implements iBugBattle {
     @Override
     public void logEvent(String name, JSONObject data) {
         BugBattleBug.getInstance().logEvent(name, data);
+    }
+
+    /**
+     * In order to pre-fill the customer's name,
+     * we recommend using the following method.
+     * This welcomes the user with his name and simplifies the feedback reporting,
+     * *
+     * @param name name of the customer
+     */
+    @Override
+    public void setCustomerName(String name) {
+        BugBattleBug.getInstance().setCustomerName(name);
     }
 }

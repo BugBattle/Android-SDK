@@ -10,9 +10,6 @@ class SilentBugReportUtil {
         model.setSilentBugreportEmail(email);
         model.setDescription(description);
         model.setSeverity(severity);
-        if (BugBattleConfig.getInstance().getBugWillBeSentCallback() != null) {
-            BugBattleConfig.getInstance().getBugWillBeSentCallback().flowInvoced();
-        }
         if (bitmap != null) {
             model.setScreenshot(bitmap);
             try {

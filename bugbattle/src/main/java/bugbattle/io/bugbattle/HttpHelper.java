@@ -4,7 +4,8 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Build;
-import android.support.annotation.RequiresApi;
+
+import androidx.annotation.RequiresApi;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -140,14 +141,12 @@ class HttpHelper extends AsyncTask<BugBattleBug, Void, Integer> {
             body.put("metaData", phoneMeta.getJSONObj());
         }
 
-        body.put("actionLog", bbBug.getStepsToReproduce());
         body.put("customData", bbBug.getCustomData());
         body.put("priority", bbBug.getSeverity());
 
         if (BugBattleConfig.getInstance().isEnableConsoleLogs()) {
             body.put("consoleLog", bbBug.getLogs());
         }
-
 
         if (bbBug.getData() != null) {
             body = concatJSONS(body, bbBug.getData());
@@ -157,6 +156,8 @@ class HttpHelper extends AsyncTask<BugBattleBug, Void, Integer> {
             byte[] input = body.toString().getBytes(StandardCharsets.UTF_8);
             os.write(input, 0, input.length);
         }
+
+        bbBug.setSeverity("MEDIUM");
 
         return conn.getResponseCode();
     }

@@ -1,26 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name_bb">bugbattle</string>
-    <string name="bb_imageview_cancel">Close</string>
-    <string name="bb_imageview_next">Next</string>
-    <string name="bb_imageview_title">Report a bug</string>
-    <string name="bb_report_cancel">Back</string>
-    <string name="bb_report_next">Send</string>
-    <string name="bb_report_title">Report a bug</string>
-    <string name="bb_report_email_placeholder">Enter your email</string>
-    <string name="bb_report_description_placeholder">Describe your problem</string>
-    <string name="bb_report_priority_low">Low</string>
-    <string name="bb_report_priority_medium">Medium</string>
-    <string name="bb_report_priority_high">High</string>
-    <string name="bb_report_loading">Sending your bug report &#8230;</string>
-    <string name="bb_report_done">Thank you for your bug report!</string>
-    <string name="bb_report_error">Oops, something went wrong.</string>
-    <string name="bb_error_email">You have to enter an email.</string>
-    <string name="bb_policy">I have read and agree to the  </string>
-    <string name="bb_policy_end">privacy policy.</string>
-    <string name="bb_report_privacy_policy_alert">Please read and accept the privacy policy.</string>
-    <string name="bb_back_to_app">Back to the app</string>
-    <string name="bb_back_to_app_msg">Do you want to go back to the app?</string>
     <string name="bb_alert_no_internet_title">Internt not available</string>
     <string name="bb_alert_no_internet_subtitle">Please check your internet connection.</string>
     <string name="bb_alert_no_internet_accept">Ok</string>

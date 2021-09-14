@@ -2,7 +2,8 @@ package bugbattle.io.bugbattle;
 
 import android.app.Application;
 import android.graphics.Bitmap;
-import android.support.annotation.Nullable;
+
+import androidx.annotation.Nullable;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -25,8 +26,9 @@ class BugBattleBug {
     private final Date startUpDate = new Date();
     private boolean isDisabled = false;
     private String language = "";
-    private String severity;
+    private String severity = "MEDIUM";
     private String userEmail;
+    private String userName;
     private String silentBugreportEmail;
     private String description;
     private Bitmap screenshot;
@@ -36,7 +38,6 @@ class BugBattleBug {
     private @Nullable
     PhoneMeta phoneMeta;
     private final LogReader logReader;
-    private final StepsToReproduce stepsToReproduce;
 
     private final JSONArray customEventLog = new JSONArray();
 
@@ -44,7 +45,6 @@ class BugBattleBug {
 
     private BugBattleBug() {
         logReader = new LogReader();
-        stepsToReproduce = StepsToReproduce.getInstance();
         customData = new JSONObject();
         replay = new Replay(30, 1000);
     }
@@ -77,16 +77,20 @@ class BugBattleBug {
         return logReader.readLog();
     }
 
-    public JSONArray getStepsToReproduce() {
-        return stepsToReproduce.getSteps();
-    }
-
     public String getEmail() {
         return userEmail;
     }
 
     public void setEmail(String userEmail) {
         this.userEmail = userEmail;
+    }
+
+    public void setCustomerName(String name){
+        this.userName = name;
+    }
+
+    public String getCustomerName() {
+        return userName;
     }
 
     public JSONObject getCustomData() {

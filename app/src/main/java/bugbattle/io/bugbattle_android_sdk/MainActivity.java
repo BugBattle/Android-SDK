@@ -1,12 +1,16 @@
 package bugbattle.io.bugbattle_android_sdk;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 
+import androidx.appcompat.app.AppCompatActivity;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import bugbattle.io.bugbattle.BugBattle;
-import bugbattle.io.bugbattle.exceptions.BugBattleNotInitialisedException;
+import bugbattle.io.bugbattle.BugBattleNotInitialisedException;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -15,6 +19,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Button button = findViewById(R.id.button3);
+
+
   /*      final Runtime runtime = Runtime.getRuntime();
         final long usedMemInMB=(runtime.totalMemory() - runtime.freeMemory()) / 1048576L;
         final long maxHeapSizeInMB=runtime.maxMemory() / 1048576L;
@@ -39,12 +45,21 @@ public class MainActivity extends AppCompatActivity {
         } catch (Exception ex) {
             ex.printStackTrace();
         }*/
+
+        JSONObject jsonObject = new JSONObject();
+
+        try {
+            jsonObject.put("hey", "you");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        BugBattle.getInstance().logEvent("JSON", jsonObject);
+
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 try {
-
-                    //BugBattle.getInstance().sendSilentBugReport("Random", "This is a test", BugBattle.SEVERITY.HIGH);
 
                     BugBattle.getInstance().startBugReporting();
                 } catch (BugBattleNotInitialisedException e) {

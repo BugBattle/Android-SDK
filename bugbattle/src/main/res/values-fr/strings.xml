@@ -1,28 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name_bb">bugbattle</string>
-    <string name="bb_imageview_cancel">Fermer</string>
-    <string name="bb_imageview_next">Suivant</string>
-    <string name="bb_imageview_title">Signaler un bug</string>
-    <string name="bb_report_cancel">Retour</string>
-    <string name="bb_report_next">Envoyer</string>
-    <string name="bb_report_title">Signaler un bug</string>
-    <string name="bb_report_email_placeholder">Entrez votre adresse mail</string>
-    <string name="bb_report_description_placeholder">Décrivez votre problème</string>
-    <string name="bb_report_priority_low">Faible</string>
-    <string name="bb_report_priority_medium">Moyenne</string>
-    <string name="bb_report_priority_high">Haute</string>
-    <string name="bb_report_loading">Envoyer votre rapport de bug &#8230;</string>
-    <string name="bb_report_done">Merci de votre rapport de bug!</string>
-    <string name="bb_report_error">Oups, il y a eu un problème.</string>
-    <string name="bb_error_email">Vous devez entrer un e-mail.</string>
-    <string name="bb_policy">J\'ai lu et j\'accepte la </string>
-    <string name="bb_policy_end">politique de privacité.</string>
-
-    <string name="bb_report_privacy_policy_alert">Veuillez lire et accepter la politique de confidentialité.</string>
-    <string name="bb_back_to_app">Revenez à l\'appli.</string>
-    <string name="bb_back_to_app_msg">Voulez-vous revenir à l\'application?</string>
-
     <string name="bb_alert_no_internet_title">Internt non disponible</string>
     <string name="bb_alert_no_internet_subtitle">Veuillez vérifier votre connexion Internet.</string>
     <string name="bb_alert_no_internet_accept">Ok</string>
