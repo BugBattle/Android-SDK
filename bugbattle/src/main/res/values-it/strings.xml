@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="app_name_bb">bugbattle</string>
-    <string name="bb_alert_no_internet_title">Internet non disponibile</string>
-    <string name="bb_alert_no_internet_subtitle">Controlla la tua connessione Internet.</string>
-    <string name="bb_alert_no_internet_accept">Ok</string>
-</resources>

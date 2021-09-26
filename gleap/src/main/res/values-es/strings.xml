@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name_gleap">gleap</string>
+    <string name="gleap_alert_no_internet_title"> Internt no disponible </string>
+    <string name="gleap_alert_no_internet_subtitle"> Verifique su conexión a Internet. </string>
+    <string name="gleap_alert_no_internet_accept">Ok</string>
+</resources>

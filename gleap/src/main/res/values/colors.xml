@@ -1,0 +1,5 @@
+<resources>
+    <color name="gleap_primary">#019AE8</color>
+    <color name="gleap_transparent_background">#B3000000</color>
+    <color name="gleap_statusbar_color">#00000000</color>
+</resources>

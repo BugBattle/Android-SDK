@@ -1,1 +1,1 @@
-include ':app', ':bugbattle'
+include ':app', ':gleap'
